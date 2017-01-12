@@ -1,6 +1,6 @@
 # pylint: disable=attribute-defined-outside-init
 import numpy as np
-from bodylabs.numerics import vx
+from blmath.numerics import vx
 
 class MeshMixin(object):
     def estimate_vertex_normals(self, face_to_verts_sparse_matrix=None):
@@ -14,7 +14,7 @@ class MeshMixin(object):
         return self.vn # for backwards compatibility
 
     def barycentric_coordinates_for_points(self, points, face_indices):
-        from bodylabs.geometry.barycentric import barycentric_coordinates_of_projection
+        from blmath.geometry.barycentric import barycentric_coordinates_of_projection
         vertex_indices = self.f[face_indices.flatten(), :]
         tri_vertices = np.array([self.v[vertex_indices[:, 0]], self.v[vertex_indices[:, 1]], self.v[vertex_indices[:, 2]]])
         return vertex_indices, barycentric_coordinates_of_projection(points, tri_vertices[0, :], tri_vertices[1, :] - tri_vertices[0, :], tri_vertices[2, :] - tri_vertices[0, :])
@@ -88,8 +88,8 @@ class MeshMixin(object):
         (i.e. facing towards a default OpenGL camera).
 
         '''
-        from bodylabs.geometry.transform import rotation_from_up_and_look
-        from bodylabs.numerics import as_numeric_array
+        from blmath.geometry.transform import rotation_from_up_and_look
+        from blmath.numerics import as_numeric_array
 
         up = as_numeric_array(up, (3,))
         look = as_numeric_array(look, (3,))
@@ -142,7 +142,7 @@ class MeshMixin(object):
 
     @property
     def floor_plane(self):
-        from bodylabs.geometry import Plane
+        from blmath.geometry import Plane
         return Plane(self.floor_point, vx.basis.y)
 
     def recenter_over_floor(self):
@@ -150,7 +150,7 @@ class MeshMixin(object):
 
     @property
     def bounding_box(self):
-        from bodylabs.geometry import Box
+        from blmath.geometry import Box
 
         if self.v is None:
             raise ValueError('Mesh has no vertices; bounding box is not defined')
@@ -171,7 +171,7 @@ class MeshMixin(object):
         axis: A vector, which is an 3x1 np.array.
 
         '''
-        from bodylabs.geometry.apex import apex
+        from blmath.geometry.apex import apex
         return apex(self.v, axis)
 
     def first_blip(self, squash_axis, origin, initial_direction):
@@ -191,7 +191,7 @@ class MeshMixin(object):
         `initial_direction` need not be normalized.
 
         '''
-        from bodylabs.numerics import as_numeric_array
+        from blmath.numerics import as_numeric_array
 
         origin = vx.reject_axis(as_numeric_array(origin, (3,)), axis=squash_axis, squash=True)
         initial_direction = vx.reject_axis(as_numeric_array(initial_direction, (3,)), axis=squash_axis, squash=True)

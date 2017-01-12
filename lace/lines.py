@@ -1,8 +1,8 @@
 __all__ = ['Lines']
 
 import numpy as np
-from bodylabs.numerics import as_numeric_array
-from bodylabs.util.decorators import setter_property
+from blmath.numerics import as_numeric_array
+from blmath.util.decorators import setter_property
 
 
 class Lines(object):

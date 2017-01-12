@@ -41,56 +41,56 @@ class TestLandmarks(ExtraAssertionsMixin, CreateScratchDirectoryMixin, unittest.
         return path
 
     def test_yaml_index(self):
-        from bodylabs.serialization import yaml
+        from baiji.serialization import yaml
         path = self.make_index_data(yaml, '.yaml')
         m = Mesh(filename=self.template_fname, landmarks=path)
         self.assertEqual(m.landm, self.template.landm)
         self.assertDictOfArraysAlmostEqual(m.landm_xyz, self.template_without_regressors.landm_xyz)
 
     def test_yaml_points(self):
-        from bodylabs.serialization import yaml
+        from baiji.serialization import yaml
         path = self.make_point_data(yaml, '.yaml')
         m = Mesh(filename=self.template_fname, landmarks=path)
         self.assertEqual(m.landm, self.template.landm)
         self.assertDictOfArraysAlmostEqual(m.landm_xyz, self.template.landm_xyz)
 
     def test_yml_index(self):
-        from bodylabs.serialization import yaml
+        from baiji.serialization import yaml
         path = self.make_index_data(yaml, '.yml')
         m = Mesh(filename=self.template_fname, landmarks=path)
         self.assertEqual(m.landm, self.template.landm)
         self.assertDictOfArraysAlmostEqual(m.landm_xyz, self.template_without_regressors.landm_xyz)
 
     def test_yml_points(self):
-        from bodylabs.serialization import yaml
+        from baiji.serialization import yaml
         path = self.make_point_data(yaml, '.yml')
         m = Mesh(filename=self.template_fname, landmarks=path)
         self.assertEqual(m.landm, self.template.landm)
         self.assertDictOfArraysAlmostEqual(m.landm_xyz, self.template.landm_xyz)
 
     def test_json_index(self):
-        from bodylabs.serialization import json
+        from baiji.serialization import json
         path = self.make_index_data(json, '.json')
         m = Mesh(filename=self.template_fname, landmarks=path)
         self.assertEqual(m.landm, self.template.landm)
         self.assertDictOfArraysAlmostEqual(m.landm_xyz, self.template_without_regressors.landm_xyz)
 
     def test_json_points(self):
-        from bodylabs.serialization import json
+        from baiji.serialization import json
         path = self.make_point_data(json, '.json')
         m = Mesh(filename=self.template_fname, landmarks=path)
         self.assertEqual(m.landm, self.template.landm)
         self.assertDictOfArraysAlmostEqual(m.landm_xyz, self.template.landm_xyz)
 
     def test_pickle_index(self):
-        from bodylabs.serialization import pickle
+        from baiji.serialization import pickle
         path = self.make_index_data(pickle, '.pkl')
         m = Mesh(filename=self.template_fname, landmarks=path)
         self.assertEqual(m.landm, self.template.landm)
         self.assertDictOfArraysAlmostEqual(m.landm_xyz, self.template_without_regressors.landm_xyz)
 
     def test_pickle_points(self):
-        from bodylabs.serialization import pickle
+        from baiji.serialization import pickle
         path = self.make_point_data(pickle, '.pkl')
         m = Mesh(filename=self.template_fname, landmarks=path)
         self.assertEqual(m.landm, self.template.landm)

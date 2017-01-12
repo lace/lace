@@ -2,7 +2,8 @@
 def load_landmarks(filename):
     import re
     from baiji import s3
-    from bodylabs.serialization import json, lmrk, pickle, yaml, meshlab_pickedpoints
+    from baiji.serialization import json, pickle, yaml
+    from lace.serialization import lmrk, meshlab_pickedpoints
 
     if not s3.exists(filename):
         raise ValueError("Landmark file %s not found" % filename)
@@ -39,7 +40,7 @@ class MeshMixin(object):
 
     def landm_xyz_linear_transform(self, ordering=None):
         import numpy as np
-        from bodylabs.numerics.matlab import col, sparse
+        from blmath.numerics.matlab import col, sparse
         if ordering is None:
             ordering = self.landm_names
         # construct a sparse matrix that converts between the landmark pts and all vertices, with height (# landmarks * 3) and width (# vertices * 3)

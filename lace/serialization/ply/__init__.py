@@ -9,13 +9,10 @@ def load(f, existing_mesh=None):
     return ensure_file_open_and_call(f, _load, mode='rb', mesh=existing_mesh)
 
 
-def dump(mesh, f, flip_faces=False, ascii=False, little_endian=True, comments=None, copyright=False): # FIXME pylint: disable=redefined-builtin
+def dump(mesh, f, flip_faces=False, ascii=False, little_endian=True, comments=None): # FIXME pylint: disable=redefined-builtin
     from baiji.serialization.util.openlib import ensure_file_open_and_call
-    if not comments:
+    if comments is None:
         comments = []
-    if copyright:
-        from bodylabs.serialization.copyright import mesh_copyright_text
-        comments.append(mesh_copyright_text())
     return ensure_file_open_and_call(f, _dump, mode='wb', mesh=mesh, flip_faces=flip_faces, ascii=ascii, little_endian=little_endian, comments=comments)
 
 def _load(f, mesh=None):

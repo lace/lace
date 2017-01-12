@@ -385,21 +385,3 @@ class MeshMixin(object):
         num_body_verts = self.v.shape[0]
         self.v = np.vstack([self.v, v_lines])
         self.e = e_lines + num_body_verts
-
-def main():
-    from bodylabs.scape.loaders import load_scapemodel
-    from bodylabs.resources import caesar_alignments
-
-    sm = load_scapemodel(gender='female', resolution='high')
-    m = caesar_alignments.random_mesh('female')
-
-    m.segm = sm.template.segm
-    m.f = sm.template.f
-
-    m.keep_segments(['pelvis', 'midsection'])
-
-    m.show()
-
-if __name__ == '__main__':
-    main()
-

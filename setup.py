@@ -1,4 +1,5 @@
 # Conversion from Markdown to pypi's restructured text: https://coderwall.com/p/qawuyq -- Thanks James.
+import os
 
 try:
     import pypandoc
@@ -11,7 +12,6 @@ import importlib
 from pip.req import parse_requirements
 from setuptools import setup, Extension
 import numpy as np
-from bodylabs.util.setup_helpers import on_platform
 
 install_requires = parse_requirements('requirements.txt', session=False)
 install_requires = [str(ir.req) for ir in install_requires]
@@ -42,7 +42,7 @@ setup(
             sources=['lace/serialization/obj/objutils.cpp'],
             depends=['lace/serialization/obj/objutils.cpp'],
             include_dirs=[np.get_include()],
-            extra_compile_args=on_platform(('Linux', 'Darwin'), ['-O2', '-Wno-write-strings', '-std=c++0x'])
+            extra_compile_args=['-O2', '-Wno-write-strings', '-std=c++0x'], # maybe skip these on Windows?
         ),
     ],
     install_requires=install_requires,

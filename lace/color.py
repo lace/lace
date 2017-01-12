@@ -15,11 +15,11 @@ def colors_like(color, arr, colormap=DEFAULT_COLORMAP):
     triangle and not something we ever actually use in practice.
     '''
     import numpy as np
-    from bodylabs.numerics import is_empty_arraylike
+    from blmath.numerics import is_empty_arraylike
     if is_empty_arraylike(color):
         return None
     if isinstance(color, basestring):
-        from bodylabs.util.color_names import name_to_rgb
+        from lace.color_names import name_to_rgb
         color = name_to_rgb[color]
     elif isinstance(color, list):
         color = np.array(color)
@@ -55,7 +55,7 @@ class MeshMixin(object):
     def set_vertex_colors_from_weights(self, weights, scale_to_range_1=True, color=DEFAULT_COLORMAP):
         import numpy as np
         if scale_to_range_1:
-            from bodylabs.numerics import scale_to_range
+            from blmath.numerics import scale_to_range
             weights = scale_to_range(weights.flatten(), 0.0, 1.0)
         if color != None:
             self.vc = colors_like(weights, self.v, colormap=color)
@@ -63,7 +63,7 @@ class MeshMixin(object):
             self.vc = np.tile(np.reshape(weights, (len(weights), 1)), (1, 3))
 
     def scale_vertex_colors(self, weights, w_min=0.0, w_max=1.0):
-        from bodylabs.numerics import scale_to_range
+        from blmath.numerics import scale_to_range
         weights = scale_to_range(weights.flatten(), w_min, w_max)
         self.vc = weights.reshape(-1, 1) * self.vc
 
@@ -75,7 +75,7 @@ class MeshMixin(object):
     def set_face_colors_from_weights(self, weights, scale_to_range_1=True, color=DEFAULT_COLORMAP):
         import numpy as np
         if scale_to_range_1:
-            from bodylabs.numerics import scale_to_range
+            from blmath.numerics import scale_to_range
             weights = scale_to_range(weights.flatten(), 0.0, 1.0)
         if color != None:
             self.fc = colors_like(weights, self.f, colormap=color)

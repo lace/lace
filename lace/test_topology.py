@@ -69,8 +69,9 @@ class TestTopologyMixin(unittest.TestCase):
         return indices_to_keep, expected_verts, expected_face_vertices
 
     def test_keep_vertices(self):
-        from bodylabs.scape.loaders import load_scapemodel
-        mesh = load_scapemodel.template_for(gender='female', resolution='multires0')
+        from lace.cache import sc
+        from lace.serialization import obj
+        mesh = obj.load(sc('s3://bodylabs-versioned-assets/templates/cached_model_templates/sm_2013_f_0005.1.0.0.obj'))
 
         indices_to_keep, expected_verts, expected_face_vertices = self.indicies_for_testing_keep_vertices(mesh)
 
@@ -84,8 +85,9 @@ class TestTopologyMixin(unittest.TestCase):
         self.assertLessEqual(max_v_index, mesh.v.shape[0] - 1)
 
     def test_keep_vertices_without_segm(self):
-        from bodylabs.scape.loaders import load_scapemodel
-        mesh = load_scapemodel.template_for(gender='female', resolution='multires0')
+        from lace.cache import sc
+        from lace.serialization import obj
+        mesh = obj.load(sc('s3://bodylabs-versioned-assets/templates/cached_model_templates/sm_2013_f_0005.1.0.0.obj'))
         mesh.segm = None
 
         indices_to_keep, expected_verts, expected_face_vertices = self.indicies_for_testing_keep_vertices(mesh)
@@ -100,8 +102,9 @@ class TestTopologyMixin(unittest.TestCase):
         self.assertLessEqual(max_v_index, mesh.v.shape[0] - 1)
 
     def test_keep_vertices_without_f(self):
-        from bodylabs.scape.loaders import load_scapemodel
-        mesh = load_scapemodel.template_for(gender='female', resolution='multires0')
+        from lace.cache import sc
+        from lace.serialization import obj
+        mesh = obj.load(sc('s3://bodylabs-versioned-assets/templates/cached_model_templates/sm_2013_f_0005.1.0.0.obj'))
         mesh.segm = None
         mesh.f = None
 
@@ -121,8 +124,9 @@ class TestTopologyMixin(unittest.TestCase):
 
     @mock.patch('warnings.warn')
     def test_keep_vertices_with_empty_list_does_not_warn(self, warn):
-        from bodylabs.scape.loaders import load_scapemodel
-        mesh = load_scapemodel.template_for(gender='female', resolution='multires0')
+        from lace.cache import sc
+        from lace.serialization import obj
+        mesh = obj.load(sc('s3://bodylabs-versioned-assets/templates/cached_model_templates/sm_2013_f_0005.1.0.0.obj'))
 
         mesh.keep_vertices([])
 
@@ -164,8 +168,9 @@ class TestTopologyMixin(unittest.TestCase):
             cube.vertex_indices_in_segments(['random_segm'])
 
     def test_keep_segments(self):
-        from bodylabs.scape.loaders import load_scapemodel
-        mesh = load_scapemodel.template_for(gender='female', resolution='multires0')
+        from lace.cache import sc
+        from lace.serialization import obj
+        mesh = obj.load(sc('s3://bodylabs-versioned-assets/templates/cached_model_templates/sm_2013_f_0005.1.0.0.obj'))
 
         expected_parts = ['rightCalf', 'head', 'rightHand', 'leftTorso', 'midsection', 'leftFoot', 'rightTorso', 'rightThigh', 'leftCalf', 'rightShoulder', 'leftShoulder', 'leftThigh', 'pelvis', 'leftForearm', 'rightFoot', 'leftHand', 'rightUpperArm', 'rightForearm', 'leftUpperArm']
         self.assertEqual(set(mesh.segm.keys()), set(expected_parts))

@@ -1,8 +1,8 @@
 # NB: setter_property incorrectly trigger's pylint's method-hidden error
 # pylint: disable=method-hidden, unused-argument
 import numpy as np
-from bodylabs.numerics import as_numeric_array
-from bodylabs.util.decorators import setter_property
+from blmath.numerics import as_numeric_array
+from blmath.util.decorators import setter_property
 
 from lace import serialization
 from lace import color
@@ -62,7 +62,7 @@ class Mesh(
         if filename is not None:
             if isinstance(filename, basestring):
                 # Support `Mesh(filename)`
-                from bodylabs.serialization import mesh
+                from lace.serialization import mesh
                 mesh.load(filename, existing_mesh=self)
                 if self.basename is None:
                     import os

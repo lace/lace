@@ -253,20 +253,6 @@ class TestOBJWithComments(TestOBJBase):
             self.assertRegexpMatches(contents, '# foo bar\n# this is a comment\n')
             self.assertNotRegexpMatches(contents, '# Copyright')
 
-    def test_writing_copyright_obj_does_write_copyright(self):
-        local_file = os.path.join(self.tmp_dir, "test_writing_copyright_ply_does_write_copyright.ply")
-        m = obj.load(self.test_obj_path)
-        obj.dump(m, local_file, copyright=True)
-        with open(local_file) as f:
-            self.assertRegexpMatches(f.read(), r'# Copyright \d\d\d\d Body Labs, Inc.\n')
-
-    def test_writing_copyright_obj_with_comments_does_write_comments_and_copyright(self):
-        local_file = os.path.join(self.tmp_dir, "test_writing_copyright_ply_with_comments_does_write_comments_and_copyright.ply")
-        m = obj.load(self.test_obj_path)
-        obj.dump(m, local_file, comments=['foo bar', 'this is a comment'], copyright=True)
-        with open(local_file) as f:
-            self.assertRegexpMatches(f.read(), r'# foo bar\n# this is a comment\n# Copyright \d\d\d\d Body Labs, Inc.\n')
-
 class TestOBJSpecialCases(TestOBJBase):
 
     def test_writing_segmented_mesh_preserves_face_order(self):

@@ -2,6 +2,12 @@ numpy>=1.10.1
 pyopengl>=3.1.0
 matplotlib>=1.5.0
 baiji>=2.5.3
-scipy
+baiji-serialization>=1.0.2
+baiji-pod>=1.0.0
+scipy>=0.14.1
 pyzmq
 baiji-pod
+lxml
+pycollada
+
+git+ssh://git@github.com/bodylabs/blmath.git@104_initial#egg=blmath

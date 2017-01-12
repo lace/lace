@@ -25,7 +25,7 @@ import OpenGL.GLUT as glut
 import OpenGL.GLU as glu
 import OpenGL.arrays.vbo
 from lace.mesh import Mesh
-from bodylabs.numerics.matlab import row
+from blmath.numerics.matlab import row
 from bodylabs.optimization.objectives.normals import TriNormals
 import zmq
 import re
@@ -494,7 +494,10 @@ class MeshViewerSingle(object):
         gl.glDrawElementsui(gl.GL_LINES, np.arange(len(allpts), dtype=np.uint32))
 
     def generate_dynamic_model_meshes(self, remove_head=False):
-        from bodylabs.scape.scapemodel import ScapeModel
+        try:
+            from bodylabs.scape.scapemodel import ScapeModel
+        except ImportError:
+            raise ImportError("MeshViewer.generate_dynamic_model_meshes requires access to BodyLabs core.")
         for dynamic_model in self.dynamic_models:
             scapemodel_fname = dynamic_model['name']
             if scapemodel_fname not in self.scape_models.keys():
@@ -674,7 +677,7 @@ class MeshViewerRemote(object):
             Glut calls this function (when mouse button is down)
             and pases the mouse cursor postion in window coords as the mouse moves.
         """
-        from bodylabs.geometry.transform.rodrigues import as_rotation_matrix
+        from blmath.geometry.transform.rodrigues import as_rotation_matrix
         if self.isdragging:
             mouse_pt = arcball.Point2fT(cursor_x, cursor_y)
             ThisQuat = self.arcball.drag(mouse_pt)                        # // Update End Vector And Get Rotation As Quaternion

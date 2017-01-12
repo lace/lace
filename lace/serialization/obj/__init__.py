@@ -1,5 +1,7 @@
 from objutils import LoadObjError # lint isn't able to find the defintion in a c++ mocule pylint: disable=no-name-in-module
 
+EXTENSION = '.obj'
+
 def load(f, existing_mesh=None):
     from baiji.serialization.util.openlib import ensure_file_open_and_call
     return ensure_file_open_and_call(f, _load, mode='rb', mesh=existing_mesh)
@@ -7,11 +9,8 @@ def load(f, existing_mesh=None):
 def dump(obj, f, flip_faces=False, ungroup=False, comments=None,
          copyright=False, split_normals=False, write_mtl=True): # FIXME pylint: disable=redefined-outer-name, redefined-builtin
     from baiji.serialization.util.openlib import ensure_file_open_and_call
-    from bodylabs.serialization.copyright import mesh_copyright_text
-    if not comments:
+    if comments is None:
         comments = []
-    if copyright:
-        comments.append(mesh_copyright_text())
     return ensure_file_open_and_call(f, _dump, mode='wb', obj=obj, flip_faces=flip_faces,
                                      ungroup=ungroup, comments=comments,
                                      split_normals=split_normals, write_mtl=write_mtl)
@@ -20,7 +19,7 @@ def _load(fd, mesh=None):
     from collections import OrderedDict
     from baiji import s3
     from lace.mesh import Mesh
-    from bodylabs.cache import sc
+    from lace.cache import sc
     import objutils
 
     v, vt, vn, f, ft, fn, mtl_path, landm, segm = objutils.read(fd.name)

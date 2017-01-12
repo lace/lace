@@ -2,7 +2,7 @@ class MeshMixin(object):
     def show(self, mv=None, meshes=None, lines=None, with_measurements=False, titlebar='Mesh Viewer'):
         import numpy as np
         from lace.meshviewer import MeshViewer
-        from bodylabs.numerics.matlab import row
+        from blmath.numerics.matlab import row
         if meshes is None:
             meshes = []
         if lines is None:
