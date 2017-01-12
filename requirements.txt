@@ -5,9 +5,8 @@ baiji>=2.5.3
 baiji-serialization>=1.0.2
 baiji-pod>=1.0.0
 scipy>=0.14.1
-pyzmq
-baiji-pod
-lxml
-pycollada
+pyzmq>=15.1.0
+lxml>=3.5.0
+pycollada>=0.4.1
 
 git+ssh://git@github.com/bodylabs/blmath.git@104_initial#egg=blmath
