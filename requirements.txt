@@ -9,4 +9,4 @@ pyzmq>=15.1.0
 lxml>=3.5.0
 pycollada>=0.4.1
 
-git+ssh://git@github.com/bodylabs/blmath.git@104_initial#egg=blmath
+git+ssh://git@github.com/bodylabs/blmath.git@6ddafff9ee#egg=blmath
