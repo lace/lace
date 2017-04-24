@@ -79,7 +79,7 @@ class TestGeometryMixin(unittest.TestCase):
 
         '''
         import math
-        from bodylabs.mesh import shapes
+        from lace import shapes
 
         points = np.array([
             [1, 0, 0],
@@ -112,7 +112,7 @@ class TestGeometryMixin(unittest.TestCase):
 
         '''
         import math
-        from bodylabs.mesh import shapes
+        from lace import shapes
 
         points = np.array([
             [1, 0, 0],
@@ -187,4 +187,3 @@ class TestGeometryMixin(unittest.TestCase):
         mesh = Mesh()
         mesh.v = np.array([[150, 100, 50], [-150, 50, 150]])
         self.assertEqual(mesh.predict_body_units(), 'cm')
-
