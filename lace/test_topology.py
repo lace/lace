@@ -133,7 +133,7 @@ class TestTopologyMixin(unittest.TestCase):
         self.assertFalse(warn.called)
 
     def test_vertex_indices_in_segments(self):
-        from bodylabs.mesh.shapes import create_cube
+        from lace.shapes import create_cube
         cube = create_cube(np.zeros(3), 1.)
         cube.segm = {
             # All quads.
@@ -190,11 +190,10 @@ class TestTopologyMixin(unittest.TestCase):
         self.assertEqual(max_f_index, mesh.f.shape[0] - 1)
 
     def test_clean_segments(self):
-        from bodylabs.mesh.shapes import create_cube
+        from lace.shapes import create_cube
         cube = create_cube(np.zeros(3), 1.)
         cube.segm = {
             'all': np.arange(12)
         }
 
         self.assertEqual(cube.clean_segments(['random_segm', 'all']), ['all'])
-
