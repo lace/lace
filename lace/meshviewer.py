@@ -26,7 +26,7 @@ import OpenGL.GLU as glu
 import OpenGL.arrays.vbo
 from lace.mesh import Mesh
 from blmath.numerics.matlab import row
-from bodylabs.optimization.objectives.normals import TriNormals
+from blmath.optimization.objectives.normals import TriNormals
 import zmq
 import re
 import platform

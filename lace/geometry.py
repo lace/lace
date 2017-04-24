@@ -4,7 +4,7 @@ from blmath.numerics import vx
 
 class MeshMixin(object):
     def estimate_vertex_normals(self, face_to_verts_sparse_matrix=None):
-        from bodylabs.optimization.objectives.normals import TriNormalsScaled
+        from blmath.optimization.objectives.normals import TriNormalsScaled
         face_normals = TriNormalsScaled(self.v, self.f).r.reshape(-1, 3)
         ftov = face_to_verts_sparse_matrix if face_to_verts_sparse_matrix else self.faces_by_vertex(as_sparse_matrix=True)
         non_scaled_normals = ftov*face_normals
@@ -41,7 +41,7 @@ class MeshMixin(object):
         - mesh.scale(.01)
 
         '''
-        from bodylabs.util import units
+        from blmath import units
         factor = units.factor(
             from_units=from_units,
             to_units=to_units,
@@ -288,4 +288,3 @@ class MeshMixin(object):
                                    e_1[:,0]*e_2[:,1] - e_1[:,1]*e_2[:,0]]).T # FIXME pylint: disable=bad-whitespace
 
         return (0.5)*((cross_products**2.).sum(axis=1)**0.5)
-

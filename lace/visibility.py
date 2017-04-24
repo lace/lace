@@ -8,7 +8,7 @@ class MeshMixin(object):
 
     def vertex_visibility_and_normals(self, camera, omni_directional_camera=False):
         import numpy as np
-        from bodylabs.mesh.visibility import visibility_compute # pylint: disable=no-name-in-module
+        from lace_search.visibility import visibility_compute # pylint: disable=no-name-in-module
         arguments = {'v': self.v, 'f': self.f, 'cams' : np.array([camera.origin.flatten()])}
         if not omni_directional_camera:
             arguments['sensors'] = np.array([camera.sensor_axis.flatten()])
@@ -25,4 +25,3 @@ class MeshMixin(object):
         old_to_new_indices = np.zeros(len(vis))
         old_to_new_indices[vertex_indices_to_keep] = range(len(vertex_indices_to_keep))
         return self.__class__(v=vertices_to_keep, f=np.array([old_to_new_indices[face] for face in faces_to_keep]))
-
