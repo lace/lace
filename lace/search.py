@@ -2,15 +2,15 @@ import numpy as np
 
 class MeshMixin(object):
     def compute_aabb_tree(self):
-        from bodylabs.mesh.search import AabbTree
+        from lace_search.aabb_tree import AabbTree
         return AabbTree(self.v, self.f)
 
     def compute_aabb_normals_tree(self):
-        from bodylabs.mesh.search import AabbNormalsTree
+        from lace_search.aabb_normal_tree import AabbNormalsTree
         return AabbNormalsTree(self)
 
     def compute_closest_point_tree(self, use_cgal=False):
-        from bodylabs.mesh.search import ClosestPointTree
+        from lace_search.closest_point_tree import ClosestPointTree
         if use_cgal:
             raise NotImplementedError('use_cgal should be False, CGALClosestPointTree has been removed')
         return ClosestPointTree(self)
@@ -31,4 +31,3 @@ class MeshMixin(object):
             raise NotImplementedError('use_cgal should be False, CGALClosestPointTree has been removed')
         tree = self.compute_closest_point_tree()
         return tree.vertices_within(vertex_or_vertices, radius)
-
