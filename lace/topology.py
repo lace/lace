@@ -268,10 +268,6 @@ class MeshMixin(object):
         import numpy as np
         return self.keep_vertices(np.setdiff1d(np.arange(self.v.shape[0]), v_list))
 
-    def simplified(self, n_faces_desired=50000):
-        from bodylabs.mesh.topology.slim import slimmed_mesh
-        return slimmed_mesh(self, n_faces_desired)
-
     def point_cloud(self):
         return self.__class__(v=self.v, f=[], vc=self.vc) if self.vc is not None else self.__class__(v=self.v, f=[])
 
