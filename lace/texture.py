@@ -82,7 +82,7 @@ class MeshMixin(object):
                 self.ft = np.zeros(self.f.shape, dtype=np.uint32)
                 for f, ft in zip(mesh_with_texture.f, mesh_with_texture.ft):
                     k = " ".join([str(x) for x in sorted(f)])
-                    if not k in face_mapping:
+                    if k not in face_mapping:
                         raise Exception('Mesh topology mismatch')
                     # the vertex order can be arbitrary...
                     ids = []

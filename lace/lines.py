@@ -1,9 +1,8 @@
-__all__ = ['Lines']
-
 import numpy as np
 from blmath.numerics import as_numeric_array
 from blmath.util.decorators import setter_property
 
+__all__ = ['Lines']
 
 class Lines(object):
     """3d List-of-lines
@@ -101,5 +100,3 @@ class Lines(object):
 
     def remove_vertices(self, v_list):
         return self.keep_vertices(np.setdiff1d(np.arange(self.v.shape[0]), v_list))
-
-

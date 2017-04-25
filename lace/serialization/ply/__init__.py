@@ -1,8 +1,9 @@
+from lace.serialization.ply.plyutils import error as PLYError # pylint can't find the exception type in the c code pylint: disable=no-name-in-module
+
 __all__ = ['load', 'dump', 'EXTENSION']
 
 EXTENSION = '.ply'
 
-from lace.serialization.ply.plyutils import error as PLYError # pylint can't find the exception type in the c code pylint: disable=no-name-in-module
 
 def load(f, existing_mesh=None):
     from baiji.serialization.util.openlib import ensure_file_open_and_call

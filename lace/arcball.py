@@ -3,9 +3,9 @@ ArcBall.py -- Math utilities, vector, matrix types and ArcBall quaternion rotati
 """
 # FIXME pylint: disable=bad-whitespace
 
-import numpy as np
 import copy
 from math import sqrt
+import numpy as np
 
 # //assuming IEEE-754(GLfloat), which i believe has max precision of 7 bits
 Epsilon = 1.0e-5

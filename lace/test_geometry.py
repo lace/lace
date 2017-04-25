@@ -1,5 +1,5 @@
-import numpy as np
 import unittest
+import numpy as np
 from lace.cache import sc
 from lace.mesh import Mesh
 

@@ -2,6 +2,27 @@
 # FIXME pylint: disable=attribute-defined-outside-init
 # encoding: utf-8
 
+import sys
+import os
+import os.path
+import time
+import copy
+import subprocess
+import re
+import platform
+from multiprocessing import freeze_support
+import numpy as np
+import OpenGL.GL as gl
+from OpenGL.GL import shaders
+import OpenGL.GLUT as glut
+import OpenGL.GLU as glu
+import OpenGL.arrays.vbo
+from blmath.numerics.matlab import row
+from blmath.optimization.objectives.normals import TriNormals
+import zmq
+from lace import arcball
+from lace.mesh import Mesh
+
 __all__ = ['MeshViewer', 'MeshViewers', 'test_for_opengl']
 
 """
@@ -10,27 +31,6 @@ MeshViewer.py
 Created by Matthew Loper on 2012-05-11.
 Copyright (c) 2012 MPI. All rights reserved.
 """
-
-import sys
-import os
-import os.path
-import time
-import copy
-import numpy as np
-from multiprocessing import freeze_support
-from lace import arcball
-import OpenGL.GL as gl
-from OpenGL.GL import shaders
-import OpenGL.GLUT as glut
-import OpenGL.GLU as glu
-import OpenGL.arrays.vbo
-from lace.mesh import Mesh
-from blmath.numerics.matlab import row
-from blmath.optimization.objectives.normals import TriNormals
-import zmq
-import re
-import platform
-import subprocess
 
 
 def _popen_exec_python(command, args=[], stdin=None, stdout=None, stderr=None):
@@ -55,7 +55,7 @@ def _run_self(args, stdin=None, stdout=subprocess.PIPE, stderr=None):
 
 
 def test_for_opengl():
-    if test_for_opengl.result == None:
+    if test_for_opengl.result is None:
         p = _run_self(["TEST_FOR_OPENGL"], stderr=open(os.devnull, 'wb'))
         line = p.stdout.readline()
         test_for_opengl.result = 'success' in line
@@ -194,7 +194,7 @@ class MeshViewerLocal(object):
 
     def __new__(cls, titlebar, uid, shape, keepalive, window_width, window_height):
         import traceback
-        assert uid == None or isinstance(uid, str) or isinstance(uid, unicode)
+        assert uid is None or isinstance(uid, str) or isinstance(uid, unicode)
         if uid == 'stack':
             uid = ''.join(traceback.format_list(traceback.extract_stack()))
         if uid and uid in MeshViewer.managed.keys():
@@ -519,8 +519,8 @@ class MeshViewerSingle(object):
             model_mesh.set_vertex_colors('pink')
             model_meshes.append(model_mesh)
         if remove_head:
-            for i in range(len(model_meshes)):
-                model_meshes[i].remove_faces(self.scape_models[self.dynamic_models[i]['name']].template.segm['head'])
+            for i, model_mesh in enumerate(model_meshes):
+                model_mesh.remove_faces(self.scape_models[self.dynamic_models[i]['name']].template.segm['head'])
         return model_meshes
 
     def draw_primitives(self, scalefactor=1.0, center=[0.0, 0.0, 0.0], recenter=False, want_camera=False):
@@ -638,7 +638,7 @@ class MeshViewerRemote(object):
     def snapshot(self, path):
         import cv
         self.on_draw()
-        if False:
+        if False: # pylint: disable=using-constant-test
             x, y, width, height = gl.glGetIntegerv(gl.GL_VIEWPORT)
         else:
             x = 0

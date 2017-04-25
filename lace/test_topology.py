@@ -1,6 +1,6 @@
+import unittest
 import numpy as np
 import mock
-import unittest
 from lace.mesh import Mesh
 
 class TestTopologyMixin(unittest.TestCase):

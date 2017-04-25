@@ -1,4 +1,4 @@
-from objutils import LoadObjError # lint isn't able to find the defintion in a c++ mocule pylint: disable=no-name-in-module
+from lace.objutils import LoadObjError # lint isn't able to find the defintion in a c++ module pylint: disable=no-name-in-module
 
 EXTENSION = '.obj'
 
@@ -7,7 +7,7 @@ def load(f, existing_mesh=None):
     return ensure_file_open_and_call(f, _load, mode='rb', mesh=existing_mesh)
 
 def dump(obj, f, flip_faces=False, ungroup=False, comments=None,
-         copyright=False, split_normals=False, write_mtl=True): # FIXME pylint: disable=redefined-outer-name, redefined-builtin
+         copyright=False, split_normals=False, write_mtl=True): # FIXME pylint: disable=redefined-outer-name, redefined-builtin, unused-argument
     from baiji.serialization.util.openlib import ensure_file_open_and_call
     if comments is None:
         comments = []
@@ -20,7 +20,7 @@ def _load(fd, mesh=None):
     from baiji import s3
     from lace.mesh import Mesh
     from lace.cache import sc
-    import objutils
+    import lace.objutils as objutils # pylint: disable=no-name-in-module
 
     v, vt, vn, f, ft, fn, mtl_path, landm, segm = objutils.read(fd.name)
     if not mesh:

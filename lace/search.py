@@ -1,4 +1,3 @@
-import numpy as np
 
 class MeshMixin(object):
     def compute_aabb_tree(self):
@@ -6,7 +5,7 @@ class MeshMixin(object):
         return AabbTree(self.v, self.f)
 
     def compute_aabb_normals_tree(self):
-        from lace_search.aabb_normal_tree import AabbNormalsTree
+        from lace_search.aabb_normals_tree import AabbNormalsTree
         return AabbNormalsTree(self)
 
     def compute_closest_point_tree(self, use_cgal=False):

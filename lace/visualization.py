@@ -7,7 +7,7 @@ class MeshMixin(object):
             meshes = []
         if lines is None:
             lines = []
-        if mv == None:
+        if mv is None:
             mv = MeshViewer(keepalive=True, titlebar=titlebar)
         else:
             mv.titlebar = titlebar

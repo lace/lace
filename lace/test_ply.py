@@ -1,4 +1,5 @@
-import unittest, os
+import unittest
+import os
 import numpy as np
 from lace.mesh import Mesh
 from lace.serialization import ply

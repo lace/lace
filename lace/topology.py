@@ -339,7 +339,7 @@ class MeshMixin(object):
     # vertex i should now be the j^th vertex. As such, each entry in new_ordering should be unique.
     def reorder_vertices(self, new_ordering, new_normal_ordering=None):
         import numpy as np
-        if new_normal_ordering == None:
+        if new_normal_ordering is None:
             new_normal_ordering = new_ordering
         inverse_ordering = np.zeros(len(new_ordering), dtype=int)
         for i, j in enumerate(new_ordering):

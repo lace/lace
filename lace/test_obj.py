@@ -1,12 +1,12 @@
 import unittest
 import os
 from textwrap import dedent
-import mock
 import numpy as np
 from baiji import s3
 from scratch_dir import ScratchDirMixin
 from bltest import skip_if_unavailable
 from bltest.extra_asserts import ExtraAssertionsMixin
+import mock
 from lace.mesh import Mesh
 from lace.serialization import obj
 from lace.cache import sc

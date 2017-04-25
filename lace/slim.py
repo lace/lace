@@ -50,7 +50,9 @@ def qslim_obj_file(path, n_tris=10000, want_optimal=False):
     '''
     A wrapper for the sqlim command, which we don't have source to or a windows version of
     '''
-    import os, platform, sys
+    import os
+    import platform
+    import sys
     from subprocess import check_output
     from bodylabs.mesh import Mesh
 

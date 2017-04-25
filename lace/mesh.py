@@ -1,5 +1,5 @@
 # NB: setter_property incorrectly trigger's pylint's method-hidden error
-# pylint: disable=method-hidden, unused-argument
+# pylint: disable=method-hidden, unused-argument, redefined-outer-name
 import numpy as np
 from blmath.numerics import as_numeric_array
 from blmath.util.decorators import setter_property
@@ -165,13 +165,11 @@ class Mesh(
 
     @setter_property
     def fc(self, val):
-        from lace import color
         val = color.colors_like(val, self.f)
         self.__dict__['fc'] = val
 
     @setter_property
     def vc(self, val):
-        from lace import color
         val = color.colors_like(val, self.v)
         self.__dict__['vc'] = val
 
