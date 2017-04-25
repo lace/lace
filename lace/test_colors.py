@@ -2,9 +2,8 @@ import unittest
 import numpy as np
 from lace.mesh import Mesh
 from lace import color
-from bodylabs.util.test import ExtraAssertionsMixin
 
-class TestMeshColors(ExtraAssertionsMixin, unittest.TestCase):
+class TestMeshColors(unittest.TestCase):
     def setUp(self):
         self.colormap = 'jet'
         self.jet_0 = np.array([0.0, 0.0, 0.5])

@@ -2,7 +2,8 @@ import unittest, os
 import numpy as np
 from lace.mesh import Mesh
 from lace.serialization import ply
-from bodylabs.util.test import ExtraAssertionsMixin, skip_if_unavaliable
+from bltest import skip_if_unavailable
+from bltest.extra_asserts import ExtraAssertionsMixin
 
 class TestPLYBase(ExtraAssertionsMixin, unittest.TestCase):
     def setUp(self):
@@ -43,7 +44,7 @@ class TestPLY(TestPLYBase):
         self.assertTrue((m.f == self.truth['box_f']).all())
 
     def test_loads_from_remote_path_using_serializer(self):
-        skip_if_unavaliable('s3')
+        skip_if_unavailable('s3')
         m = ply.load(self.test_ply_url)
         self.assertTrue((m.v == self.truth['box_v']).all())
         self.assertTrue((m.f == self.truth['box_f']).all())

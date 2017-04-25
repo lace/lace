@@ -1,12 +1,16 @@
-import unittest, mock, os
-import numpy as np
+import unittest
+import os
 from textwrap import dedent
+import mock
+import numpy as np
 from baiji import s3
+from scratch_dir import ScratchDirMixin
+from bltest import skip_if_unavailable
+from bltest.extra_asserts import ExtraAssertionsMixin
 from lace.mesh import Mesh
 from lace.serialization import obj
 from lace.cache import sc
 from lace.cache import vc
-from bodylabs.util.test import ExtraAssertionsMixin, skip_if_unavaliable, CreateScratchDirectoryMixin
 
 class TestOBJBase(ExtraAssertionsMixin, unittest.TestCase):
     def setUp(self):
@@ -50,7 +54,7 @@ class TestOBJBasicLoading(TestOBJBase):
         self.assertDictOfArraysEqual(m.segm, self.truth['box_segm'])
 
     def test_loads_from_remote_path_using_serializer(self):
-        skip_if_unavaliable('s3')
+        skip_if_unavailable('s3')
         m = obj.load(self.test_obj_url)
         self.assertTrue((m.v == self.truth['box_v']).all())
         self.assertTrue((m.f == self.truth['box_f']).all())
@@ -101,7 +105,7 @@ class TestOBJBasicWriting(TestOBJBase):
         obj.dump(m, local_file)
         self.assertFilesEqual(local_file, self.test_obj_simple_path)
 
-class TestOBJWithMaterials(CreateScratchDirectoryMixin, TestOBJBase):
+class TestOBJWithMaterials(ScratchDirMixin, TestOBJBase):
 
     def test_writing_obj_with_mtl(self):
         local_file = os.path.join(self.tmp_dir, "test_writing_obj_with_mtl.obj")
@@ -154,7 +158,7 @@ class TestOBJWithMaterials(CreateScratchDirectoryMixin, TestOBJBase):
 
     @mock.patch('bodylabs.cloud.s3.open', side_effect=s3.open)
     def test_reading_obj_with_mtl_from_s3_url(self, mock_s3_open):
-        skip_if_unavaliable('s3')
+        skip_if_unavailable('s3')
         m = obj.load(self.obj_with_texure)
 
         mock_s3_open.assert_has_calls([
@@ -167,7 +171,7 @@ class TestOBJWithMaterials(CreateScratchDirectoryMixin, TestOBJBase):
     @mock.patch('bodylabs.cloud.s3.open', side_effect=s3.open)
     def test_reading_obj_with_mtl_from_absolute_path(self, mock_s3_open):
         # This is generally a very bad idea; it makes it hard to move an obj around
-        skip_if_unavaliable('s3')
+        skip_if_unavailable('s3')
         obj_path = os.path.join(self.scratch_dir, 'abs_path_to_mtl.obj')
         mlt_path = os.path.join(self.scratch_dir, 'abs_path_to_mtl.mlt')
         tex_path = os.path.abspath(sc(self.obj_with_texure_tex))
@@ -190,7 +194,7 @@ class TestOBJWithMaterials(CreateScratchDirectoryMixin, TestOBJBase):
     def test_reading_obj_with_mtl_from_missing_absolute_path(self, mock_s3_open):
         # If an absolute path is given and the file is missing, try looking in the same directory;
         # this lets you find the most common intention when an abs path is used.
-        skip_if_unavaliable('s3')
+        skip_if_unavailable('s3')
         obj_path = os.path.join(self.scratch_dir, 'abs_path_to_missing_mtl.obj')
         real_mlt_path = os.path.join(self.scratch_dir, 'abs_path_to_missing_mtl.mlt')
         arbitrary_mlt_path = os.path.join(self.scratch_dir, 'some_other_absolute_path', 'abs_path_to_missing_mtl.mlt')
@@ -215,7 +219,7 @@ class TestOBJWithMaterials(CreateScratchDirectoryMixin, TestOBJBase):
         # In this case, we're given a windows absolute path, which it totally wrong, but if there happens
         # to be a mtl file of the right name in the same dir as the obj, go for it.
         # This is a signiicant case, because 3dMD outputs mtllib this way.
-        skip_if_unavaliable('s3')
+        skip_if_unavailable('s3')
         obj_path = os.path.join(self.scratch_dir, 'abs_path_to_missing_windows_mtl.obj')
         real_mlt_path = os.path.join(self.scratch_dir, 'abs_path_to_missing_windows_mtl.mlt')
         arbitrary_mlt_path = 'C:/Users/ARGH/Documents/I-Did_some_scans/Subject_47/abs_path_to_missing_windows_mtl.mlt'

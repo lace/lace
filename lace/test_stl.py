@@ -2,9 +2,8 @@ import unittest
 import numpy as np
 from lace.cache import sc
 from lace.serialization import stl
-from bodylabs.util.test import ExtraAssertionsMixin
 
-class TestSTL(ExtraAssertionsMixin, unittest.TestCase):
+class TestSTL(unittest.TestCase):
     def setUp(self):
         import tempfile
         self.tmp_dir = tempfile.mkdtemp('bodylabs-test')

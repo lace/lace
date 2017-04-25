@@ -1,10 +1,11 @@
-from lace.mesh import Mesh
-import numpy as np
 import unittest
+import numpy as np
+from scratch_dir import ScratchDirMixin
+from bltest.extra_asserts import ExtraAssertionsMixin
 from lace.cache import sc
-from bodylabs.util.test import CreateScratchDirectoryMixin, ExtraAssertionsMixin
+from lace.mesh import Mesh
 
-class TestLandmarks(ExtraAssertionsMixin, CreateScratchDirectoryMixin, unittest.TestCase):
+class TestLandmarks(ExtraAssertionsMixin, ScratchDirMixin, unittest.TestCase):
     def setUp(self):
         self.scan_fname = sc('s3://bodylabs-korper-assets/is/ps/shared/data/body/caesar/RawScans/csr0001a.ply')
         self.scan_lmrk = sc('s3://bodylabs-korper-assets/is/ps/shared/data/body/caesar/Landmarks/csr0001a.lmrk')
