@@ -54,7 +54,7 @@ def create_triangular_prism(p1, p2, p3, height):
     direction, the prism extends from behind them.
 
     '''
-    from bodylabs.geometry import Plane
+    from blmath.geometry import Plane
 
     base_plane = Plane.from_points(p1, p2, p3)
     lower_base_to_upper_base = height * -base_plane.normal

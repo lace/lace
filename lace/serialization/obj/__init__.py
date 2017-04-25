@@ -1,4 +1,4 @@
-from lace.objutils import LoadObjError # lint isn't able to find the defintion in a c++ module pylint: disable=no-name-in-module
+from lace.serialization.obj.objutils import LoadObjError # lint isn't able to find the defintion in a c++ module pylint: disable=no-name-in-module
 
 EXTENSION = '.obj'
 
@@ -20,7 +20,7 @@ def _load(fd, mesh=None):
     from baiji import s3
     from lace.mesh import Mesh
     from lace.cache import sc
-    import lace.objutils as objutils # pylint: disable=no-name-in-module
+    import lace.serialization.obj.objutils as objutils # pylint: disable=no-name-in-module
 
     v, vt, vn, f, ft, fn, mtl_path, landm, segm = objutils.read(fd.name)
     if not mesh:
