@@ -44,7 +44,7 @@ def _popen_exec_python(command, args=[], stdin=None, stdout=None, stderr=None):
 def _run_self(args, stdin=None, stdout=subprocess.PIPE, stderr=None):
     if platform.system() == 'Windows':
         try:
-            from bodylabs.util.windows import running_as_windows_exe, get_main_dir
+            from py_windows_exe import running_as_windows_exe, get_main_dir
             if running_as_windows_exe():
                 env = os.environ.copy()
                 env["PATH"] = "%s;%s" % (get_main_dir(), env["PATH"])

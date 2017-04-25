@@ -8,5 +8,6 @@ scipy>=0.14.1
 pyzmq>=15.1.0
 lxml>=3.5.0
 pycollada>=0.4.1
+py_windows_exe>=1.0.0,<2
 
 git+ssh://git@github.com/bodylabs/blmath.git@6ddafff9ee#egg=blmath
