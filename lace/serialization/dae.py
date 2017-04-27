@@ -30,7 +30,11 @@ def mesh_to_collada(mesh):
     Supports per-vertex color, but nothing else.
     '''
     import numpy as np
-    from collada import Collada, scene
+    try:
+        from collada import Collada, scene
+    except ImportError:
+        raise ImportError("lace.serialization.dae.mesh_to_collade requires package pycollada.")
+
 
     def create_material(dae):
         from collada import material, scene
