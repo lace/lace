@@ -1,15 +1,27 @@
 
 class MeshMixin(object):
+
+    msg_lace_search_missing = "{} is implemented in `lace-search` which is not installed and not yet publicly avaliable"
+
     def compute_aabb_tree(self):
-        from lace_search.aabb_tree import AabbTree
+        try:
+            from lace_search.aabb_tree import AabbTree
+        except ImportError:
+	    raise NotImplementedError(self.msg_lace_search_missing.format('compute_aabb_tree'))
         return AabbTree(self.v, self.f)
 
     def compute_aabb_normals_tree(self):
-        from lace_search.aabb_normals_tree import AabbNormalsTree
+        try:
+            from lace_search.aabb_normals_tree import AabbNormalsTree
+        except ImportError:
+	    raise NotImplementedError(self.msg_lace_search_missing.format('compute_aabb_normals_tree'))
         return AabbNormalsTree(self)
 
     def compute_closest_point_tree(self, use_cgal=False):
-        from lace_search.closest_point_tree import ClosestPointTree
+        try:
+            from lace_search.closest_point_tree import ClosestPointTree
+        except ImportError:
+	    raise NotImplementedError(self.msg_lace_search_missing.format('compute_closest_point_tree'))
         if use_cgal:
             raise NotImplementedError('use_cgal should be False, CGALClosestPointTree has been removed')
         return ClosestPointTree(self)

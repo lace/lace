@@ -3,7 +3,7 @@ import os
 import numpy as np
 from lace.mesh import Mesh
 from lace.serialization import ply
-from bltest import skip_if_unavailable
+from bltest import skip_if_unavailable, skip_on_import_error
 from bltest.extra_asserts import ExtraAssertionsMixin
 
 class TestPLYBase(ExtraAssertionsMixin, unittest.TestCase):
@@ -57,6 +57,7 @@ class TestPLY(TestPLYBase):
         self.assertTrue((m.f == self.truth['box_f']).all())
 
     def test_loads_from_local_path_using_constructor_with_landmarks(self):
+        skip_on_import_error('lace-search')
         m = Mesh(filename=self.test_ply_path, ppfilename=self.test_pp_path)
         self.assertTrue((m.v == self.truth['box_v']).all())
         self.assertTrue((m.f == self.truth['box_f']).all())

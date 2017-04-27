@@ -1,12 +1,14 @@
 import unittest
 import numpy as np
 from scratch_dir import ScratchDirMixin
+from bltest import skip_on_import_error
 from bltest.extra_asserts import ExtraAssertionsMixin
 from lace.cache import sc
 from lace.mesh import Mesh
 
 class TestLandmarks(ExtraAssertionsMixin, ScratchDirMixin, unittest.TestCase):
     def setUp(self):
+        skip_on_import_error('lace-search')
         self.scan_fname = sc('s3://bodylabs-korper-assets/is/ps/shared/data/body/caesar/RawScans/csr0001a.ply')
         self.scan_lmrk = sc('s3://bodylabs-korper-assets/is/ps/shared/data/body/caesar/Landmarks/csr0001a.lmrk')
         self.template_fname = sc('s3://bodylabs-korper-assets/is/ps/shared/data/body/template/textured_mean_scape_female.obj')
