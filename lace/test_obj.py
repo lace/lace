@@ -114,7 +114,7 @@ class TestOBJWithMaterials(ScratchDirMixin, TestOBJBase):
         self.assertTrue(s3.exists(os.path.splitext(local_file)[0] + '.mtl'))
         self.assertTrue(s3.exists(os.path.splitext(local_file)[0] + '.png'))
 
-    @mock.patch('bodylabs.cloud.s3.open', side_effect=s3.open)
+    @mock.patch('baiji.s3.open', side_effect=s3.open)
     def test_reading_obj_with_mtl_from_local_file(self, mock_s3_open):
         local_obj_with_texure = os.path.join(self.tmp_dir, os.path.basename(self.obj_with_texure))
         local_obj_with_texure_mtl = os.path.join(self.tmp_dir, os.path.basename(self.obj_with_texure_mtl))
@@ -132,7 +132,7 @@ class TestOBJWithMaterials(ScratchDirMixin, TestOBJBase):
         self.assertEqual(m.materials_filepath, local_obj_with_texure_mtl)
         self.assertEqual(m.texture_filepath, local_obj_with_texure_tex)
 
-    @mock.patch('bodylabs.cloud.s3.open', side_effect=s3.open)
+    @mock.patch('baiji.s3.open', side_effect=s3.open)
     @mock.patch('baiji.pod.asset_cache.AssetCache.__call__', side_effect=sc.__call__)
     def test_reading_obj_with_mtl_from_sc_file(self, mock_sc, mock_s3_open):
         from baiji.pod.asset_cache import CacheFile
@@ -156,7 +156,7 @@ class TestOBJWithMaterials(ScratchDirMixin, TestOBJBase):
         self.assertEqual(m.materials_filepath, sc(sc_obj_with_texure_mtl, bucket=bucket))
         self.assertEqual(m.texture_filepath, sc(sc_obj_with_texure_tex, bucket=bucket))
 
-    @mock.patch('bodylabs.cloud.s3.open', side_effect=s3.open)
+    @mock.patch('baiji.s3.open', side_effect=s3.open)
     def test_reading_obj_with_mtl_from_s3_url(self, mock_s3_open):
         skip_if_unavailable('s3')
         m = obj.load(self.obj_with_texure)
@@ -168,7 +168,7 @@ class TestOBJWithMaterials(ScratchDirMixin, TestOBJBase):
         self.assertEqual(m.materials_filepath, self.obj_with_texure_mtl)
         self.assertEqual(m.texture_filepath, self.obj_with_texure_tex)
 
-    @mock.patch('bodylabs.cloud.s3.open', side_effect=s3.open)
+    @mock.patch('baiji.s3.open', side_effect=s3.open)
     def test_reading_obj_with_mtl_from_absolute_path(self, mock_s3_open):
         # This is generally a very bad idea; it makes it hard to move an obj around
         skip_if_unavailable('s3')
@@ -190,7 +190,7 @@ class TestOBJWithMaterials(ScratchDirMixin, TestOBJBase):
         self.assertEqual(m.materials_filepath, mlt_path)
         self.assertEqual(m.texture_filepath, tex_path)
 
-    @mock.patch('bodylabs.cloud.s3.open', side_effect=s3.open)
+    @mock.patch('baiji.s3.open', side_effect=s3.open)
     def test_reading_obj_with_mtl_from_missing_absolute_path(self, mock_s3_open):
         # If an absolute path is given and the file is missing, try looking in the same directory;
         # this lets you find the most common intention when an abs path is used.
@@ -214,7 +214,7 @@ class TestOBJWithMaterials(ScratchDirMixin, TestOBJBase):
         self.assertEqual(m.materials_filepath, real_mlt_path)
         self.assertEqual(m.texture_filepath, tex_path)
 
-    @mock.patch('bodylabs.cloud.s3.open', side_effect=s3.open)
+    @mock.patch('baiji.s3.open', side_effect=s3.open)
     def test_reading_obj_with_mtl_from_missing_windows_absolute_path(self, mock_s3_open):
         # In this case, we're given a windows absolute path, which it totally wrong, but if there happens
         # to be a mtl file of the right name in the same dir as the obj, go for it.

@@ -27,14 +27,12 @@ setup(
     license='MIT',
     packages=[
         'lace',
-    ],
-    scripts=[
-        'bin/hello',
+        'lace.serialization',
+        'lace.serialization.obj',
+        'lace.serialization.ply'
     ],
     ext_modules=[
         Extension('lace.serialization.ply.plyutils',
-
-
             sources=[os.path.join('lace/serialization/ply', x) for x in ['plyutils.c', 'rply.c']],
             depends=[os.path.join('lace/serialization/ply', x) for x in ['plyutils.c', 'plyutils.h', 'rply.c', 'rply.h']],
         ),
