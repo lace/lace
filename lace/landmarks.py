@@ -1,4 +1,5 @@
-# pylint: disable=attribute-defined-outside-init
+# pylint: disable=attribute-defined-outside-init, len-as-condition
+
 def load_landmarks(filename):
     import re
     from baiji import s3

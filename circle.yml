@@ -14,7 +14,7 @@ dependencies:
     - rake install_style_config
     - pip install -U 'numpy>=1.10.1' 'scipy>=0.14.1'
     - pip install -Ur requirements_dev.txt
-    - pip install -e .
+    - pip install -Ue .
 
 test:
   override: # rather than using their autodetected steps, use these instead

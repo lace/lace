@@ -1,10 +1,10 @@
 import unittest
 import os
 import numpy as np
-from lace.mesh import Mesh
-from lace.serialization import ply
 from bltest import skip_if_unavailable, skip_on_import_error
 from bltest.extra_asserts import ExtraAssertionsMixin
+from lace.mesh import Mesh
+from lace.serialization import ply
 
 class TestPLYBase(ExtraAssertionsMixin, unittest.TestCase):
     def setUp(self):

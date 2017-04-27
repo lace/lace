@@ -1,4 +1,4 @@
-# pylint: disable=attribute-defined-outside-init, access-member-before-definition
+# pylint: disable=attribute-defined-outside-init, access-member-before-definition, len-as-condition
 
 def quads_to_tris(quads):
     '''

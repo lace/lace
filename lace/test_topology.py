@@ -1,3 +1,4 @@
+# pylint: disable=len-as-condition
 import unittest
 import numpy as np
 import mock

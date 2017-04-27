@@ -1,3 +1,4 @@
+# pylint: disable=len-as-condition
 __all__ = ['load', 'ParseError']
 
 class ParseError(Exception):

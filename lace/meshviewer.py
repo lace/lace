@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# FIXME pylint: disable=attribute-defined-outside-init
+# FIXME pylint: disable=attribute-defined-outside-init, len-as-condition
 # encoding: utf-8
 
 import sys
@@ -556,7 +556,7 @@ class MeshViewerSingle(object):
         # uncomment to add a default rotation (useful when automatically snapshoting kinect data
         #glRotate(220, 0.0, 1.0, 0.0)
         tf = np.identity(4, 'f')/scalefactor
-        tf[:3, 3] = -center/scalefactor
+        tf[:3, 3] = -center/scalefactor # pylint: disable=invalid-unary-operand-type
         tf[3, 3] = 1
         cur_mtx = gl.glGetFloatv(gl.GL_MODELVIEW_MATRIX).T
         gl.glLoadMatrixf(cur_mtx.dot(tf).T)

@@ -1,3 +1,4 @@
+# pylint: disable=len-as-condition
 def load(f, existing_mesh=None):
     from baiji.serialization.util.openlib import ensure_file_open_and_call
     return ensure_file_open_and_call(f, _load, mode='rb', existing_mesh=existing_mesh)
@@ -223,6 +224,3 @@ class BSFParser(object):
         ARM_CHECK_VALUES = ['unknown', True, False]
         ARM_CHECKS = ['arm not in front of torso right', 'arm not in front of torso left', 'arm touches not torso right', 'arm touches not torso left']
         self.header['arm_checks'] = dict(zip(ARM_CHECKS, map(lambda x: ARM_CHECK_VALUES[self.header['arm_checks'] >> (2*x) & 3], [0, 1, 2, 3])))
-
-
-

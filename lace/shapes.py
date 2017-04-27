@@ -57,7 +57,7 @@ def create_triangular_prism(p1, p2, p3, height):
     from blmath.geometry import Plane
 
     base_plane = Plane.from_points(p1, p2, p3)
-    lower_base_to_upper_base = height * -base_plane.normal
+    lower_base_to_upper_base = height * -base_plane.normal # pylint: disable=invalid-unary-operand-type
     vertices = np.vstack(([p1, p2, p3], [p1, p2, p3] + lower_base_to_upper_base))
 
     faces = np.array([
