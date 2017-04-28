@@ -3,7 +3,6 @@ __all__ = ['dump']
 def dump(mesh, f):
     from baiji.serialization.util.openlib import ensure_file_open_and_call
     return ensure_file_open_and_call(f, _dump, 'w', mesh)
-    return _dump(mesh, filename) # FIXME pylint: disable=unreachable, undefined-variable
 
 def _dump(f, mesh):
     '''

@@ -280,11 +280,11 @@ class MeshMixin(object):
         '''
         returns the surface area of each face
         '''
-        e_1 = self.v[self.f[:,1]] - self.v[self.f[:,0]] # FIXME pylint: disable=bad-whitespace
-        e_2 = self.v[self.f[:,2]] - self.v[self.f[:,0]] # FIXME pylint: disable=bad-whitespace
+        e_1 = self.v[self.f[:, 1]] - self.v[self.f[:, 0]]
+        e_2 = self.v[self.f[:, 2]] - self.v[self.f[:, 0]]
 
-        cross_products = np.array([e_1[:,1]*e_2[:,2] - e_1[:,2]*e_2[:,1], # FIXME pylint: disable=bad-whitespace
-                                   e_1[:,2]*e_2[:,0] - e_1[:,0]*e_2[:,2],  # FIXME pylint: disable=bad-whitespace
-                                   e_1[:,0]*e_2[:,1] - e_1[:,1]*e_2[:,0]]).T # FIXME pylint: disable=bad-whitespace
+        cross_products = np.array([e_1[:, 1]*e_2[:, 2] - e_1[:, 2]*e_2[:, 1],
+                                   e_1[:, 2]*e_2[:, 0] - e_1[:, 0]*e_2[:, 2],
+                                   e_1[:, 0]*e_2[:, 1] - e_1[:, 1]*e_2[:, 0]]).T
 
         return (0.5)*((cross_products**2.).sum(axis=1)**0.5)

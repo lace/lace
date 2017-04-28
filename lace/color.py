@@ -82,7 +82,7 @@ class MeshMixin(object):
         else:
             self.fc = np.tile(np.reshape(weights, (len(weights), 1)), (1, 3))
 
-    def color_by_height(self, axis=1, threshold=None, color=DEFAULT_COLORMAP): # FIXME pylint: disable=unused-argument
+    def color_by_height(self, axis=1, threshold=None, color=DEFAULT_COLORMAP): # pylint: disable=unused-argument
         '''
         Color each vertex by its height above the floor point.
 

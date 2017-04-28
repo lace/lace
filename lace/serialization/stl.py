@@ -35,7 +35,7 @@ def _load(f, mesh=None):
                 if line[1] == "normal":
                     try:
                         facenormals.append([float(x) for x in line[2:]])
-                    except: # FIXME pylint: disable=bare-except
+                    except: # pylint: disable=bare-except
                         facenormals.append([np.nan, np.nan, np.nan])
                 else:
                     facenormals.append([np.nan, np.nan, np.nan])
@@ -50,7 +50,7 @@ def _load(f, mesh=None):
                 current_face.append(len(verts))
                 try:
                     verts.append([float(x) for x in line[1:]])
-                except: # FIXME pylint: disable=bare-except
+                except: # pylint: disable=bare-except
                     verts.append([np.nan, np.nan, np.nan])
             else:
                 raise ValueError("Badly formatted STL file. I don't understand the line %s" % line)
@@ -64,5 +64,5 @@ def _load(f, mesh=None):
     return mesh
 
 
-def _dump(f, mesh, name="mesh", ascii=True): # FIXME pylint: disable=unused-argument
+def _dump(f, mesh, name="mesh", ascii=True): # pylint: disable=unused-argument
     raise NotImplementedError("stl.dump is not implemented yet")

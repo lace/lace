@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# FIXME pylint: disable=attribute-defined-outside-init, len-as-condition
+# pylint: disable=len-as-condition, attribute-defined-outside-init, len-as-condition, invalid-unary-operand-type
 # encoding: utf-8
 
 import sys
@@ -49,7 +49,7 @@ def _run_self(args, stdin=None, stdout=subprocess.PIPE, stderr=None):
                 env = os.environ.copy()
                 env["PATH"] = "%s;%s" % (get_main_dir(), env["PATH"])
                 return subprocess.Popen([os.path.join(get_main_dir(), 'pymeshviewer.exe')] + args, stdin=stdin, stdout=stdout, stderr=stderr, env=env)
-        except Exception: # FIXME pylint: disable=broad-except
+        except Exception: # pylint: disable=broad-except
             pass
     return _popen_exec_python(os.path.abspath(__file__), args, stdin=stdin, stdout=stdout, stderr=stderr)
 
@@ -268,7 +268,7 @@ class MeshViewerLocal(object):
             port = server.bind_to_random_port('tcp://127.0.0.1', min_port=49152, max_port=65535, max_tries=100000)
 #            print 'sending with blocking'
             self.client.send_pyobj({'label': label, 'obj': obj, 'port': port, 'which_window': which_window})
-            task_completion_time = server.recv_pyobj() # FIXME pylint: disable=unused-variable
+            task_completion_time = server.recv_pyobj() # pylint: disable=unused-variable
 #            print 'task completion time was %.2fs in other process' % (task_completion_time, )
             server.close()
         else:
@@ -556,7 +556,7 @@ class MeshViewerSingle(object):
         # uncomment to add a default rotation (useful when automatically snapshoting kinect data
         #glRotate(220, 0.0, 1.0, 0.0)
         tf = np.identity(4, 'f')/scalefactor
-        tf[:3, 3] = -center/scalefactor # pylint: disable=invalid-unary-operand-type
+        tf[:3, 3] = -center/scalefactor
         tf[3, 3] = 1
         cur_mtx = gl.glGetFloatv(gl.GL_MODELVIEW_MATRIX).T
         gl.glLoadMatrixf(cur_mtx.dot(tf).T)
@@ -842,7 +842,7 @@ class MeshViewerRemote(object):
             return False # can't handle this request string
         return True # handled the request string
 
-    def checkQueue(self, unused_timer_id): # FIXME pylint: disable=unused-argument
+    def checkQueue(self, unused_timer_id): # pylint: disable=unused-argument
         glut.glutTimerFunc(20, self.checkQueue, 0)
         # if True: # spinning
         #     w_whole_window = glutGet(GLUT_WINDOW_WIDTH)
@@ -903,7 +903,7 @@ def main(argv):
         try:
             from OpenGL.GLUT import glutInit
             glutInit()
-        except Exception as e: # FIXME pylint: disable=broad-except
+        except Exception as e: # pylint: disable=broad-except
             print >>sys.stderr, e
             print 'failure'
         else:

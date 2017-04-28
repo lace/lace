@@ -2,9 +2,9 @@ import numpy as np
 from lace.mesh import Mesh
 
 class Sphere(Mesh):
-    def __init__(self, radius=1.0, center=[0,0,0], vc=None, fc=None): # FIXME pylint: disable=bad-whitespace
+    def __init__(self, radius=1.0, center=[0, 0, 0], vc=None, fc=None):
         center = np.array(center)
-        if(center.flatten().shape != (3, )): # FIXME pylint: disable=superfluous-parens
+        if center.flatten().shape != (3, ):
             raise Exception("Center should have size(1, 3) instead of %s" % center.shape)
         self.center = center.flatten()
         self.radius = radius
@@ -25,7 +25,7 @@ class Sphere(Mesh):
         super(Sphere, self).__init__(f=f, vc=vc, fc=fc)
 
     @property
-    def v(self): # FIXME pylint: disable=arguments-differ
+    def v(self): # pylint: disable=arguments-differ
         V = np.array([[0.0000, -1.000, 0.0000], [0.7236, -0.447, 0.5257],
                       [-0.278, -0.447, 0.8506], [-0.894, -0.447, 0.0000],
                       [-0.278, -0.447, -0.850], [0.7236, -0.447, -0.525],

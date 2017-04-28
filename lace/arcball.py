@@ -1,8 +1,6 @@
 """
 ArcBall.py -- Math utilities, vector, matrix types and ArcBall quaternion rotation class
 """
-# FIXME pylint: disable=bad-whitespace
-
 import copy
 from math import sqrt
 import numpy as np
@@ -11,7 +9,7 @@ import numpy as np
 Epsilon = 1.0e-5
 
 
-class ArcBallT: # FIXME pylint: disable=old-style-class
+class ArcBallT(object):
     def __init__(self, NewWidth, NewHeight):
         self.m_StVec = Vector3fT()
         self.m_EnVec = Vector3fT()
@@ -46,11 +44,11 @@ class ArcBallT: # FIXME pylint: disable=old-style-class
         TempPt[X] = (NewPt[X] * self.m_AdjustWidth) - 1.0
         TempPt[Y] = 1.0 - (NewPt[Y] * self.m_AdjustHeight)
         # //Compute the square of the length of the vector to the point from the center
-        length = np.sum(np.dot (TempPt, TempPt))
+        length = np.sum(np.dot(TempPt, TempPt))
         # //If the point is mapped outside of the sphere... (length > radius squared)
-        if (length > 1.0): # FIXME pylint: disable=superfluous-parens
+        if length > 1.0:
             # //Compute a normalizing factor (radius / sqrt(length))
-            norm    = 1.0 / sqrt(length)
+            norm = 1.0 / sqrt(length)
 
             # //Return the "normalized" vector, a point on the sphere
             NewVec[X] = TempPt[X] * norm
@@ -66,7 +64,7 @@ class ArcBallT: # FIXME pylint: disable=old-style-class
 
     def click(self, NewPt):
         # //Mouse down (Point2fT
-        self.m_StVec = self._mapToSphere (NewPt)
+        self.m_StVec = self._mapToSphere(NewPt)
         return
 
     def drag(self, NewPt):
@@ -86,7 +84,7 @@ class ArcBallT: # FIXME pylint: disable=old-style-class
 
         NewRot = Quat4fT()
         # //Compute the length of the perpendicular vector
-        if (Vector3fLength(Perp) > Epsilon):        #    //if its non-zero # FIXME pylint: disable=superfluous-parens
+        if Vector3fLength(Perp) > Epsilon:        #    //if its non-zero
             # //We're ok, so return the perpendicular vector as the transform after all
             NewRot[X] = Perp[X]
             NewRot[Y] = Perp[Y]
@@ -115,7 +113,7 @@ def Quat4fT():
 def Vector3fT():
     return np.zeros(3, 'f')
 
-def Point2fT(x = 0.0, y = 0.0):
+def Point2fT(x=0.0, y=0.0):
     pt = np.zeros(2, 'f')
     pt[0] = x
     pt[1] = y
@@ -123,7 +121,7 @@ def Point2fT(x = 0.0, y = 0.0):
 
 def Vector3fDot(u, v):
     # Dot product of two 3f vectors
-    dotprod = np.dot(u,v)
+    dotprod = np.dot(u, v)
     return dotprod
 
 def Vector3fCross(u, v):
@@ -138,7 +136,7 @@ def Vector3fCross(u, v):
     return cross
 
 def Vector3fLength(u):
-    mag_squared = np.sum(np.dot(u,u))
+    mag_squared = np.sum(np.dot(u, u))
     mag = sqrt(mag_squared)
     return mag
 
@@ -151,21 +149,21 @@ def Matrix3fMulMatrix3f(matrix_a, matrix_b):
 
 
 
-def Matrix4fSVD (NewObj):
+def Matrix4fSVD(NewObj):
     X = 0
     Y = 1
     Z = 2
-    s = sqrt (
-        ( (NewObj[X][X] * NewObj[X][X]) + (NewObj[X][Y] * NewObj[X][Y]) + (NewObj[X][Z] * NewObj[X][Z]) +
-        (NewObj[Y][X] * NewObj[Y][X]) + (NewObj[Y][Y] * NewObj[Y][Y]) + (NewObj[Y][Z] * NewObj[Y][Z]) + # FIXME pylint: disable=bad-continuation
-        (NewObj[Z][X] * NewObj[Z][X]) + (NewObj[Z][Y] * NewObj[Z][Y]) + (NewObj[Z][Z] * NewObj[Z][Z]) ) / 3.0 ) # FIXME pylint: disable=bad-continuation
+    s = sqrt(
+        ((NewObj[X][X] * NewObj[X][X]) + (NewObj[X][Y] * NewObj[X][Y]) + (NewObj[X][Z] * NewObj[X][Z]) +
+         (NewObj[Y][X] * NewObj[Y][X]) + (NewObj[Y][Y] * NewObj[Y][Y]) + (NewObj[Y][Z] * NewObj[Y][Z]) +
+         (NewObj[Z][X] * NewObj[Z][X]) + (NewObj[Z][Y] * NewObj[Z][Y]) + (NewObj[Z][Z] * NewObj[Z][Z])) / 3.0)
     return s
 
 def Matrix4fSetRotationScaleFromMatrix3f(NewObj, three_by_three_matrix):
     # Modifies NewObj in-place by replacing its upper 3x3 portion from the
     # passed in 3x3 matrix.
     # NewObj = Matrix4fT ()
-    NewObj[0:3,0:3] = three_by_three_matrix
+    NewObj[0:3, 0:3] = three_by_three_matrix
     return NewObj
 
 # /**
@@ -178,33 +176,35 @@ def Matrix4fSetRotationScaleFromMatrix3f(NewObj, three_by_three_matrix):
 # * components.
 # * @param three_by_three_matrix T precision 3x3 matrix
 # */
-def Matrix4fSetRotationFromMatrix3f (NewObj, three_by_three_matrix):
-    scale = Matrix4fSVD (NewObj)
+def Matrix4fSetRotationFromMatrix3f(NewObj, three_by_three_matrix):
+    scale = Matrix4fSVD(NewObj)
 
     NewObj = Matrix4fSetRotationScaleFromMatrix3f(NewObj, three_by_three_matrix)
     scaled_NewObj = NewObj * scale           # Matrix4fMulRotationScale(NewObj, scale)
     return scaled_NewObj
 
-def Matrix3fSetRotationFromQuat4f (q1):
+def Matrix3fSetRotationFromQuat4f(q1):
     # Converts the H quaternion q1 into a new equivalent 3x3 rotation matrix.
     X = 0
     Y = 1
     Z = 2
     W = 3
 
-    NewObj = Matrix3fT ()
-    n = np.sum (np.dot (q1, q1))
+    NewObj = Matrix3fT()
+    n = np.sum(np.dot(q1, q1))
     s = 0.0
-    if (n > 0.0): # FIXME pylint: disable=superfluous-parens
+    if n > 0.0:
         s = 2.0 / n
-    xs = q1[X] * s;  ys = q1[Y] * s;  zs = q1[Z] * s # FIXME pylint: disable=multiple-statements
-    wx = q1[W] * xs; wy = q1[W] * ys; wz = q1[W] * zs # FIXME pylint: disable=multiple-statements
-    xx = q1[X] * xs; xy = q1[X] * ys; xz = q1[X] * zs # FIXME pylint: disable=multiple-statements
-    yy = q1[Y] * ys; yz = q1[Y] * zs; zz = q1[Z] * zs # FIXME pylint: disable=multiple-statements
+
+    # pylint: disable=multiple-statements
+    xs = q1[X] * s;  ys = q1[Y] * s;  zs = q1[Z] * s
+    wx = q1[W] * xs; wy = q1[W] * ys; wz = q1[W] * zs
+    xx = q1[X] * xs; xy = q1[X] * ys; xz = q1[X] * zs
+    yy = q1[Y] * ys; yz = q1[Y] * zs; zz = q1[Z] * zs
     # This math all comes about by way of algebra, complex math, and trig identities.
     # See Lengyel pages 88-92
-    NewObj[X][X] = 1.0 - (yy + zz);    NewObj[Y][X] = xy - wz;            NewObj[Z][X] = xz + wy # FIXME pylint: disable=multiple-statements
-    NewObj[X][Y] = xy + wz;            NewObj[Y][Y] = 1.0 - (xx + zz);    NewObj[Z][Y] = yz - wx # FIXME pylint: disable=multiple-statements
-    NewObj[X][Z] = xz - wy;            NewObj[Y][Z] = yz + wx;            NewObj[Z][Z] = 1.0 - (xx + yy) # FIXME pylint: disable=multiple-statements
+    NewObj[X][X] = 1.0 - (yy + zz);    NewObj[Y][X] = xy - wz;            NewObj[Z][X] = xz + wy
+    NewObj[X][Y] = xy + wz;            NewObj[Y][Y] = 1.0 - (xx + zz);    NewObj[Z][Y] = yz - wx
+    NewObj[X][Z] = xz - wy;            NewObj[Y][Z] = yz + wx;            NewObj[Z][Z] = 1.0 - (xx + yy)
 
     return NewObj

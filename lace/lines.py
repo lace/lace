@@ -81,7 +81,7 @@ class Lines(object):
             return
 
         initial_num_verts = self.v.shape[0]
-        if self.e is not None:  # FIXME pylint: disable=bad-whitespace
+        if self.e is not None:
             initial_num_edges = self.e.shape[0]
             e_indices_to_keep = self.all_edges_with_verts(indices_to_keep, as_boolean=True)
 

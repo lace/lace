@@ -22,13 +22,13 @@ def load(f, *args, **kwargs):
     return ensure_file_open_and_call(f, _load, 'r', *args, **kwargs)
 
 
-def loads(s, *args, **kwargs): # FIXME pylint: disable=unused-argument
+def loads(s, *args, **kwargs): # pylint: disable=unused-argument
     # TODO This seems tricky with xml.etree, probably easiest to
     # write the file and then read it again?
     raise NotImplementedError()
 
 
-def dumps(obj, mesh_filename=None, *args, **kwargs): # FIXME pylint: disable=unused-argument
+def dumps(obj, mesh_filename=None, *args, **kwargs): # pylint: disable=unused-argument
     '''
     obj: A dictionary mapping names to a 3-dimension array.
     mesh_filename: If provided, this value is included in the <DataFileName>
@@ -64,7 +64,7 @@ def _dump(f, obj, *args, **kwargs):
     f.write(xml_string)
 
 
-def _load(f, *args, **kwargs): # FIXME pylint: disable=unused-argument
+def _load(f, *args, **kwargs): # pylint: disable=unused-argument
     from xml.etree import ElementTree
     tree = ElementTree.parse(f)
 

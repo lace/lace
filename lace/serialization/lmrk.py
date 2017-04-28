@@ -10,7 +10,7 @@ def load(f, *args, **kwargs):
     from baiji.serialization.util.openlib import ensure_file_open_and_call
     return ensure_file_open_and_call(f, _load, 'rb', *args, **kwargs)
 
-def _load(f, *args, **kwargs): # FIXME pylint: disable=unused-argument
+def _load(f, *args, **kwargs): # pylint: disable=unused-argument
     return loads(f.read())
 
 def loads(s, ret_commands=False):

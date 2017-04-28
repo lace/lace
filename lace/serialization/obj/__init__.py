@@ -7,7 +7,7 @@ def load(f, existing_mesh=None):
     return ensure_file_open_and_call(f, _load, mode='rb', mesh=existing_mesh)
 
 def dump(obj, f, flip_faces=False, ungroup=False, comments=None,
-         copyright=False, split_normals=False, write_mtl=True): # FIXME pylint: disable=redefined-outer-name, redefined-builtin, unused-argument
+         copyright=False, split_normals=False, write_mtl=True): # pylint: disable=redefined-outer-name, redefined-builtin, unused-argument
     from baiji.serialization.util.openlib import ensure_file_open_and_call
     if comments is None:
         comments = []
@@ -93,7 +93,7 @@ def _load(fd, mesh=None):
         mesh.landm = landm
     return mesh
 
-def _dump(f, obj, flip_faces=False, ungroup=False, comments=None, split_normals=False, write_mtl=True): # FIXME pylint: disable=redefined-outer-name
+def _dump(f, obj, flip_faces=False, ungroup=False, comments=None, split_normals=False, write_mtl=True): # pylint: disable=redefined-outer-name
     '''
     write_mtl: When True and mesh has a texture, includes a mtllib
       reference in the .obj and writes a .mtl alongside.

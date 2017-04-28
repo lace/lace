@@ -46,7 +46,7 @@ class BSFParser(object):
                 slices = sorted(set(self.bsf_column_data['slice'][inds_for_cam]))
 
                 def ordered_inds_and_cols_for_slice(slc):
-                    subset = np.logical_and(inds_for_cam, self.bsf_column_data['slice'] == slc) # FIXME pylint: disable=cell-var-from-loop
+                    subset = np.logical_and(inds_for_cam, self.bsf_column_data['slice'] == slc) # pylint: disable=cell-var-from-loop
                     order = np.argsort(self.bsf_column_data['imcol'][subset])
                     inds = self.bsf_column_data['index'][subset]
                     inds = inds[order]

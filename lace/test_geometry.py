@@ -149,7 +149,7 @@ class TestGeometryMixin(unittest.TestCase):
         mesh = Mesh()
 
         with self.assertRaises(ValueError) as ctx:
-            mesh.centroid # FIXME pylint: disable=pointless-statement
+            mesh.centroid # pylint: disable=pointless-statement
 
         self.assertEqual(
             str(ctx.exception),
@@ -160,7 +160,7 @@ class TestGeometryMixin(unittest.TestCase):
         mesh = Mesh()
 
         with self.assertRaises(ValueError) as ctx:
-            mesh.bounding_box # FIXME pylint: disable=pointless-statement
+            mesh.bounding_box # pylint: disable=pointless-statement
 
         self.assertEqual(
             str(ctx.exception),
