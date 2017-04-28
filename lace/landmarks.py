@@ -124,7 +124,7 @@ class MeshMixin(object):
                     raise Exception("Can't parse landmark %s: %s" % (k, v))
             if len(filtered_landmarks) > 0:
                 import warnings
-                raise DeprecationWarning("WARNING: the following landmarks are positioned at (0.0, 0.0, 0.0) and were ignored: %s" % ", ".join(filtered_landmarks))
+                warnings.warn("WARNING: the following landmarks are positioned at (0.0, 0.0, 0.0) and were ignored: %s" % ", ".join(filtered_landmarks))
             # We preserve these and calculate everything seperately so that we can recompute_landmarks if v changes
             self._raw_landmarks = {
                 'landm': landm,
