@@ -1,0 +1,11 @@
+baiji-pod>=1.0.0
+baiji-serialization>=1.0.2
+baiji>=2.5.3
+blmath>=1.0.0
+lxml>=3.5.0
+matplotlib>=1.5.0
+numpy>=1.10.1
+py_windows_exe>=1.0.0,<2
+pyopengl>=3.1.0
+pyzmq>=15.1.0
+scipy>=0.14.1
