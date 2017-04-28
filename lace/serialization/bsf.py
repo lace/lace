@@ -134,7 +134,7 @@ class BSFParser(object):
     def _point_info(self):
         info = self.BSF_SUBTYPES[self.header['subtype']]
         if 'unsupported' in info:
-            raise ValueError("BSF subtype %s is not supported. Tell Alex you've got one of these so he can figure out the point format." % self.header['subtype'])
+            raise ValueError("BSF subtype %s is not supported. Open an issue on github." % self.header['subtype'])
         return info
 
     def _parse_point(self, f):

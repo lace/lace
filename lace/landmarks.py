@@ -1,4 +1,4 @@
-# pylint: disable=attribute-defined-outside-init, len-as-condition
+# pylint: disable=attribute-defined-outside-init, len-as-condition, unused-argument
 
 def load_landmarks(filename):
     import re
@@ -124,7 +124,7 @@ class MeshMixin(object):
                     raise Exception("Can't parse landmark %s: %s" % (k, v))
             if len(filtered_landmarks) > 0:
                 import warnings
-                warnings.warn("WARNING: the following landmarks are positioned at (0.0, 0.0, 0.0) and were ignored: %s" % ", ".join(filtered_landmarks))
+                raise DeprecationWarning("WARNING: the following landmarks are positioned at (0.0, 0.0, 0.0) and were ignored: %s" % ", ".join(filtered_landmarks))
             # We preserve these and calculate everything seperately so that we can recompute_landmarks if v changes
             self._raw_landmarks = {
                 'landm': landm,
@@ -166,29 +166,14 @@ class MeshMixin(object):
         else:
             return {}
 
-
-
-
-    @property
-    def landm_raw_xyz(self):
-        raise AttributeError("Mesh.landm_raw_xyz was always a private variable and now it's gone for good; please think about what you're doing and use landm and landm_xyz instead")
-
     def set_landmarks_from_xyz(self, landm_raw_xyz):
-        import warnings
-        warnings.warn("Mesh.set_landmarks_from_xyz is deprecated in favor of just setting mesh.landm_xyz directly", DeprecationWarning)
-        self.landm_xyz = landm_raw_xyz
+        raise DeprecationWarning("Mesh.set_landmarks_from_xyz is deprecated in favor of just setting mesh.landm_xyz directly")
 
     def set_landmark_indices_from_any(self, landmarks):
-        import warnings
-        warnings.warn("Mesh.set_landmark_indices_from_any is deprecated in favor of just setting mesh.landm directly", DeprecationWarning)
-        self.landm = landmarks
+        raise DeprecationWarning("Mesh.set_landmark_indices_from_any is deprecated in favor of just setting mesh.landm directly")
 
     def set_landmarks_from_raw(self, landmarks):
-        import warnings
-        warnings.warn("Mesh.set_landmarks_from_raw is deprecated in favor of just setting mesh.landm directly", DeprecationWarning)
-        self.landm = landmarks
+        raise DeprecationWarning("Mesh.set_landmarks_from_raw is deprecated in favor of just setting mesh.landm directly")
 
     def set_landmarks_from_regressors(self, regressors):
-        import warnings
-        warnings.warn("Mesh.set_landmarks_from_regressors is deprecated in favor of just setting mesh.landm_regressors directly", DeprecationWarning)
-        self.landm_regressors = regressors
+        raise DeprecationWarning("Mesh.set_landmarks_from_regressors is deprecated in favor of just setting mesh.landm_regressors directly")

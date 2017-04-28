@@ -17,18 +17,14 @@ class MeshMixin(object):
             raise NotImplementedError(self.msg_lace_search_missing.format('compute_aabb_normals_tree'))
         return AabbNormalsTree(self)
 
-    def compute_closest_point_tree(self, use_cgal=False):
+    def compute_closest_point_tree(self):
         try:
             from lace_search.closest_point_tree import ClosestPointTree
         except ImportError:
             raise NotImplementedError(self.msg_lace_search_missing.format('compute_closest_point_tree'))
-        if use_cgal:
-            raise NotImplementedError('use_cgal should be False, CGALClosestPointTree has been removed')
         return ClosestPointTree(self)
 
-    def closest_vertices(self, vertices, use_cgal=False):
-        if use_cgal:
-            raise NotImplementedError('use_cgal should be False, CGALClosestPointTree has been removed')
+    def closest_vertices(self, vertices):
         return self.compute_closest_point_tree().nearest(vertices)
 
     def closest_points(self, vertices):
@@ -37,8 +33,6 @@ class MeshMixin(object):
     def closest_faces_and_points(self, vertices):
         return self.compute_aabb_tree().nearest(vertices)
 
-    def vertices_within(self, vertex_or_vertices, radius, use_cgal=False):
-        if use_cgal:
-            raise NotImplementedError('use_cgal should be False, CGALClosestPointTree has been removed')
+    def vertices_within(self, vertex_or_vertices, radius):
         tree = self.compute_closest_point_tree()
         return tree.vertices_within(vertex_or_vertices, radius)

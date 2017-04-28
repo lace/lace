@@ -35,3 +35,7 @@ License
 -------
 
 The project is licensed under the two-clause BSD license.
+
+This project uses the RPly library to read and write PLY files, by Diego Nehab,
+IMPA, distributed under the MIT License.
+ * http://www.impa.br/~diego/software/rply
