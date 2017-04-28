@@ -1,10 +1,4 @@
 include requirements.txt
 include README.md
 include manifest.json
-include lace/serialization/ply/rply.h
-include lace/serialization/ply/plytuils.h
-include lace/serialization/ply/rplyfile.h
-include lace/serialization/ply/plyutils.c
-include lace/serialization/ply/rply.c
-include lace/serialization/obj/objutils.cpp
-include lace/serialization/obj/objutils.cpp
+recursive-include lace *.h *.c *.cpp *.hpp
