@@ -1,4 +1,99 @@
 # pylint: disable=attribute-defined-outside-init, access-member-before-definition, len-as-condition
+import zlib
+
+def get_vert_connectivity(mesh):
+    """Returns a sparse matrix (of size #verts x #verts) where each nonzero
+    element indicates a neighborhood relation. For example, if there is a
+    nonzero element in position (15, 12), that means vertex 15 is connected
+    by an edge to vertex 12."""
+    import numpy as np
+    import scipy.sparse as sp
+    from blmath.numerics.matlab import row
+
+    vpv = sp.csc_matrix((len(mesh.v), len(mesh.v)))
+
+    # for each column in the faces...
+    for i in range(3):
+        IS = mesh.f[:, i]
+        JS = mesh.f[:, (i+1)%3]
+        data = np.ones(len(IS))
+        ij = np.vstack((row(IS.flatten()), row(JS.flatten())))
+        mtx = sp.csc_matrix((data, ij), shape=vpv.shape)
+        vpv = vpv + mtx + mtx.T
+
+    return vpv
+
+_vertices_per_edge_cache = {}
+def get_vertices_per_edge(mesh, faces_per_edge=None):
+    """Returns an Ex2 array of adjacencies between vertices, where
+    each element in the array is a vertex index. Each edge is included
+    only once. If output of get_faces_per_edge is provided, this is used to
+    avoid call to get_vert_connectivity()"""
+    import numpy as np
+    import scipy.sparse as sp
+    from blmath.numerics.matlab import row, col
+
+    faces = mesh.f
+    suffix = str(zlib.crc32(faces_per_edge.flatten())) if faces_per_edge != None else ''
+    cache_key = str(zlib.crc32(faces.flatten())) + '_' + suffix
+    if cache_key in _vertices_per_edge_cache:
+        return _vertices_per_edge_cache[cache_key]
+    else:
+        if faces_per_edge != None:
+            #result = np.asarray([vertices_in_common(face_pair[0], face_pair[1]) for face_pair in mesh.f[faces_per_edge]])
+            #new code above is a few times faster
+            result = np.asarray(np.vstack([row(np.intersect1d(mesh.f[k[0]], mesh.f[k[1]])) for k in faces_per_edge]), np.uint32)
+        else:
+            vc = sp.coo_matrix(get_vert_connectivity(mesh))
+            result = np.hstack((col(vc.row), col(vc.col)))
+            result = result[result[:, 0] < result[:, 1]] # for uniqueness
+
+        _vertices_per_edge_cache[cache_key] = result
+        return result
+
+def gen_coupling_weights(sm_template, default_weights=1.0):
+    """
+    feet and hands have a higher weight, and rest of parts will have default_weights
+    TODO: Remove and use `generate_parts_coupling_weights` from
+    `bodylabs.util.coupling`
+    """
+    # from bodylabs.util.stats.robustifiers import Sigmoid
+    import numpy as np
+    Sigmoid = lambda x, scale: x * scale / np.sqrt(x**2 + scale**2)
+
+    m = sm_template
+
+    min_y = m.v[:, 1].min()
+    min_x = m.v[:, 0].min()
+    max_x = m.v[:, 0].max()
+
+    def p(w, u=0.5, l=0.3):
+        w[w > u] = u
+        w[w < l] = l
+        w = (w - l) / (u - l)
+        return w
+
+    min_hands_w = Sigmoid(x=np.abs(m.v[:, 0]-min_x), scale=0.1)
+    min_hands_w = 1.0 - min_hands_w / (min_hands_w.max() - min_hands_w.min())
+    min_hands_w = p(min_hands_w)
+
+    max_hands_w = Sigmoid(x=np.abs(m.v[:, 0]-max_x), scale=0.1)
+    max_hands_w = 1.0 - max_hands_w / (max_hands_w.max() - max_hands_w.min())
+    max_hands_w = p(max_hands_w)
+
+    feet_weights = Sigmoid(x=np.abs(m.v[:, 1]-min_y), scale=0.1)
+    feet_weights = 1.0 - feet_weights / (feet_weights.max() - feet_weights.min())
+    feet_weights = p(feet_weights, u=0.8, l=0.2)
+
+    weights = np.maximum(min_hands_w, max_hands_w)
+    weights = np.maximum(weights, feet_weights)
+
+    weights = (3.0 - default_weights) * weights
+    weights = weights + default_weights
+
+    return weights
+
+
 
 def quads_to_tris(quads):
     '''
