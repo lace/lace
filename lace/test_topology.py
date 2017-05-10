@@ -3,6 +3,7 @@ import unittest
 import numpy as np
 import mock
 from lace.mesh import Mesh
+from lace.cache import vc
 
 class TestTopologyMixin(unittest.TestCase):
 
@@ -198,3 +199,17 @@ class TestTopologyMixin(unittest.TestCase):
         }
 
         self.assertEqual(cube.clean_segments(['random_segm', 'all']), ['all'])
+
+    def test_flip_faces(self):
+        raw_box = Mesh(vc('/unittest/serialization/obj/test_box.obj'))
+        box = Mesh(v=raw_box.v, f=raw_box.f)
+        box.reset_normals()
+        original_vn = box.vn.copy()
+        original_f = box.f.copy()
+        box.flip_faces()
+        box.reset_normals()
+        self.assertEqual(box.f.shape, original_f.shape)
+        for face, orig_face in zip(box.f, original_f):
+            self.assertNotEqual(list(face), list(orig_face))
+            self.assertEqual(set(face), set(orig_face))
+        np.testing.assert_array_almost_equal(box.vn, np.negative(original_vn))

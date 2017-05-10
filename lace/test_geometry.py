@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from lace.cache import sc
+from lace.cache import sc, vc
 from lace.mesh import Mesh
 
 class TestGeometryMixin(unittest.TestCase):
@@ -187,3 +187,24 @@ class TestGeometryMixin(unittest.TestCase):
         mesh = Mesh()
         mesh.v = np.array([[150, 100, 50], [-150, 50, 150]])
         self.assertEqual(mesh.predict_body_units(), 'cm')
+
+    def test_flip(self):
+        raw_box = Mesh(vc('/unittest/serialization/obj/test_box.obj'))
+        box = Mesh(v=raw_box.v, f=raw_box.f)
+        box.reset_normals()
+        original_v = box.v.copy()
+        original_vn = box.vn.copy()
+        original_f = box.f.copy()
+        box.flip(axis=0)
+        box.reset_normals()
+        self.assertEqual(box.f.shape, original_f.shape)
+        self.assertEqual(box.v.shape, original_v.shape)
+        for face, orig_face in zip(box.f, original_f):
+            self.assertNotEqual(list(face), list(orig_face))
+            self.assertEqual(set(face), set(orig_face))
+        np.testing.assert_array_almost_equal(box.v[:, 0], np.negative(original_v[:, 0]))
+        np.testing.assert_array_almost_equal(box.v[:, 1], original_v[:, 1])
+        np.testing.assert_array_almost_equal(box.v[:, 2], original_v[:, 2])
+        np.testing.assert_array_almost_equal(box.vn[:, 0], np.negative(original_vn[:, 0]))
+        np.testing.assert_array_almost_equal(box.vn[:, 1], original_vn[:, 1])
+        np.testing.assert_array_almost_equal(box.vn[:, 2], original_vn[:, 2])
