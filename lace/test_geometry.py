@@ -189,7 +189,7 @@ class TestGeometryMixin(unittest.TestCase):
         self.assertEqual(mesh.predict_body_units(), 'cm')
 
     def test_flip(self):
-        raw_box = Mesh(vc('/unittest/serialization/obj/test_box.obj'))
+        raw_box = Mesh(vc('/unittest/serialization/obj/test_box_simple.obj'))
         box = Mesh(v=raw_box.v, f=raw_box.f)
         box.reset_normals()
         original_v = box.v.copy()
