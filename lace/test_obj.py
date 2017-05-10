@@ -24,9 +24,10 @@ class TestOBJBase(ExtraAssertionsMixin, unittest.TestCase):
             'landm': {'pospospos' : 0, 'negnegneg' : 7},
             'landm_xyz': {'pospospos' : np.array([0.5, 0.5, 0.5]), 'negnegneg' : np.array([-0.5, -0.5, -0.5])},
         }
-        self.test_obj_url = vc.uri('/unittest/serialization/obj/test_box.obj')
-        self.test_obj_path = vc('/unittest/serialization/obj/test_box.obj')
-        self.test_obj_simple_path = vc('/unittest/serialization/obj/test_box_simple.obj')
+        self.test_obj_url = vc.uri('/unittest/serialization/obj/test_box_simple.obj')
+        self.test_obj_path = vc('/unittest/serialization/obj/test_box_simple.obj')
+        self.test_obj_with_landmarks_url = vc.uri('/unittest/serialization/obj/test_box.obj')
+        self.test_obj_with_landmarks_path = vc('/unittest/serialization/obj/test_box.obj')
         self.test_pp_path = vc('/unittest/serialization/obj/test_box.pp')
         self.test_obj_with_overlapping_groups_path = vc('/unittest/serialization/obj/test_box_with_overlapping_groups.obj')
 
@@ -41,7 +42,6 @@ class TestOBJBase(ExtraAssertionsMixin, unittest.TestCase):
 class TestOBJBasicLoading(TestOBJBase):
 
     def test_loads_from_local_path_using_constructor(self):
-        skip_on_import_error('lace-search')
         m = Mesh(filename=self.test_obj_path)
         self.assertTrue((m.v == self.truth['box_v']).all())
         self.assertTrue((m.f == self.truth['box_f']).all())
@@ -49,14 +49,12 @@ class TestOBJBasicLoading(TestOBJBase):
         self.assertEqual(m.materials_filepath, None)
 
     def test_loads_from_local_path_using_serializer(self):
-        skip_on_import_error('lace-search')
         m = obj.load(self.test_obj_path)
         self.assertTrue((m.v == self.truth['box_v']).all())
         self.assertTrue((m.f == self.truth['box_f']).all())
         self.assertDictOfArraysEqual(m.segm, self.truth['box_segm'])
 
     def test_loads_from_remote_path_using_serializer(self):
-        skip_on_import_error('lace-search')
         skip_if_unavailable('s3')
         m = obj.load(self.test_obj_url)
         self.assertTrue((m.v == self.truth['box_v']).all())
@@ -64,7 +62,6 @@ class TestOBJBasicLoading(TestOBJBase):
         self.assertDictOfArraysEqual(m.segm, self.truth['box_segm'])
 
     def test_loads_from_open_file_using_serializer(self):
-        skip_on_import_error('lace-search')
         with open(self.test_obj_path) as f:
             m = obj.load(f)
         self.assertTrue((m.v == self.truth['box_v']).all())
@@ -89,7 +86,7 @@ class TestOBJWithLandmarks(TestOBJBase):
 
     def test_loads_from_local_path_using_constructor_with_landmarks(self):
         skip_on_import_error('lace-search')
-        m = Mesh(filename=self.test_obj_path, ppfilename=self.test_pp_path)
+        m = Mesh(filename=self.test_obj_with_landmarks_path, ppfilename=self.test_pp_path)
         self.assertTrue((m.v == self.truth['box_v']).all())
         self.assertTrue((m.f == self.truth['box_f']).all())
         self.assertEqual(m.landm, self.truth['landm'])
@@ -99,18 +96,16 @@ class TestOBJWithLandmarks(TestOBJBase):
 class TestOBJBasicWriting(TestOBJBase):
 
     def test_writing_obj_locally_using_mesh_write_obj(self):
-        skip_on_import_error('lace-search')
         local_file = os.path.join(self.tmp_dir, "test_writing_ascii_obj_locally_using_mesh_write_ply.obj")
         m = Mesh(filename=self.test_obj_path)
         m.write_obj(local_file)
-        self.assertFilesEqual(local_file, self.test_obj_simple_path)
+        self.assertFilesEqual(local_file, self.test_obj_path)
 
     def test_writing_obj_locally_using_serializer(self):
-        skip_on_import_error('lace-search')
         local_file = os.path.join(self.tmp_dir, "test_writing_ascii_obj_locally_using_serializer.obj")
         m = Mesh(filename=self.test_obj_path)
         obj.dump(m, local_file)
-        self.assertFilesEqual(local_file, self.test_obj_simple_path)
+        self.assertFilesEqual(local_file, self.test_obj_path)
 
 class TestOBJWithMaterials(ScratchDirMixin, TestOBJBase):
 
@@ -249,7 +244,6 @@ class TestOBJWithMaterials(ScratchDirMixin, TestOBJBase):
 class TestOBJWithComments(TestOBJBase):
 
     def test_writing_obj_with_no_comments_does_not_write_comments(self):
-        skip_on_import_error('lace-search')
         local_file = os.path.join(self.tmp_dir, "test_writing_ply_with_no_comments_does_not_write_comments.ply")
         m = obj.load(self.test_obj_path)
         obj.dump(m, local_file)
@@ -257,7 +251,6 @@ class TestOBJWithComments(TestOBJBase):
             self.assertNotRegexpMatches(f.read(), '#')
 
     def test_writing_obj_with_comments_does_write_comments(self):
-        skip_on_import_error('lace-search')
         local_file = os.path.join(self.tmp_dir, "test_writing_ply_with_comments_does_write_comments.ply")
         m = obj.load(self.test_obj_path)
         obj.dump(m, local_file, comments=['foo bar', 'this is a comment'])
@@ -269,7 +262,6 @@ class TestOBJWithComments(TestOBJBase):
 class TestOBJSpecialCases(TestOBJBase):
 
     def test_writing_segmented_mesh_preserves_face_order(self):
-        skip_on_import_error('lace-search')
         m = obj.load(self.test_obj_path)
         self.assertTrue((m.f == self.truth['box_f']).all())
 
