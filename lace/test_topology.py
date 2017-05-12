@@ -209,22 +209,22 @@ class TestTopologyMixin(unittest.TestCase):
     def test_vert_connectivity(self):
         from lace.shapes import create_cube
         cube = create_cube(np.zeros(3), 1.)
-        vc = cube.vert_connectivity
-        self.assertTrue(sp.issparse(vc))
-        self.assertEqual(vc.shape, (cube.v.shape[0], cube.v.shape[0]))
+        connectivity = cube.vert_connectivity
+        self.assertTrue(sp.issparse(connectivity))
+        self.assertEqual(connectivity.shape, (cube.v.shape[0], cube.v.shape[0]))
         # Assert that neighbors are marked:
         for face in cube.f:
             face = np.asarray(face, dtype=np.uint32)
-            self.assertNotEqual(vc[face[0], face[1]], 0)
-            self.assertNotEqual(vc[face[1], face[2]], 0)
-            self.assertNotEqual(vc[face[2], face[0]], 0)
+            self.assertNotEqual(connectivity[face[0], face[1]], 0)
+            self.assertNotEqual(connectivity[face[1], face[2]], 0)
+            self.assertNotEqual(connectivity[face[2], face[0]], 0)
         # Assert that non-neighbors are not marked:
         for v_index in set(cube.f.flatten()):
             faces_with_this_v = set(cube.f[np.any(cube.f == v_index, axis=1)].flatten())
             not_neighbors_of_this_v = set(cube.f.flatten()) - faces_with_this_v
             for vert in not_neighbors_of_this_v:
-                self.assertEqual(vc[int(vert), int(v_index)], 0)
-                self.assertEqual(vc[int(v_index), int(vert)], 0)
+                self.assertEqual(connectivity[int(vert), int(v_index)], 0)
+                self.assertEqual(connectivity[int(v_index), int(vert)], 0)
 
     def test_vert_opposites_per_edge(self):
         from lace.shapes import create_cube
