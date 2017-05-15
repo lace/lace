@@ -153,10 +153,14 @@ class Mesh(
     # these, we'll use the actual var name and just override the setter.
     @setter_property
     def v(self, val):
+        # cached properties that are dependent on v
+        self._clear_cached_properties('vertices_to_edges_matrix', 'vertices_to_edges_matrix_single_axis')
         self.__dict__['v'] = as_numeric_array(val, dtype=np.float64, shape=(-1, 3), allow_none=True, empty_as_none=True)
 
     @setter_property
     def f(self, val):
+        # cached properties that are dependent on f
+        self._clear_cached_properties('faces_per_edge', 'vertices_per_edge', 'vertices_to_edges_matrix', 'vertices_to_edges_matrix_single_axis')
         self.__dict__['f'] = as_numeric_array(val, dtype=np.uint64, shape=(-1, 3), allow_none=True, empty_as_none=True)
 
     @setter_property
@@ -201,6 +205,11 @@ class Mesh(
     @setter_property
     def segm(self, val):
         self.__dict__['segm'] = val
+
+    def _clear_cached_properties(self, *keys):
+        for cached_property_key in keys:
+            if cached_property_key in self.__dict__:
+                del self.__dict__[cached_property_key]
 
     @classmethod
     def concatenate(cls, *args):

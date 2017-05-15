@@ -1,4 +1,5 @@
 # pylint: disable=attribute-defined-outside-init, access-member-before-definition, len-as-condition
+from cached_property import cached_property
 
 def quads_to_tris(quads):
     '''
@@ -14,6 +15,17 @@ def quads_to_tris(quads):
     tris[0::2, :] = quads[:, [0, 1, 2]]
     tris[1::2, :] = quads[:, [0, 2, 3]]
     return tris
+
+
+def vertices_in_common(face_1, face_2):
+    "returns the two vertices shared by two faces"
+    # So... on a 10000 iteration timing run, np.intersect1d takes 0.2s, the very
+    # complicated code we pulled from core takes 0.05s, and this runs in 0.007s.
+    # Just goes to show that sometimes simplest is best... The easy timing script
+    # for things like this is:
+    # import timeit; print timeit.timeit('vertices_in_common([0, 1, 2], [0, 1, 3])', setup='from lace.topology import vertices_in_common', number=10000)
+    return [x for x in face_1 if x in face_2]
+
 
 class MeshMixin(object):
     def faces_by_vertex(self, as_sparse_matrix=False):
@@ -317,7 +329,6 @@ class MeshMixin(object):
             self.ft = new_ft
         return self
 
-
     def concatenate_mesh(self, mesh):
         import numpy as np
         if len(self.v) == 0:
@@ -329,7 +340,6 @@ class MeshMixin(object):
             self.v = np.concatenate([self.v, mesh.v])
             self.vc = np.concatenate([self.vc, mesh.vc]) if (mesh.vc is not None and self.vc is not None) else None
         return self
-
 
     # new_ordering specifies the new index of each vertex. If new_ordering[i] = j,
     # vertex i should now be the j^th vertex. As such, each entry in new_ordering should be unique.
@@ -381,3 +391,126 @@ class MeshMixin(object):
         num_body_verts = self.v.shape[0]
         self.v = np.vstack([self.v, v_lines])
         self.e = e_lines + num_body_verts
+
+    @property
+    def vert_connectivity(self):
+        """Returns a sparse matrix (of size #verts x #verts) where each nonzero
+        element indicates a neighborhood relation. For example, if there is a
+        nonzero element in position (15, 12), that means vertex 15 is connected
+        by an edge to vertex 12."""
+        import numpy as np
+        import scipy.sparse as sp
+        from blmath.numerics.matlab import row
+        vpv = sp.csc_matrix((len(self.v), len(self.v)))
+        # for each column in the faces...
+        for i in range(3):
+            IS = self.f[:, i]
+            JS = self.f[:, (i+1)%3]
+            data = np.ones(len(IS))
+            ij = np.vstack((row(IS.flatten()), row(JS.flatten())))
+            mtx = sp.csc_matrix((data, ij), shape=vpv.shape)
+            vpv = vpv + mtx + mtx.T
+        return vpv
+
+    @property
+    def vert_opposites_per_edge(self):
+        """Returns a dictionary from vertidx-pairs to opposites.
+        For example, a key consist of [4, 5)] meaning the edge between
+        vertices 4 and 5, and a value might be [10, 11] which are the indices
+        of the vertices opposing this edge."""
+        result = {}
+        for f in self.f:
+            for i in range(3):
+                key = [f[i], f[(i+1)%3]]
+                key.sort()
+                key = tuple(key)
+                val = f[(i+2)%3]
+
+                if key in result:
+                    result[key].append(val)
+                else:
+                    result[key] = [val]
+        return result
+
+    @cached_property
+    def faces_per_edge(self):
+        """Returns an Ex2 array of adjacencies between faces, where
+        each element in the array is a face index. Each edge is included
+        only once. Edges that are not shared by 2 faces are not included."""
+        import numpy as np
+        import scipy.sparse as sp
+        from blmath.numerics.matlab import col
+        IS = np.repeat(np.arange(len(self.f)), 3)
+        JS = self.f.ravel()
+        data = np.ones(IS.size)
+        f2v = sp.csc_matrix((data, (IS, JS)), shape=(len(self.f), np.max(self.f.ravel())+1))
+        f2f = f2v.dot(f2v.T)
+        f2f = f2f.tocoo()
+        f2f = np.hstack((col(f2f.row), col(f2f.col), col(f2f.data)))
+        which = (f2f[:, 0] < f2f[:, 1]) & (f2f[:, 2] >= 2)
+        return np.asarray(f2f[which, :2], np.uint32)
+
+    @cached_property
+    def vertices_per_edge(self):
+        """Returns an Ex2 array of adjacencies between vertices, where
+        each element in the array is a vertex index. Each edge is included
+        only once. Edges that are not shared by 2 faces are not included."""
+        import numpy as np
+        return np.asarray([vertices_in_common(e[0], e[1]) for e in self.f[self.faces_per_edge]])
+
+    def get_vertices_to_edges_matrix(self, want_xyz=True):
+        """Returns a matrix M, which if multiplied by vertices,
+        gives back edges (so "e = M.dot(v)"). Note that this generates
+        one edge per edge, *not* two edges per triangle.
+
+        Args:
+            want_xyz: if true, takes and returns xyz coordinates, otherwise
+                takes and returns x *or* y *or* z coordinates
+        """
+        import numpy as np
+        import scipy.sparse as sp
+
+        vpe = np.asarray(self.vertices_per_edge, dtype=np.int32)
+        IS = np.repeat(np.arange(len(vpe)), 2)
+        JS = vpe.flatten()
+        data = np.ones_like(vpe)
+        data[:, 1] = -1
+        data = data.flatten()
+
+        if want_xyz:
+            IS = np.concatenate((IS*3, IS*3+1, IS*3+2))
+            JS = np.concatenate((JS*3, JS*3+1, JS*3+2))
+            data = np.concatenate((data, data, data))
+
+        ij = np.vstack((IS.flatten(), JS.flatten()))
+        return sp.csc_matrix((data, ij))
+
+    @cached_property
+    def vertices_to_edges_matrix(self):
+        return self.get_vertices_to_edges_matrix(want_xyz=True)
+
+    @cached_property
+    def vertices_to_edges_matrix_single_axis(self):
+        return self.get_vertices_to_edges_matrix(want_xyz=False)
+
+    def remove_redundant_verts(self, eps=1e-10):
+        """Given verts and faces, this remove colocated vertices"""
+        import numpy as np
+        from scipy.spatial import cKDTree # FIXME pylint: disable=no-name-in-module
+        fshape = self.f.shape
+        tree = cKDTree(self.v)
+        close_pairs = list(tree.query_pairs(eps))
+        if close_pairs:
+            close_pairs = np.sort(close_pairs, axis=1)
+            # update faces to not refer to redundant vertices
+            equivalent_verts = np.arange(self.v.shape[0])
+            for v1, v2 in close_pairs:
+                if equivalent_verts[v2] > v1:
+                    equivalent_verts[v2] = v1
+            self.f = equivalent_verts[self.f.flatten()].reshape((-1, 3))
+            # get rid of unused verts, and update faces accordingly
+            vertidxs_left = np.unique(self.f)
+            repl = np.arange(np.max(self.f)+1)
+            repl[vertidxs_left] = np.arange(len(vertidxs_left))
+            self.v = self.v[vertidxs_left]
+            self.f = repl[self.f].reshape((-1, fshape[1]))
