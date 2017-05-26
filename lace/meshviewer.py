@@ -526,9 +526,12 @@ class MeshViewerSingle(object):
     def draw_primitives(self, scalefactor=1.0, center=[0.0, 0.0, 0.0], recenter=False, want_camera=False):
         # measure the bounding box of all our primitives, so that we can
         # recenter them in our field of view
-        if recenter:
+        if len(self.dynamic_models):
             all_meshes = self.static_meshes + self.dynamic_meshes + self.generate_dynamic_model_meshes()
-            all_lines = self.static_lines + self.dynamic_lines
+        else:
+            all_meshes = self.static_meshes + self.dynamic_meshes
+        all_lines = self.static_lines + self.dynamic_lines
+        if recenter:
             if (len(all_meshes)+len(all_lines)) == 0:
                 return
             for m in all_meshes:
@@ -545,10 +548,6 @@ class MeshViewerSingle(object):
             scalefactor = np.max(scalefactor)
         else:
             center = np.array(center)
-#            for mesh in self.dynamic_meshes:
-#                if mesh.f: mesh.reset_normals()
-            all_meshes = self.static_meshes + self.dynamic_meshes + self.generate_dynamic_model_meshes()
-            all_lines = self.static_lines + self.dynamic_lines
         self.current_center = center
         self.current_scalefactor = scalefactor
         gl.glMatrixMode(gl.GL_MODELVIEW)
