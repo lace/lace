@@ -75,6 +75,10 @@ class TestTopologyMixin(unittest.TestCase):
     def test_keep_vertices(self):
         mesh = obj.load(vc('/templates/cached_model_templates/sm_2013_f_0005.obj'))
 
+        # set vc and vc for completeness
+        mesh.set_vertex_colors("blue")
+        mesh.reset_normals()
+
         indices_to_keep, expected_verts, expected_face_vertices = self.indicies_for_testing_keep_vertices(mesh)
 
         mesh.keep_vertices(indices_to_keep)

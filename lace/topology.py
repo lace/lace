@@ -232,6 +232,8 @@ class MeshMixin(object):
         if self.v is None:
             return
 
+        indices_to_keep = np.array(indices_to_keep, dtype=np.uint32)
+
         initial_num_verts = self.v.shape[0]
         if self.f is not None:
             initial_num_faces = self.f.shape[0]
@@ -242,7 +244,7 @@ class MeshMixin(object):
         vn_should_update = self.vn is not None and self.vn.shape[0] == initial_num_verts
         vc_should_update = self.vc is not None and self.vc.shape[0] == initial_num_verts
 
-        self.v = self.v[np.array(indices_to_keep, dtype=np.uint32)]
+        self.v = self.v[indices_to_keep]
 
         if vn_should_update:
             self.vn = self.vn[indices_to_keep]
@@ -253,7 +255,7 @@ class MeshMixin(object):
             v_old_to_new = np.zeros(initial_num_verts, dtype=int)
             f_old_to_new = np.zeros(initial_num_faces, dtype=int)
 
-            v_old_to_new[np.array(indices_to_keep, dtype=np.uint32)] = np.arange(len(indices_to_keep), dtype=int)
+            v_old_to_new[indices_to_keep] = np.arange(len(indices_to_keep), dtype=int)
             self.f = v_old_to_new[self.f[f_indices_to_keep]]
             f_old_to_new[f_indices_to_keep] = np.arange(self.f.shape[0], dtype=int)
 
