@@ -259,6 +259,7 @@ objutils_read(PyObject *self, PyObject *args, PyObject *keywds)
         uint32_t n_fn = (uint32_t)fn.size()/3;
         npy_intp v_dims[] = {n_v,3};
         npy_intp vn_dims[] = {n_vn,3};
+        npy_intp vc_dims[] = {n_vc,len_vc};
         npy_intp vt_dims[] = {n_vt,len_vt};
         npy_intp f_dims[] = {n_f,3};
         npy_intp ft_dims[] = {n_ft,3};
