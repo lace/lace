@@ -302,7 +302,7 @@ objutils_read(PyObject *self, PyObject *args, PyObject *keywds)
             PyDict_SetItemString(py_segm, it->first.c_str(), Py_BuildValue("N", temp));
         }
 
-        return Py_BuildValue("NNNNNNsNN",py_v,py_vt,py_vn,py_vc,py_f,py_ft,py_fn,mtl_path.c_str(),py_landm,py_segm);
+        return Py_BuildValue("NNNNNNNsNN",py_v,py_vt,py_vn,py_vc,py_f,py_ft,py_fn,mtl_path.c_str(),py_landm,py_segm);
     } catch (LoadObjException& e) {
         PyErr_SetString(LoadObjError, e.what());
         return NULL;
