@@ -26,6 +26,7 @@ class TestOBJBase(ExtraAssertionsMixin, unittest.TestCase):
         }
         self.test_obj_url = vc.uri('/unittest/serialization/obj/test_box_simple.obj')
         self.test_obj_path = vc('/unittest/serialization/obj/test_box_simple.obj')
+        self.test_obj_with_vertex_colors_url = vc.uri('/unittest/serialization/obj/test_box_simple_with_vertex_colors.obj')
         self.test_obj_with_landmarks_url = vc.uri('/unittest/serialization/obj/test_box.obj')
         self.test_obj_with_landmarks_path = vc('/unittest/serialization/obj/test_box.obj')
         self.test_pp_path = vc('/unittest/serialization/obj/test_box.pp')
@@ -80,6 +81,18 @@ class TestOBJBasicLoading(TestOBJBase):
         self.assertIsNotNone(mesh_with_texture.fn)
         self.assertEqual(mesh_with_texture.vn.shape[1], 3)
         self.assertEqual(mesh_with_texture.vn.shape[0], np.max(mesh_with_texture.fn)+1)
+
+    def test_loading_vertex_colors(self):
+        # Mesh without vertex colors should not have vertex colors
+        mesh_without_vertex_colors = obj.load(sc(self.test_obj_url))
+        self.assertIsNone(mesh_without_vertex_colors.vc)
+
+        # Mesh with vertex colors should have vertex colors
+        mesh_with_vertex_colors = obj.load(sc(self.test_obj_with_vertex_colors_url))
+        self.assertIsNotNone(mesh_with_vertex_colors.vc)
+
+        # Vertices should be the same
+        self.assertTrue((mesh_without_vertex_colors.v == mesh_with_vertex_colors.v).all())
 
 
 class TestOBJWithLandmarks(TestOBJBase):

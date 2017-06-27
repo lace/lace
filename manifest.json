@@ -1,9 +1,10 @@
 {
+    "/templates/cached_model_templates/sm_2013_f_0005.obj": "1.0.0",
+    "/unittest/bsf/bsf_example.bsf": "1.0.0",
+    "/unittest/bsf/bsf_example.ply": "1.1.0",
     "/unittest/serialization/obj/test_box.obj": "1.0.0",
     "/unittest/serialization/obj/test_box.pp": "1.0.0",
     "/unittest/serialization/obj/test_box_simple.obj": "2.1.0",
-    "/unittest/serialization/obj/test_box_with_overlapping_groups.obj": "1.1.0",
-    "/unittest/bsf/bsf_example.bsf": "1.0.0",
-    "/unittest/bsf/bsf_example.ply": "1.1.0",
-    "/templates/cached_model_templates/sm_2013_f_0005.obj": "1.0.0"
+    "/unittest/serialization/obj/test_box_simple_with_vertex_colors.obj": "1.0.0",
+    "/unittest/serialization/obj/test_box_with_overlapping_groups.obj": "1.1.0"
 }
