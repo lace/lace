@@ -3,7 +3,7 @@ class MeshMixin(object):
 
     @property
     def texture_filepath(self):
-        if not hasattr(self, '_texture_filepath'):
+        if getattr(self, '_texture_filepath', None) is None:
             return None
         if self._texture_filepath.startswith('/is/ps/'):
             # This is a special case to support some old meshes, scape templates in particular,
