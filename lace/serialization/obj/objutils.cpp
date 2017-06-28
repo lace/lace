@@ -69,18 +69,21 @@ objutils_read(PyObject *self, PyObject *args, PyObject *keywds)
         std::vector<double> v;
         std::vector<double> vt;
         std::vector<double> vn;
+        std::vector<double> vc;
         std::vector<uint32_t> f;
         std::vector<uint32_t> ft;
         std::vector<uint32_t> fn;
         v.reserve(30000);
         vt.reserve(30000);
         vn.reserve(30000);
+        vc.reserve(30000);
         f.reserve(100000);
         ft.reserve(100000);
         fn.reserve(100000);
         std::map<std::string, std::vector<uint32_t> > segm;
 
         bool next_v_is_land = false;
+        bool has_vertex_colors = true;
         std::string land_name("");
         std::map<std::string, uint32_t> landm;
 
@@ -88,6 +91,8 @@ objutils_read(PyObject *self, PyObject *args, PyObject *keywds)
         std::vector<std::string> curr_segm;
         std::string mtl_path("");
         uint32_t len_vt = 3;
+        uint32_t len_vc = 3;
+
         while (getline(obj_is, line)) {
             boost::erase_all(line, "\r"); // argh windows line endings
             if (line.substr(0,7) == "mtllib ") {
@@ -202,6 +207,26 @@ objutils_read(PyObject *self, PyObject *args, PyObject *keywds)
                     }
                     v.push_back(x);
                 }
+
+                if(has_vertex_colors) {
+                    for (int i=0; i<len_vc; ++i) {
+                        double c;
+                        if (!(is >> c)) {
+                            // If there is no value after the vertex values, it simply has
+                            // no vertex color data, sets a flag, and continues.
+                            // Otherwise, it is an error
+                            if (i > 0) {
+                                throw LoadObjException("Malformed OBJ file: could not parse vertex colors");
+                            }
+                            else {
+                                has_vertex_colors = false;
+                                break;
+                            }
+                        }
+                        vc.push_back(c);
+                    }
+                }
+
                 if (next_v_is_land) {
                     next_v_is_land = false;
                     landm[land_name.c_str()] = (uint32_t)v.size()/3-1;
@@ -211,9 +236,9 @@ objutils_read(PyObject *self, PyObject *args, PyObject *keywds)
                 next_v_is_land = true;
                 land_name = line.substr(10);
             }
-            else if (line.substr(0,3) == "vp " || 
-                     line.substr(0,7) == "usemtl " || 
-                     line.substr(0,2) == "o " || 
+            else if (line.substr(0,3) == "vp " ||
+                     line.substr(0,7) == "usemtl " ||
+                     line.substr(0,2) == "o " ||
                      line.substr(0,1) == "s") { // spec allows `s INT` or `s off`; 3dMD puts in a line with just `s`
                 // allowed, but unused
             }
@@ -228,11 +253,13 @@ objutils_read(PyObject *self, PyObject *args, PyObject *keywds)
         uint32_t n_v = (uint32_t)v.size()/3;
         uint32_t n_vt = (uint32_t)vt.size()/len_vt;
         uint32_t n_vn = (uint32_t)vn.size()/3;
+        uint32_t n_vc = (uint32_t)vc.size()/len_vc;
         uint32_t n_f = (uint32_t)f.size()/3;
         uint32_t n_ft = (uint32_t)ft.size()/3;
         uint32_t n_fn = (uint32_t)fn.size()/3;
         npy_intp v_dims[] = {n_v,3};
         npy_intp vn_dims[] = {n_vn,3};
+        npy_intp vc_dims[] = {n_vc,len_vc};
         npy_intp vt_dims[] = {n_vt,len_vt};
         npy_intp f_dims[] = {n_f,3};
         npy_intp ft_dims[] = {n_ft,3};
@@ -253,6 +280,8 @@ objutils_read(PyObject *self, PyObject *args, PyObject *keywds)
         std::copy(vt.begin(), vt.end(), reinterpret_cast<double*>(PyArray_DATA(py_vt)));
         PyArrayObject *py_vn = (PyArrayObject *)PyArray_SimpleNew(2, vn_dims, NPY_DOUBLE);
         std::copy(vn.begin(), vn.end(), reinterpret_cast<double*>(PyArray_DATA(py_vn)));
+        PyArrayObject *py_vc = (PyArrayObject *)PyArray_SimpleNew(2, vc_dims, NPY_DOUBLE);
+        std::copy(vc.begin(), vc.end(), reinterpret_cast<double*>(PyArray_DATA(py_vc)));
         PyArrayObject *py_f = (PyArrayObject *)PyArray_SimpleNew(2, f_dims, NPY_UINT32);
         std::copy(f.begin(), f.end(), reinterpret_cast<uint32_t*>(PyArray_DATA(py_f)));
         PyArrayObject *py_ft = (PyArrayObject *)PyArray_SimpleNew(2, ft_dims, NPY_UINT32);
@@ -273,7 +302,7 @@ objutils_read(PyObject *self, PyObject *args, PyObject *keywds)
             PyDict_SetItemString(py_segm, it->first.c_str(), Py_BuildValue("N", temp));
         }
 
-        return Py_BuildValue("NNNNNNsNN",py_v,py_vt,py_vn,py_f,py_ft,py_fn,mtl_path.c_str(),py_landm,py_segm);
+        return Py_BuildValue("NNNNNNNsNN",py_v,py_vt,py_vn,py_vc,py_f,py_ft,py_fn,mtl_path.c_str(),py_landm,py_segm);
     } catch (LoadObjException& e) {
         PyErr_SetString(LoadObjError, e.what());
         return NULL;
