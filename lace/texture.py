@@ -15,11 +15,12 @@ class MeshMixin(object):
 
     @texture_filepath.setter
     def texture_filepath(self, val):
+        self._texture_image = None # To ensure reloading
         self._texture_filepath = val
 
     @property
     def texture_image(self):
-        if not hasattr(self, '_texture_image'):
+        if getattr(self, '_texture_image', None) is None:
             self.reload_texture_image()
         return self._texture_image
 
@@ -37,11 +38,13 @@ class MeshMixin(object):
     def reload_texture_image(self):
         import cv2
         import numpy as np
-        if self.texture_filepath is None:
+        from baiji import s3
+        if not self.texture_filepath:
             self._texture_image = None
         else:
             # image is loaded as image_height-by-image_width-by-3 array in BGR color order.
-            self._texture_image = cv2.imread(self.texture_filepath) if self.texture_filepath else None
+            with s3.open(self.texture_filepath) as f:
+                self._texture_image = cv2.imread(f.name)
             texture_sizes = [32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384]
             if self._texture_image is not None:
                 h, w = self._texture_image.shape[:2]
