@@ -89,14 +89,14 @@ def _load(fd, mesh=None):
             mesh.materials_filepath = materials_filepath
 
     if hasattr(mesh, 'materials_file'):
-        mesh.texture_paths = dict([
+        mesh.texture_filepaths = dict([
             [text.strip() for text in line.split(None, 1)]
             for line in mesh.materials_file if line.startswith('map_K')
         ])
-        if 'map_Ka' in mesh.materials:
-            mesh.texture_filepath = path_relative_to_mesh(mesh.materials['map_Ka'])
-        elif 'map_Kd' in mesh.materials:
-            mesh.texture_filepath = path_relative_to_mesh(mesh.materials['map_Kd'])
+        if 'map_Ka' in mesh.texture_filepaths:
+            mesh.texture_filepath = path_relative_to_mesh(mesh.texture_filepaths['map_Ka'])
+        elif 'map_Kd' in mesh.texture_filepaths:
+            mesh.texture_filepath = path_relative_to_mesh(mesh.texture_filepaths['map_Kd'])
 
     if landm:
         mesh.landm = landm
