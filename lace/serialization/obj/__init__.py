@@ -85,10 +85,17 @@ def _load(fd, mesh=None):
             with s3.open(materials_filepath, 'r') as f:
                 mesh.materials_file = f.readlines()
             mesh.materials_filepath = materials_filepath
+
     if hasattr(mesh, 'materials_file'):
-        for line in mesh.materials_file:
-            if line and line.split() and line.split()[0] == 'map_Ka':
-                mesh.texture_filepath = path_relative_to_mesh(line.split()[1])
+        mesh.materials = dict([
+            (line.split()[0], ' '.join(line.split()[1:]))
+            for line in mesh.materials_file if line.split()
+        ])
+        if 'map_Ka' in mesh.materials:
+            mesh.texture_filepath = path_relative_to_mesh(mesh.materials['map_Ka'])
+        elif 'map_Kd' in mesh.materials:
+            mesh.texture_filepath = path_relative_to_mesh(mesh.materials['map_Kd'])
+
     if landm:
         mesh.landm = landm
     return mesh
