@@ -22,7 +22,7 @@ def _load(fd, mesh=None):
     from lace.cache import sc
     import lace.serialization.obj.objutils as objutils # pylint: disable=no-name-in-module
 
-    v, vt, vn, f, ft, fn, mtl_path, landm, segm = objutils.read(fd.name)
+    v, vt, vn, vc, f, ft, fn, mtl_path, landm, segm = objutils.read(fd.name)
     if not mesh:
         mesh = Mesh()
     if v.size != 0:
@@ -33,6 +33,8 @@ def _load(fd, mesh=None):
         mesh.vn = vn
     if vt.size != 0:
         mesh.vt = vt
+    if vc.size != 0:
+        mesh.vc = vc
     if fn.size != 0:
         mesh.fn = fn
     if ft.size != 0:
