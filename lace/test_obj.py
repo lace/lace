@@ -91,6 +91,12 @@ class TestOBJBasicLoading(TestOBJBase):
         mesh_with_vertex_colors = obj.load(sc(self.test_obj_with_vertex_colors_url))
         self.assertIsNotNone(mesh_with_vertex_colors.vc)
 
+        # Check sizes
+        vc_length, vc_size = mesh_with_vertex_colors.vc.shape
+        v_length, _ = mesh_with_vertex_colors.v.shape
+        self.assertEqual(vc_length, v_length)
+        self.assertEqual(vc_size, 3)
+
         # Vertices should be the same
         self.assertTrue((mesh_without_vertex_colors.v == mesh_with_vertex_colors.v).all())
 

@@ -209,7 +209,7 @@ objutils_read(PyObject *self, PyObject *args, PyObject *keywds)
                 }
 
                 if(has_vertex_colors) {
-                    for (int i=0; i< len_vc; ++i) {
+                    for (int i=0; i<len_vc; ++i) {
                         double c;
                         if (!(is >> c)) {
                             // If there is no value after the vertex values, it simply has
