@@ -188,6 +188,41 @@ class TestOBJWithMaterials(ScratchDirMixin, TestOBJBase):
         ])
         self.assertEqual(m.materials_filepath, self.obj_with_texure_mtl)
         self.assertEqual(m.texture_filepath, self.obj_with_texure_tex)
+        self.assertIsNotNone(m.texture_image)
+
+    def test_changing_texture_filepath(self):
+        m = obj.load(self.obj_with_texure)
+        self.assertEqual(m.texture_filepath, self.obj_with_texure_tex)
+        self.assertIsNotNone(m.texture_image)
+        m.texture_filepath = None
+        self.assertIsNone(m.texture_image)
+
+    def create_texture_test_files(self, include_Ka=False, include_Kd=False):
+        obj_path = os.path.join(self.scratch_dir, 'texture_test.obj')
+        with open(obj_path, 'w') as f:
+            f.write('mtllib {}\n'.format('texture_test.mtl'))
+        mtl_path = os.path.join(self.scratch_dir, 'texture_test.mtl')
+        with open(mtl_path, 'w') as f:
+            if include_Ka:
+                f.write('map_Ka {}\n'.format('ambient_tex.png'))
+            if include_Kd:
+                f.write('map_Kd {}\n'.format('diffuse_tex.png'))
+        return obj_path
+
+    def test_texture_reads_Ka(self):
+        obj_path = self.create_texture_test_files(include_Ka=True)
+        m = obj.load(obj_path)
+        self.assertEqual(m.texture_filepath, os.path.join(self.scratch_dir, 'ambient_tex.png'))
+
+    def test_texture_reads_Kd(self):
+        obj_path = self.create_texture_test_files(include_Kd=True)
+        m = obj.load(obj_path)
+        self.assertEqual(m.texture_filepath, os.path.join(self.scratch_dir, 'diffuse_tex.png'))
+
+    def test_texture_reads_Ka_if_both_Ka_and_Kd_are_present(self):
+        obj_path = self.create_texture_test_files(include_Ka=True, include_Kd=True)
+        m = obj.load(obj_path)
+        self.assertEqual(m.texture_filepath, os.path.join(self.scratch_dir, 'ambient_tex.png'))
 
     @mock.patch('baiji.s3.open', side_effect=s3.open)
     def test_reading_obj_with_mtl_from_absolute_path(self, mock_s3_open):
