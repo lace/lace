@@ -40,7 +40,7 @@ setup(
             sources=['lace/serialization/obj/objutils.cpp'],
             depends=['lace/serialization/obj/objutils.cpp'],
             include_dirs=[np.get_include()],
-            extra_compile_args=['-O2', '-Wno-write-strings', '-std=c++0x'], # maybe skip these on Windows?
+            extra_compile_args=['-O2', '-Wno-write-strings', '-Wno-c++11-narrowing', '-std=c++0x'], # maybe skip these on Windows?
         ),
     ],
     install_requires=install_requires,
