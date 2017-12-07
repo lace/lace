@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-# pylint: disable=len-as-condition, attribute-defined-outside-init, invalid-unary-operand-type
+# pylint: disable=attribute-defined-outside-init
+# pylint: disable=invalid-unary-operand-type, too-many-lines
 # encoding: utf-8
 
 import sys
@@ -575,7 +576,7 @@ class MeshViewerSingle(object):
             gl.glDisable(gl.GL_TEXTURE_2D)
             gl.glDisableClientState(gl.GL_TEXTURE_COORD_ARRAY)
         # Draw
-        if m.f is not None and len(m.f) > 0:  # i.e. if it is triangulated
+        if m.f:  # i.e. if it is triangulated
             gl.glEnable(gl.GL_LIGHTING)
             gl.glDrawElementsui(gl.GL_TRIANGLES, np.arange(m.f.size, dtype=np.uint32))
         else:  # not triangulated, so disable lighting
