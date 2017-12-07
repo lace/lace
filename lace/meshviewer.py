@@ -245,7 +245,7 @@ class MeshViewerLocal(object):
         assert uid is None or isinstance(uid, str) or isinstance(uid, unicode)
         if uid == 'stack':
             uid = ''.join(traceback.format_list(traceback.extract_stack()))
-        if uid and uid in MeshViewer.managed.keys():
+        if uid and uid in MeshViewer.managed:
             return MeshViewer.managed[uid]
         result = super(MeshViewerLocal, cls).__new__(cls)
         result.client = zmq.Context.instance().socket(zmq.PUSH)
@@ -547,7 +547,7 @@ class MeshViewerSingle(object):
         gl.glVertexPointer(3, gl.GL_FLOAT, 0, m.vbo['v'])
         m.vbo['v'].unbind()
         # Supply normals
-        if 'vn' in m.vbo.keys():
+        if 'vn' in m.vbo:
             gl.glEnableClientState(gl.GL_NORMAL_ARRAY)
             m.vbo['vn'].bind()
             gl.glNormalPointer(gl.GL_FLOAT, 0, m.vbo['vn'])
@@ -555,14 +555,14 @@ class MeshViewerSingle(object):
         else:
             gl.glDisableClientState(gl.GL_NORMAL_ARRAY)
         # Supply colors
-        if 'vc' in m.vbo.keys():
+        if 'vc' in m.vbo:
             gl.glEnableClientState(gl.GL_COLOR_ARRAY)
             m.vbo['vc'].bind()
             gl.glColorPointer(3, gl.GL_FLOAT, 0, m.vbo['vc'])
             m.vbo['vc'].unbind()
         else:
             gl.glDisableClientState(gl.GL_COLOR_ARRAY)
-        if ('vt' in m.vbo.keys()) and hasattr(m, 'textureID'):
+        if ('vt' in m.vbo) and hasattr(m, 'textureID'):
             gl.glEnable(gl.GL_TEXTURE_2D)
             gl.glTexParameterf(gl.GL_TEXTURE_2D, gl.GL_TEXTURE_MAG_FILTER, gl.GL_NEAREST)
             gl.glTexParameterf(gl.GL_TEXTURE_2D, gl.GL_TEXTURE_MIN_FILTER, gl.GL_NEAREST)
@@ -576,7 +576,7 @@ class MeshViewerSingle(object):
             gl.glDisable(gl.GL_TEXTURE_2D)
             gl.glDisableClientState(gl.GL_TEXTURE_COORD_ARRAY)
         # Draw
-        if m.f:  # i.e. if it is triangulated
+        if np.any(m.f):  # i.e. if it is triangulated
             gl.glEnable(gl.GL_LIGHTING)
             gl.glDrawElementsui(gl.GL_TRIANGLES, np.arange(m.f.size, dtype=np.uint32))
         else:  # not triangulated, so disable lighting
@@ -646,7 +646,7 @@ class MeshViewerSingle(object):
         # recenter them in our field of view
         if center is None:
             center = [0.0, 0.0, 0.0]
-        if self.dynamic_models:
+        if np.any(self.dynamic_models):
             all_meshes = (
                 self.static_meshes + self.dynamic_meshes + self.generate_dynamic_model_meshes()
             )
@@ -660,7 +660,7 @@ class MeshViewerSingle(object):
                 m.v = m.v.reshape((-1, 3))
             all_verts = np.concatenate(
                 [
-                    m.v[m.f.flatten()] if m.f else m.v[:]
+                    m.v[m.f.flatten()] if np.any(m.f) else m.v[:]
                     for m in all_meshes
                 ] + [
                     l.v[l.e.flatten()]
@@ -698,7 +698,7 @@ class MeshViewerSingle(object):
         for m in all_meshes:
             if not hasattr(m, 'vbo'):
                 # Precompute vertex vbo
-                fidxs = m.f.flatten() if m.f else np.arange(len(m.v))
+                fidxs = m.f.flatten() if np.any(m.f) else np.arange(len(m.v))
                 allpts = m.v[fidxs].astype(np.float32).flatten()
                 vbo = OpenGL.arrays.vbo.VBO(allpts)
                 m.vbo = {'v': vbo}
@@ -707,12 +707,12 @@ class MeshViewerSingle(object):
                     ns = m.vn.astype(np.float32)
                     ns = ns[m.f.flatten(), :]
                     m.vbo['vn'] = OpenGL.arrays.vbo.VBO(ns.flatten())
-                elif m.f is not None and m.f.size > 0:
+                elif np.any(m.f):
                     ns = TriNormals(m.v, m.f).r.reshape(-1, 3)
                     ns = np.tile(ns, (1, 3)).reshape(-1, 3).astype(np.float32)
                     m.vbo['vn'] = OpenGL.arrays.vbo.VBO(ns.flatten())
                 # Precompute texture vbo
-                if m.ft is not None and (m.ft.size > 0):
+                if np.any(m.ft):
                     ftidxs = m.ft.flatten()
                     data = m.vt[ftidxs].astype(np.float32)[:, 0:2]
                     data[:, 1] = 1.0 - 1.0 * data[:, 1]
@@ -981,13 +981,6 @@ class MeshViewerRemote(object):
 
     def checkQueue(self, unused_timer_id):  # pylint: disable=unused-argument
         glut.glutTimerFunc(20, self.checkQueue, 0)
-        # if True: # spinning
-        #     w_whole_window = glutGet(GLUT_WINDOW_WIDTH)
-        #     h_whole_window = glutGet(GLUT_WINDOW_HEIGHT)
-        #     center_x = w_whole_window/2
-        #     center_y = h_whole_window/2
-        #     self.on_click(GLUT_LEFT_BUTTON, GLUT_DOWN, center_x, center_y)
-        #     self.on_drag(center_x+2, center_y)
         try:
             request = self.server.recv_pyobj(zmq.NOBLOCK)
         except zmq.ZMQError as e:
