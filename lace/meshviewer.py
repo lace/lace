@@ -35,12 +35,8 @@ Copyright (c) 2012 MPI. All rights reserved.
 
 
 def _popen_exec_python(command, args=[], stdin=None, stdout=None, stderr=None):
-    if platform.system() == 'Windows':
-        python_executable = ["C:\\Python27\\python.exe"]
-    else:
-        python_executable = ["/usr/bin/env", "python"]
     return subprocess.Popen(
-        python_executable + [command] + args,
+        [sys.executable, command] + args,
         stdin=stdin, stdout=stdout, stderr=stderr
     )
 
