@@ -4,6 +4,28 @@ lace
 A mesh class loaded with useful geometric and analysis functionality.
 
 
+Installation
+------------
+
+Mac OS:
+```sh
+brew update && brew install boost
+pip install pip==9.0.1 numpy==1.13.1
+pip install lace
+```
+
+Linux:
+```sh
+apt-get install -y --no-install-recommends libsuitesparse-dev libboost-dev
+pip install pip==9.0.1 numpy==1.13.1
+pip install lace
+```
+
+Docker:
+```
+docker build .
+```
+
 
 Development
 -----------
