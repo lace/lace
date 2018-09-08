@@ -73,6 +73,7 @@ objutils_read(PyObject *self, PyObject *args, PyObject *keywds)
         std::vector<uint32_t> f;
         std::vector<uint32_t> ft;
         std::vector<uint32_t> fn;
+        std::vector<uint32_t> f4;
         v.reserve(30000);
         vt.reserve(30000);
         vn.reserve(30000);
@@ -80,6 +81,7 @@ objutils_read(PyObject *self, PyObject *args, PyObject *keywds)
         f.reserve(100000);
         ft.reserve(100000);
         fn.reserve(100000);
+        f4.reserve(100000);
         std::map<std::string, std::vector<uint32_t> > segm;
 
         bool next_v_is_land = false;
@@ -177,6 +179,12 @@ objutils_read(PyObject *self, PyObject *args, PyObject *keywds)
                             segm.find(*it)->second.push_back(face_index);
                     }
                 }
+                if (localf.size() == 4) {
+                    f4.push_back(localf[0] - 1);
+                    f4.push_back(localf[1] - 1);
+                    f4.push_back(localf[2] - 1);
+                    f4.push_back(localf[3] - 1);
+                }
                 if (localft.size() > 0) {
                     if (localft.size() != localf.size()) {
                         throw LoadObjException("Malformed OBJ file: could not parse face (len(ft) != len(f))");
@@ -257,6 +265,7 @@ objutils_read(PyObject *self, PyObject *args, PyObject *keywds)
         uint32_t n_f = (uint32_t)f.size()/3;
         uint32_t n_ft = (uint32_t)ft.size()/3;
         uint32_t n_fn = (uint32_t)fn.size()/3;
+        uint32_t n_f4 = (uint32_t)f4.size()/4;
         npy_intp v_dims[] = {n_v,3};
         npy_intp vn_dims[] = {n_vn,3};
         npy_intp vc_dims[] = {n_vc,len_vc};
@@ -264,6 +273,7 @@ objutils_read(PyObject *self, PyObject *args, PyObject *keywds)
         npy_intp f_dims[] = {n_f,3};
         npy_intp ft_dims[] = {n_ft,3};
         npy_intp fn_dims[] = {n_fn,3};
+        npy_intp f4_dims[] = {n_f4,4};
         /*
         // XXX Memory from vectors get deallocated!
         PyObject *py_v = PyArray_SimpleNewFromData(2, v_dims, NPY_DOUBLE, v.data());
@@ -288,6 +298,8 @@ objutils_read(PyObject *self, PyObject *args, PyObject *keywds)
         std::copy(ft.begin(), ft.end(), reinterpret_cast<uint32_t*>(PyArray_DATA(py_ft)));
         PyArrayObject *py_fn = (PyArrayObject *)PyArray_SimpleNew(2, fn_dims, NPY_UINT32);
         std::copy(fn.begin(), fn.end(), reinterpret_cast<uint32_t*>(PyArray_DATA(py_fn)));
+        PyArrayObject *py_f4 = (PyArrayObject *)PyArray_SimpleNew(2, f4_dims, NPY_UINT32);
+        std::copy(f4.begin(), f4.end(), reinterpret_cast<uint32_t*>(PyArray_DATA(py_f4)));
 
         PyObject *py_landm = PyDict_New();
         for (std::map<std::string, uint32_t>::iterator it=landm.begin(); it!=landm.end(); ++it)
@@ -302,7 +314,7 @@ objutils_read(PyObject *self, PyObject *args, PyObject *keywds)
             PyDict_SetItemString(py_segm, it->first.c_str(), Py_BuildValue("N", temp));
         }
 
-        return Py_BuildValue("NNNNNNNsNN",py_v,py_vt,py_vn,py_vc,py_f,py_ft,py_fn,mtl_path.c_str(),py_landm,py_segm);
+        return Py_BuildValue("NNNNNNNNsNN",py_v,py_vt,py_vn,py_vc,py_f,py_ft,py_fn,py_f4,mtl_path.c_str(),py_landm,py_segm);
     } catch (LoadObjException& e) {
         PyErr_SetString(LoadObjError, e.what());
         return NULL;

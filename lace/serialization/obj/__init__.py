@@ -22,7 +22,7 @@ def _load(fd, mesh=None):
     from lace.cache import sc
     import lace.serialization.obj.objutils as objutils # pylint: disable=no-name-in-module
 
-    v, vt, vn, vc, f, ft, fn, mtl_path, landm, segm = objutils.read(fd.name)
+    v, vt, vn, vc, f, ft, fn, f4, mtl_path, landm, segm = objutils.read(fd.name)
     if not mesh:
         mesh = Mesh()
     if v.size != 0:
@@ -39,6 +39,8 @@ def _load(fd, mesh=None):
         mesh.fn = fn
     if ft.size != 0:
         mesh.ft = ft
+    if f4.size != 0:
+        mesh.f4 = f4
     if segm:
         mesh.segm = OrderedDict([(k, v if isinstance(v, list) else v.tolist()) for k, v in segm.items()])
     def path_relative_to_mesh(filename):

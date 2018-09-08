@@ -26,6 +26,12 @@ def vertices_in_common(face_1, face_2):
     # import timeit; print timeit.timeit('vertices_in_common([0, 1, 2], [0, 1, 3])', setup='from lace.topology import vertices_in_common', number=10000)
     return [x for x in face_1 if x in face_2]
 
+def face_indices_with_verts(faces, wanted_v_indices):
+    import numpy as np
+    max_vert_idx = np.amax(faces)
+    included_vertices = np.zeros(int(max_vert_idx) + 1, dtype=bool)
+    included_vertices[np.array(wanted_v_indices, dtype=np.uint32)] = True
+    return included_vertices[faces].all(axis=1)
 
 class MeshMixin(object):
     def faces_by_vertex(self, as_sparse_matrix=False):
@@ -49,12 +55,13 @@ class MeshMixin(object):
         returns all of the faces that contain at least one of the vertices in v_indices
         '''
         import numpy as np
-        included_vertices = np.zeros(self.v.shape[0], dtype=bool)
-        included_vertices[np.array(v_indices, dtype=np.uint32)] = True
-        faces_with_verts = included_vertices[self.f].all(axis=1)
-        if as_boolean:
-            return faces_with_verts
-        return np.nonzero(faces_with_verts)[0]
+        faces_with_verts = face_indices_with_verts(self.f, v_indices)
+        return faces_with_verts if as_boolean else np.nonzero(faces_with_verts[0])
+
+    def all_f4_with_verts(self, v_indices, as_boolean=False):
+        import numpy as np
+        faces_with_verts = face_indices_with_verts(self.f4, v_indices)
+        return faces_with_verts if as_boolean else np.nonzero(faces_with_verts[0])
 
     def transfer_segm(self, mesh, exclude_empty_parts=True):
         import numpy as np
@@ -238,6 +245,9 @@ class MeshMixin(object):
         if self.f is not None:
             initial_num_faces = self.f.shape[0]
             f_indices_to_keep = self.all_faces_with_verts(indices_to_keep, as_boolean=True)
+        if self.f4 is not None:
+            initial_num_f4 = self.f4.shape[0]
+            f4_indices_to_keep = self.all_f4_with_verts(indices_to_keep, as_boolean=True)
 
         # Why do we test this? Don't know. But we do need to test it before we
         # mutate self.v.
@@ -251,13 +261,18 @@ class MeshMixin(object):
         if vc_should_update:
             self.vc = self.vc[indices_to_keep]
 
-        if self.f is not None:
+        if self.f is not None or self.f4 is not None:
             v_old_to_new = np.zeros(initial_num_verts, dtype=int)
-            f_old_to_new = np.zeros(initial_num_faces, dtype=int)
-
             v_old_to_new[indices_to_keep] = np.arange(len(indices_to_keep), dtype=int)
-            self.f = v_old_to_new[self.f[f_indices_to_keep]]
-            f_old_to_new[f_indices_to_keep] = np.arange(self.f.shape[0], dtype=int)
+
+            if self.f is not None:
+                f_old_to_new = np.zeros(initial_num_faces, dtype=int)
+                self.f = v_old_to_new[self.f[f_indices_to_keep]]
+                f_old_to_new[f_indices_to_keep] = np.arange(self.f.shape[0], dtype=int)
+            if self.f4 is not None:
+                f4_old_to_new = np.zeros(initial_num_f4, dtype=int)
+                self.f4 = v_old_to_new[self.f4[f4_indices_to_keep]]
+                f4_old_to_new[f4_indices_to_keep] = np.arange(self.f4.shape[0], dtype=int)
 
         else:
             # Make the code below work, in case there is somehow degenerate
