@@ -22,7 +22,7 @@ def _load(fd, mesh=None):
     from lace.cache import sc
     import lace.serialization.obj.objutils as objutils # pylint: disable=no-name-in-module
 
-    v, vt, vn, vc, f, ft, fn, f4, mtl_path, landm, segm = objutils.read(fd.name)
+    v, vt, vn, vc, f, ft, fn, f4, ft4, fn4, mtl_path, landm, segm = objutils.read(fd.name)
     if not mesh:
         mesh = Mesh()
     if v.size != 0:
@@ -41,6 +41,10 @@ def _load(fd, mesh=None):
         mesh.ft = ft
     if f4.size != 0:
         mesh.f4 = f4
+    if ft4.size != 0:
+        mesh.ft4 = ft4
+    if fn4.size != 0:
+        mesh.fn4 = fn4
     if segm:
         mesh.segm = OrderedDict([(k, v if isinstance(v, list) else v.tolist()) for k, v in segm.items()])
     def path_relative_to_mesh(filename):
@@ -119,7 +123,9 @@ def _dump(f, obj, flip_faces=False, ungroup=False, comments=None, split_normals=
         vertex_indices = faces[face_index][::ff] + 1
 
         write_normals = obj.fn is not None or (obj.vn is not None and obj.vn.shape == obj.v.shape)
-        write_texture = obj.ft is not None and obj.vt is not None
+        write_texture = (obj.ft4 is not None or obj.ft is not None) and obj.vt is not None
+
+        texture_faces = obj.ft4 if obj.ft4 is not None else obj.ft
 
         if write_normals and obj.fn is not None:
             normal_indices = obj.fn[face_index][::ff] + 1
@@ -128,7 +134,7 @@ def _dump(f, obj, flip_faces=False, ungroup=False, comments=None, split_normals=
             normal_indices = faces[face_index][::ff] + 1
 
         if write_texture:
-            texture_indices = obj.ft[face_index][::ff] + 1
+            texture_indices = texture_faces[face_index][::ff] + 1
             assert len(texture_indices) == len(vertex_indices)
 
         # Valid obj face lines are: v, v/vt, v//vn, v/vt/vn
@@ -184,7 +190,7 @@ def _dump(f, obj, flip_faces=False, ungroup=False, comments=None, split_normals=
             for r in obj.vn:
                 f.write('vn %f %f %f\n' % (r[0], r[1], r[2]))
 
-    if obj.ft is not None and obj.vt is not None:
+    if (obj.ft4 is not None or obj.ft is not None) and obj.vt is not None:
         for r in obj.vt:
             if len(r) == 3:
                 f.write('vt %f %f %f\n' % (r[0], r[1], r[2]))

@@ -195,6 +195,10 @@ class Mesh(
         self.__dict__['ft'] = as_numeric_array(val, dtype=np.uint32, shape=(-1, 3), allow_none=True, empty_as_none=True)
 
     @setter_property
+    def ft4(self, val):
+        self.__dict__['ft4'] = as_numeric_array(val, dtype=np.uint32, shape=(-1, 4), allow_none=True, empty_as_none=True)
+
+    @setter_property
     def vt(self, val):
         self.__dict__['vt'] = as_numeric_array(val, dtype=np.float64, shape=(-1, 2), allow_none=True, empty_as_none=True)
 
