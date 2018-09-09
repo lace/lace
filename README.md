@@ -93,7 +93,7 @@ Acknowledgements
 ----------------
 
 This library was refactored from legacy code at Body Labs by [Alex Weiss][],
-with portions by [Eric Rachlin][], [Paul Melnikow][], and [Victor Alvarez][],
+with portions by [Eric Rachlin][], [Paul Melnikow][], [Victor Alvarez][],
 and others. It was extracted from the Body Labs codebase and open-sourced by
 [Guillaume Marceau][].
 
