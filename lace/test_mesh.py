@@ -1,5 +1,6 @@
 import unittest
 import numpy as np
+from bltest import attr
 from lace.mesh import Mesh
 from lace.cache import sc
 
@@ -56,6 +57,7 @@ class TestMesh(unittest.TestCase):
         m = Mesh(fn=a)
         np.testing.assert_array_equal(m.fn, a)
 
+    @attr('missing_assets')
     def test_estimate_vertex_normals(self):
         # normals of a sphere should be scaled versions of the vertices
         test_sphere_path = sc(
