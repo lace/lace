@@ -1,23 +1,48 @@
-lace
-===========
+metabolace
+==========
 
-A mesh class loaded with useful geometric and analysis functionality.
+[![pip install](https://img.shields.io/badge/pip%20install-metablmath-f441b8.svg?style=flat-square)][pypi]
+[![version](https://img.shields.io/pypi/v/metablmath.svg?style=flat-square)][pypi]
+[![python versions](https://img.shields.io/pypi/pyversions/metablmath.svg?style=flat-square)][pypi]
+[![build status](https://img.shields.io/circleci/project/github/metabolize/blmath/master.svg?style=flat-square)][circle]
+[![last commit](https://img.shields.io/github/last-commit/metabolize/blmath.svg?style=flat-square)][commits]
+[![open pull requests](https://img.shields.io/github/issues-pr/metabolize/blmath.svg?style=flat-square)][pull requests]
+
+This is an active fork of [lace][upstream], the Body Labs-developed polygonal
+mesh library.
+
+The fork's goals are ambitious:
+
+- Keep the library working in current versions of Python and other tools.
+- Make bug fixes.
+- Provide API stability and backward compatibility with the upstream version.
+- Expand functionality to fully support quad meshes, and additional
+  analysis and manipulation functionality where appropriate.
+- Respond to community contributions.
+
+[upstream]: https://github.com/bodylabs/blmath
+[circle]: https://circleci.com/gh/metabolize/lace
+[pypi]: https://pypi.org/project/metabolace/
+[pull requests]: https://github.com/metabolize/lace/pulls
+[commits]: https://github.com/metabolize/lace/commits/master
 
 
 Installation
 ------------
 
+### Install dependencies
+
 Mac OS:
 ```sh
 brew update && brew install boost
-pip install pip==9.0.1 numpy==1.13.1
+pip install numpy==1.13.1
 pip install lace
 ```
 
 Linux:
 ```sh
 apt-get install -y --no-install-recommends libsuitesparse-dev libboost-dev
-pip install pip==9.0.1 numpy==1.13.1
+pip install numpy==1.13.1
 pip install lace
 ```
 
@@ -26,6 +51,17 @@ Docker:
 docker build .
 ```
 
+### Install the library
+
+```sh
+pip install metabolace
+```
+
+And import it just like the upstream library:
+
+```py
+from lace.mesh import Mesh
+```
 
 Development
 -----------
@@ -41,8 +77,8 @@ rake lint
 Contribute
 ----------
 
-- Issue Tracker: github.com/bodylabs/example/issues
-- Source Code: github.com/bodylabs/example
+- Issue Tracker: https://github.com/metabolize/lace/issues
+- Source Code: https://github.com/metabolize/lace
 
 Pull requests welcome!
 
@@ -51,6 +87,21 @@ Support
 -------
 
 If you are having issues, please let us know.
+
+
+Acknowledgements
+----------------
+
+This library was refactored from legacy code at Body Labs by [Alex Weiss][],
+with portions by [Eric Rachlin][], [Paul Melnikow][], and [Victor Alvarez][],
+and others. It was extracted from the Body Labs codebase and open-sourced by
+[Guillaume Marceau][].
+
+[alex weiss]: https://github.com/algrs
+[eric rachlin]: https://github.com/eerac
+[paul melnikow]: https://github.com/paulmelnikow
+[victor alvarez]: https://github.com/yangmillstheory
+[guillaume marceau]: https://github.com/gmarceau
 
 
 License

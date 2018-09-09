@@ -22,13 +22,13 @@ install_requires = parse_requirements('requirements.txt', session=False)
 install_requires = [str(ir.req) for ir in install_requires]
 
 setup(
-    name='lace',
+    name='metabolace',
     version=importlib.import_module('lace').__version__,
     author='Body Labs',
     author_email='alex@bodylabs.com',
-    description='3d mesh handling',
+    description='Active fork of lace, the Body Labs-developed polygonal mesh library',
     long_description=long_description,
-    url='https://github.com/bodylabs/lace',
+    url='https://github.com/metabolize/lace',
     license='MIT',
     packages=[
         'lace',
@@ -55,6 +55,6 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
-        'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
     ]
 )
