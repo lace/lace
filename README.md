@@ -1,12 +1,12 @@
 metabolace
 ==========
 
-[![pip install](https://img.shields.io/badge/pip%20install-metablmath-f441b8.svg?style=flat-square)][pypi]
-[![version](https://img.shields.io/pypi/v/metablmath.svg?style=flat-square)][pypi]
-[![python versions](https://img.shields.io/pypi/pyversions/metablmath.svg?style=flat-square)][pypi]
-[![build status](https://img.shields.io/circleci/project/github/metabolize/blmath/master.svg?style=flat-square)][circle]
-[![last commit](https://img.shields.io/github/last-commit/metabolize/blmath.svg?style=flat-square)][commits]
-[![open pull requests](https://img.shields.io/github/issues-pr/metabolize/blmath.svg?style=flat-square)][pull requests]
+[![pip install](https://img.shields.io/badge/pip%20install-metabolace-f441b8.svg?style=flat-square)][pypi]
+[![version](https://img.shields.io/pypi/v/metabolace.svg?style=flat-square)][pypi]
+[![python versions](https://img.shields.io/pypi/pyversions/metabolace.svg?style=flat-square)][pypi]
+[![build status](https://img.shields.io/circleci/project/github/metabolize/lace/master.svg?style=flat-square)][circle]
+[![last commit](https://img.shields.io/github/last-commit/metabolize/lace.svg?style=flat-square)][commits]
+[![open pull requests](https://img.shields.io/github/issues-pr/metabolize/lace.svg?style=flat-square)][pull requests]
 
 This is an active fork of [lace][upstream], the Body Labs-developed polygonal
 mesh library.
@@ -20,7 +20,7 @@ The fork's goals are ambitious:
   analysis and manipulation functionality where appropriate.
 - Respond to community contributions.
 
-[upstream]: https://github.com/bodylabs/blmath
+[upstream]: https://github.com/bodylabs/lace
 [circle]: https://circleci.com/gh/metabolize/lace
 [pypi]: https://pypi.org/project/metabolace/
 [pull requests]: https://github.com/metabolize/lace/pulls
