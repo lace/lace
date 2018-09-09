@@ -1,8 +1,10 @@
 import unittest
 import numpy as np
+from bltest import attr
 from lace.cache import sc
 from lace.serialization import stl
 
+@attr('missing_assets')
 class TestSTL(unittest.TestCase):
     def setUp(self):
         import tempfile

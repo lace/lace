@@ -1,11 +1,12 @@
 import unittest
 import os
 import numpy as np
-from bltest import skip_if_unavailable, skip_on_import_error
+from bltest import skip_if_unavailable, skip_on_import_error, attr
 from bltest.extra_asserts import ExtraAssertionsMixin
 from lace.mesh import Mesh
 from lace.serialization import ply
 
+@attr('missing_assets')
 class TestPLYBase(ExtraAssertionsMixin, unittest.TestCase):
     def setUp(self):
         import tempfile

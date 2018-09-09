@@ -3,6 +3,7 @@ import unittest
 import mock
 import numpy as np
 import scipy.sparse as sp
+from bltest import attr
 from lace.mesh import Mesh
 from lace.serialization import obj
 from lace.cache import vc
@@ -72,6 +73,7 @@ class TestTopologyMixin(unittest.TestCase):
         expected_face_vertices = mesh.v[mesh.f[expected_faces].flatten()]
         return indices_to_keep, expected_verts, expected_face_vertices
 
+    @attr('missing_assets')
     def test_keep_vertices(self):
         mesh = obj.load(vc('/templates/cached_model_templates/sm_2013_f_0005.obj'))
 
@@ -90,6 +92,7 @@ class TestTopologyMixin(unittest.TestCase):
         max_v_index = np.max(mesh.f.flatten())
         self.assertLessEqual(max_v_index, mesh.v.shape[0] - 1)
 
+    @attr('missing_assets')
     def test_keep_vertices_without_segm(self):
         mesh = obj.load(vc('/templates/cached_model_templates/sm_2013_f_0005.obj'))
         mesh.segm = None
@@ -105,6 +108,7 @@ class TestTopologyMixin(unittest.TestCase):
         max_v_index = np.max(mesh.f.flatten())
         self.assertLessEqual(max_v_index, mesh.v.shape[0] - 1)
 
+    @attr('missing_assets')
     def test_keep_vertices_without_f(self):
         mesh = obj.load(vc('/templates/cached_model_templates/sm_2013_f_0005.obj'))
         mesh.segm = None
@@ -124,6 +128,7 @@ class TestTopologyMixin(unittest.TestCase):
         mesh = Mesh()
         mesh.keep_vertices([])
 
+    @attr('missing_assets')
     @mock.patch('warnings.warn')
     def test_keep_vertices_with_empty_list_does_not_warn(self, warn):
         mesh = obj.load(vc('/templates/cached_model_templates/sm_2013_f_0005.obj'))
@@ -167,6 +172,7 @@ class TestTopologyMixin(unittest.TestCase):
         with self.assertRaises(ValueError):
             cube.vertex_indices_in_segments(['random_segm'])
 
+    @attr('missing_assets')
     def test_keep_segments(self):
         mesh = obj.load(vc('/templates/cached_model_templates/sm_2013_f_0005.obj'))
 
@@ -196,6 +202,7 @@ class TestTopologyMixin(unittest.TestCase):
 
         self.assertEqual(cube.clean_segments(['random_segm', 'all']), ['all'])
 
+    @attr('missing_assets')
     def test_flip_faces(self):
         raw_box = Mesh(vc('/unittest/serialization/obj/test_box_simple.obj'))
         box = Mesh(v=raw_box.v, f=raw_box.f)

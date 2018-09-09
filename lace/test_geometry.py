@@ -1,11 +1,13 @@
 import unittest
 import numpy as np
+from bltest import attr
 from lace.cache import sc, vc
 from lace.mesh import Mesh
 
 class TestGeometryMixin(unittest.TestCase):
     debug = False
 
+    @attr('missing_assets')
     def test_cut_across_axis(self):
         original_mesh = Mesh(filename=sc('s3://bodylabs-assets/example_meshes/average_female.obj'))
 
@@ -51,6 +53,7 @@ class TestGeometryMixin(unittest.TestCase):
         if self.debug:
             mesh.show()
 
+    @attr('missing_assets')
     def test_cut_across_axis_by_percentile(self):
         original_mesh = Mesh(filename=sc('s3://bodylabs-assets/example_meshes/average_female.obj'))
 
@@ -188,6 +191,7 @@ class TestGeometryMixin(unittest.TestCase):
         mesh.v = np.array([[150, 100, 50], [-150, 50, 150]])
         self.assertEqual(mesh.predict_body_units(), 'cm')
 
+    @attr('missing_assets')
     def test_flip(self):
         raw_box = Mesh(vc('/unittest/serialization/obj/test_box_simple.obj'))
         box = Mesh(v=raw_box.v, f=raw_box.f)

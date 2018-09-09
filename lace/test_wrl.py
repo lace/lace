@@ -1,7 +1,9 @@
 import unittest
+from bltest import attr
 from lace.cache import sc
 from lace.serialization import wrl, obj
 
+@attr('missing_assets')
 class TestWRL(unittest.TestCase):
     def setUp(self):
         self.test_wrl_url = "s3://bodylabs-korper-assets/is/ps/shared/data/body/korper_testdata/test_wrl.wrl"

@@ -6,15 +6,15 @@ try:
     long_description = pypandoc.convert('README.md', 'rst')
 except (IOError, ImportError):
     long_description = ''
-    print 'warning: pandoc or pypandoc does not seem to be installed; using empty long_description'
+    print('warning: pandoc or pypandoc does not seem to be installed; using empty long_description')
 
 import importlib
-try:
-    # for pip >= 10
+
+try:  # pip >= 10
     from pip._internal.req import parse_requirements
-except ImportError:
-    # for pip <= 9.0.3
+except ImportError:  # pip <= 9.0.3
     from pip.req import parse_requirements
+
 from setuptools import setup, Extension
 import numpy as np
 

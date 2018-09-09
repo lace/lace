@@ -2,6 +2,7 @@ import unittest
 import os
 from textwrap import dedent
 import numpy as np
+from bltest import attr
 from baiji import s3
 from scratch_dir import ScratchDirMixin
 from bltest import skip_if_unavailable, skip_on_import_error
@@ -12,6 +13,7 @@ from lace.serialization import obj
 from lace.cache import sc
 from lace.cache import vc
 
+@attr('missing_assets')
 class TestOBJBase(ExtraAssertionsMixin, unittest.TestCase):
     def setUp(self):
         import tempfile
