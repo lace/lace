@@ -1,20 +1,27 @@
 # pylint: disable=attribute-defined-outside-init, access-member-before-definition, len-as-condition
 from cached_property import cached_property
 
-def quads_to_tris(quads):
+def quads_to_tris(quads, ret_mapping=False):
     '''
     Convert quad faces to triangular faces.
 
     quads: An nx4 array.
+    ret_mapping: A bool.
 
-    Return a 2nx3 array.
+    When `ret_mapping` is `True`, return a 2nx3 array of new triangles and a 2nx3
+    array mapping old quad indices to new trangle indices.
 
+    When `ret_mapping` is `False`, return the 2nx3 array of triangles.
     '''
     import numpy as np
     tris = np.empty((2 * len(quads), 3))
     tris[0::2, :] = quads[:, [0, 1, 2]]
     tris[1::2, :] = quads[:, [0, 2, 3]]
-    return tris
+    if ret_mapping:
+        f_old_to_new = np.arange(len(tris)).reshape(-1, 2)
+        return tris, f_old_to_new
+    else:
+        return tris
 
 
 def vertices_in_common(face_1, face_2):

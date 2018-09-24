@@ -35,7 +35,19 @@ class TestTopologyMixin(unittest.TestCase):
             [0, 4, 7],
             [0, 7, 3],
         ])
+        expected_f_old_to_new = np.array([
+            [0, 1],
+            [2, 3],
+            [4, 5],
+            [6, 7],
+            [8, 9],
+            [10, 11],
+        ])
         np.testing.assert_array_equal(quads_to_tris(tris), expected_quads)
+
+        quads, f_old_to_new = quads_to_tris(tris, ret_mapping=True)
+        np.testing.assert_array_equal(expected_quads, quads)
+        np.testing.assert_array_equal(f_old_to_new, f_old_to_new)
 
     def indicies_for_testing_keep_vertices(self, mesh):
         '''
