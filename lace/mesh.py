@@ -211,6 +211,21 @@ class Mesh(
             if cached_property_key in self.__dict__:
                 del self.__dict__[cached_property_key]
 
+    def has_same_len_attr(self, other_mesh, attr):
+        ours = getattr(self, attr)
+        other = getattr(other_mesh, attr)
+        if ours is None or other is None:
+            return ours is other
+        else:
+            return ours.shape == other.shape
+
+    def has_equal_attr(self, other_mesh, attr):
+        # Avoid comparing None's.
+        if not self.has_same_len_attr(other_mesh, attr):
+            return False
+        else:
+            return np.array_equal(getattr(self, attr), getattr(other_mesh, attr))
+
     @classmethod
     def concatenate(cls, *args):
         """Concatenates an arbitrary number of meshes.

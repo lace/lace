@@ -272,7 +272,7 @@ class TestTopologyMixin(unittest.TestCase):
         self.assertEqual(vertices_in_common([0, 1], [0, 1, 2]), [0, 1])
         self.assertEqual(vertices_in_common([0, 1, 2], [0, 1]), [0, 1])
         self.assertEqual(vertices_in_common([0, 1, 2], [0, 1, 2, 3]), [0, 1, 2])
-        self.assertLess(timeit.timeit('vertices_in_common([0, 1, 2], [0, 1, 3])', setup='from lace.topology import vertices_in_common', number=10000), 0.01)
+        self.assertLess(timeit.timeit('vertices_in_common([0, 1, 2], [0, 1, 3])', setup='from lace.topology import vertices_in_common', number=10000), 0.015)
 
     def edges_the_hard_way(self, faces):
         from collections import Counter
@@ -342,3 +342,24 @@ class TestTopologyMixin(unittest.TestCase):
         cube.remove_redundant_verts()
         np.testing.assert_array_equal(cube.v, orig_v)
         np.testing.assert_array_equal(cube.f, orig_f)
+
+    def test_has_same_topology(self):
+        from lace.shapes import create_cube
+
+        cube_1 = create_cube(np.zeros(3), 1.)
+        cube_2 = create_cube(np.zeros(3), 1.)
+        self.assertTrue(cube_1.has_same_topology(cube_2))
+
+        cube_1 = create_cube(np.zeros(3), 1.)
+        cube_2 = create_cube(np.ones(3), 1.)
+        self.assertTrue(cube_1.has_same_topology(cube_2))
+
+        cube_1 = create_cube(np.zeros(3), 1.)
+        cube_2 = create_cube(np.zeros(3), 1.)
+        cube_2.f = np.roll(cube_2.f, 1, axis=1)
+        self.assertFalse(cube_1.has_same_topology(cube_2))
+
+        cube_1 = create_cube(np.zeros(3), 1.)
+        cube_2 = create_cube(np.zeros(3), 1.)
+        del cube_2.f
+        self.assertFalse(cube_1.has_same_topology(cube_2))

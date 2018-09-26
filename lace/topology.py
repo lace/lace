@@ -523,3 +523,7 @@ class MeshMixin(object):
             repl[vertidxs_left] = np.arange(len(vertidxs_left))
             self.v = self.v[vertidxs_left]
             self.f = repl[self.f].reshape((-1, fshape[1]))
+
+    def has_same_topology(self, other_mesh):
+        return self.has_same_len_attr(other_mesh, 'v') and \
+            self.has_equal_attr(other_mesh, 'f')
