@@ -15,9 +15,14 @@ class MeshMixin(object):
 
     def barycentric_coordinates_for_points(self, points, face_indices):
         from blmath.geometry.barycentric import barycentric_coordinates_of_projection
-        vertex_indices = self.f[face_indices.flatten(), :]
-        tri_vertices = np.array([self.v[vertex_indices[:, 0]], self.v[vertex_indices[:, 1]], self.v[vertex_indices[:, 2]]])
-        return vertex_indices, barycentric_coordinates_of_projection(points, tri_vertices[0, :], tri_vertices[1, :] - tri_vertices[0, :], tri_vertices[2, :] - tri_vertices[0, :])
+        vertex_indices = self.f[face_indices]
+        vertices = self.v[vertex_indices]
+        coeffs = barycentric_coordinates_of_projection(
+            points,
+            vertices[:, 0],
+            vertices[:, 1] - vertices[:, 0],
+            vertices[:, 2] - vertices[:, 0])
+        return vertex_indices, coeffs
 
     def reset_normals(self, face_to_verts_sparse_matrix=None):
         self.vn = self.estimate_vertex_normals(face_to_verts_sparse_matrix)

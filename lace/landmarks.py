@@ -40,23 +40,59 @@ class MeshMixin(object):
         return dict(zip(ordering, landmark_vertex_locations))
 
     def landm_xyz_linear_transform(self, ordering=None):
+        '''
+        Construct a sparse matrix that converts between the landmark points
+        and all vertices, with height 3*num_landmarks and width
+        3*num_vertices.
+        '''
         import numpy as np
         from blmath.numerics.matlab import col, sparse
         if ordering is None:
             ordering = self.landm_names
-        # construct a sparse matrix that converts between the landmark pts and all vertices, with height (# landmarks * 3) and width (# vertices * 3)
         if self.landm_regressors is not None:
-            landmark_coefficients = np.hstack([self.landm_regressors[name][1] for name in ordering])
-            landmark_indices = np.hstack([self.landm_regressors[name][0] for name in ordering])
-            column_indices = np.hstack([col(3*landmark_indices + i) for i in range(3)]).flatten()
-            row_indices = np.hstack([[3*index, 3*index + 1, 3*index + 2]*len(self.landm_regressors[ordering[index]][0]) for index in np.arange(len(ordering))])
-            values = np.hstack([col(landmark_coefficients) for i in range(3)]).flatten()
-            return sparse(row_indices, column_indices, values, 3*len(ordering), 3*self.v.shape[0])
+            landmark_coefficients = np.hstack([
+                self.landm_regressors[name][1]
+                for name in ordering
+            ])
+            landmark_indices = np.hstack([
+                self.landm_regressors[name][0]
+                for name in ordering
+            ])
+            column_indices = np.hstack([
+                col(3*landmark_indices + i)
+                for i in range(3)
+            ]).flatten()
+            row_indices = np.hstack([
+                [3*index, 3*index + 1, 3*index + 2] * \
+                    len(self.landm_regressors[ordering[index]][0])
+                for index in np.arange(len(ordering))
+            ])
+            values = np.hstack([
+                col(landmark_coefficients)
+                for i in range(3)
+            ]).flatten()
+            return sparse(
+                row_indices,
+                column_indices,
+                values,
+                3*len(ordering),
+                3*self.v.shape[0])
         elif hasattr(self, 'landm') and len(self.landm) > 0:
-            landmark_indices = np.array([self.landm[name] for name in ordering])
-            column_indices = np.hstack(([col(3*landmark_indices + i) for i in range(3)])).flatten()
+            landmark_indices = np.array([
+                self.landm[name]
+                for name in ordering
+            ])
+            column_indices = np.hstack([
+                col(3*landmark_indices + i)
+                for i in range(3)
+            ]).flatten()
             row_indices = np.arange(3*len(ordering))
-            return sparse(row_indices, column_indices, np.ones(len(column_indices)), 3*len(ordering), 3*self.v.shape[0])
+            return sparse(
+                row_indices,
+                column_indices,
+                np.ones(len(column_indices)),
+                3*len(ordering),
+                3*self.v.shape[0])
         else:
             return np.zeros((0, 0))
 
@@ -133,21 +169,37 @@ class MeshMixin(object):
             self.recompute_landmarks()
 
     def recompute_landmarks(self):
+        """
+        Compute default regressors from landmarks.
+        """
         import numpy as np
         landm = self._raw_landmarks['landm']
         landm_xyz = self._raw_landmarks['landm_xyz']
-        self._landm = dict(landm.items() + self.compute_landmark_indices(landm_xyz).items())
+        self._landm = dict(
+            landm.items() + self.compute_landmark_indices(landm_xyz).items())
         if len(self._landm) == 0:
             self._landm = None
             self._landm_regressors = None
-        # compute default regressors from landmarks
         elif self.f is not None and len(self.f):
-            landmark_points = np.vstack((self.v[landm.values()].reshape(-1, 3), np.array(landm_xyz.values()).reshape(-1, 3)))
-            face_indices, closest_points = self.closest_faces_and_points(landmark_points)
-            vertex_indices, coefficients = self.barycentric_coordinates_for_points(closest_points, face_indices)
-            self._landm_regressors = {name: (vertex_indices[i], coefficients[i]) for i, name in enumerate(landm.keys() + landm_xyz.keys())}
+            landmark_points = np.vstack((
+                self.v[landm.values()].reshape(-1, 3),
+                np.array(landm_xyz.values()).reshape(-1, 3)
+            ))
+            face_indices, closest_points = self.closest_faces_and_points(
+                landmark_points)
+            vertex_indices, coefficients = self.barycentric_coordinates_for_points(
+                closest_points,
+                face_indices)
+            self._landm_regressors = {
+                name: (vertex_indices[i], coefficients[i])
+                for i, name
+                in enumerate(landm.keys() + landm_xyz.keys())
+            }
         else:
-            self._landm_regressors = {k: (v, np.array([1.0])) for k, v in self.landm.items()}
+            self._landm_regressors = {
+                k: (vert_index, np.array([1.0]))
+                for k, vert_index in self.landm.items()
+            }
 
     @property
     def landm_names(self):
