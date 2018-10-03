@@ -2,6 +2,33 @@
 import numpy as np
 from blmath.numerics import vx
 
+def angle(v1, v2, normalize=True):
+    """
+    https://github.com/lace/vx/pull/4
+    Note: The implementation in vx is not vectorized.
+    """
+    if normalize:
+        v1, v2 = vx.normalize(v1), vx.normalize(v2)
+    dot_products = np.einsum('ij,ij->i', v1, v2)
+    return np.arccos(np.clip(dot_products, -1.0, 1.0))
+
+def reorient_faces_using_normals(mesh):
+    """
+    Using face normals, infer counterclockwise winding and canonicalize
+    the faces.
+
+    Return a list of indices of faces which were flipped.
+    """
+    import math
+    from blmath.geometry.surface_normals import surface_normal
+    if mesh.fn is None:
+        raise ValueError("Face normals are required")
+    normals_from_winding = surface_normal(mesh.v[mesh.f])
+    deviation_angle = angle(mesh.fn, normals_from_winding)
+    need_flipping, = np.nonzero(deviation_angle > 0.5 * math.pi)
+    mesh.flip_faces(need_flipping)
+    return need_flipping
+
 class MeshMixin(object):
     def estimate_vertex_normals(self, face_to_verts_sparse_matrix=None):
         from blmath.optimization.objectives.normals import TriNormalsScaled
@@ -293,3 +320,12 @@ class MeshMixin(object):
                                    e_1[:, 0]*e_2[:, 1] - e_1[:, 1]*e_2[:, 0]]).T
 
         return (0.5)*((cross_products**2.).sum(axis=1)**0.5)
+
+    def reorient_faces_using_normals(self):
+        """
+        Using face normals, infer counterclockwise winding and canonicalize
+        the faces.
+
+        Return a list of indices of faces which were flipped.
+        """
+        return reorient_faces_using_normals(self)

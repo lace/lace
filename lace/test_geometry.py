@@ -212,3 +212,35 @@ class TestGeometryMixin(unittest.TestCase):
         np.testing.assert_array_almost_equal(box.vn[:, 0], np.negative(original_vn[:, 0]))
         np.testing.assert_array_almost_equal(box.vn[:, 1], original_vn[:, 1])
         np.testing.assert_array_almost_equal(box.vn[:, 2], original_vn[:, 2])
+
+    def test_reorient_faces_using_normals(self):
+        import math
+        from lace import shapes
+        from blmath.geometry.surface_normals import surface_normal
+        from blmath.numerics import vx
+
+        points = np.array([
+            [1, 0, 0],
+            [0, math.sqrt(1.25), 0],
+            [-1, 0, 0],
+        ])
+        prism = shapes.create_triangular_prism(*points, height=4)
+        correct_faces = prism.f.copy()
+
+        # Generate normals that are slightly off in random directions.
+        prism.fn = vx.normalize(
+            surface_normal(prism.v[prism.f]) + \
+            0.05 * np.random.random(len(prism.f)*3).reshape(len(prism.f), 3))
+
+        # Flip a few of the faces.
+        n_to_flip = 4
+        to_flip = np.random.permutation(len(prism.f))[:n_to_flip]
+        prism.flip_faces(to_flip)
+
+        # Confidence check.
+        np.testing.assert_raises(AssertionError, np.testing.assert_array_equal, prism.f, correct_faces)
+
+        prism.reorient_faces_using_normals()
+
+        # Confidence check.
+        np.testing.assert_array_equal(prism.f, correct_faces)

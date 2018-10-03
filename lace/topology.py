@@ -297,13 +297,11 @@ class MeshMixin(object):
         self.f = np.delete(self.f, face_indices_to_remove, 0)
         return self
 
-    def flip_faces(self):
-        self.f = self.f.copy()
-        for i in range(len(self.f)):
-            self.f[i] = self.f[i][::-1]
+    def flip_faces(self, face_indices_to_flip=()):
+        import numpy as np
+        self.f[face_indices_to_flip] = np.fliplr(self.f[face_indices_to_flip])
         if self.ft is not None:
-            for i in range(len(self.f)):
-                self.ft[i] = self.ft[i][::-1]
+            self.ft[face_indices_to_flip] = np.fliplr(self.ft[face_indices_to_flip])
         return self
 
     def subdivide_triangles(self):

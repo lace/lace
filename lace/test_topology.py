@@ -214,10 +214,9 @@ class TestTopologyMixin(unittest.TestCase):
 
         self.assertEqual(cube.clean_segments(['random_segm', 'all']), ['all'])
 
-    @attr('missing_assets')
     def test_flip_faces(self):
-        raw_box = Mesh(vc('/unittest/serialization/obj/test_box_simple.obj'))
-        box = Mesh(v=raw_box.v, f=raw_box.f)
+        from lace.shapes import create_rectangular_prism
+        box = create_rectangular_prism(np.array([1.0, 1.0, 1.0]), np.array([4.0, 2.0, 1.0]))
         box.reset_normals()
         original_vn = box.vn.copy()
         original_f = box.f.copy()
