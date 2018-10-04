@@ -1,6 +1,29 @@
 Changelog for the Metabolize fork
 =================================
 
+## 1.2.0 (Oct 4, 2018)
+
+As of this release, break from the upstream revision history and adopt ordinary
+semver.
+
+Features:
+
+- Add `has_same_topology()` helper.
+- Add `face_indices_to_flip` parameter to `flip_faces()`
+- `quads_to_tris` optionally returns a mapping of old quads to new tris.
+- Add new method `reorient_faces_using_normals()`
+
+Improvements:
+
+- Replace for loops in `flip_faces()` with vectorized operations
+- Re-enable test for `flip_faces()`.
+- Delegate shape geometry generation to `blmath`. Requires `1.2.5.post3` or
+  later.
+- `landm` / `barycentric`: Refactor + improve readability
+
+Note: This release does not include quad face support from `1.1.8.dev1`.
+
+
 ## 1.1.8.dev1 (Sep 9, 2018)
 
 - Increased support for quad faces
