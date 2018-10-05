@@ -242,7 +242,10 @@ class MeshMixin(object):
         indices_to_keep = np.array(indices_to_keep, dtype=np.uint32)
 
         initial_num_verts = self.v.shape[0]
-        if self.f is not None:
+        if self.f is None:
+            initial_num_faces = 0
+            f_indices_to_keep = []
+        else:
             initial_num_faces = self.f.shape[0]
             f_indices_to_keep = self.all_faces_with_verts(indices_to_keep, as_boolean=True)
 
@@ -258,27 +261,14 @@ class MeshMixin(object):
         if vc_should_update:
             self.vc = self.vc[indices_to_keep]
 
-        if self.f is not None:
-            v_old_to_new = np.zeros(initial_num_verts, dtype=int)
-            f_old_to_new = np.zeros(initial_num_faces, dtype=int)
+        v_old_to_new = np.repeat(-1, len(initial_num_verts))
+        v_old_to_new[indices_to_keep] = np.arange(len(indices_to_keep))
 
-            v_old_to_new[indices_to_keep] = np.arange(len(indices_to_keep), dtype=int)
-            self.f = v_old_to_new[self.f[f_indices_to_keep]]
-            f_old_to_new[f_indices_to_keep] = np.arange(self.f.shape[0], dtype=int)
-
+        if self.f is None:
+            del self.segm
         else:
-            # Make the code below work, in case there is somehow degenerate
-            # segm even though there are no faces.
-            f_indices_to_keep = []
-
-        if self.segm is not None:
-            new_segm = {}
-            for segm_name, segm_faces in self.segm.items():
-                faces = np.array(segm_faces, dtype=int)
-                valid_faces = faces[f_indices_to_keep[faces]]
-                if len(valid_faces):
-                    new_segm[segm_name] = f_old_to_new[valid_faces]
-            self.segm = new_segm if new_segm else None
+            self.f = v_old_to_new[self.f]
+            self.keep_faces(f_indices_to_keep)
 
         if hasattr(self, '_raw_landmarks') and self._raw_landmarks is not None:
             self.recompute_landmarks()
@@ -292,10 +282,32 @@ class MeshMixin(object):
     def point_cloud(self):
         return self.__class__(v=self.v, f=[], vc=self.vc) if self.vc is not None else self.__class__(v=self.v, f=[])
 
+    def keep_faces(self, face_indices_to_keep):
+        initial_nf = len(self.f)
+        new_nf = len(face_indices_to_keep)
+
+        self.f = self.f[face_indices_to_keep]
+
+        f_old_to_new = np.repeat(-1, initial_nf)
+        f_old_to_new[face_indices_to_keep] = np.arange(len(face_indices_to_keep))
+
+        if self.segm is not None:
+            new_segm = {}
+            for name, segm_faces in self.segm.items():
+                new_segm_faces = f_old_to_new[segm_faces]
+                valid_faces = new_segm_faces[new_segm_faces >= 0]
+                if len(valid_faces):
+                    new_segm[name] = valid_faces
+            self.segm = new_segm if new_segm else None
+
+        return f_old_to_new
+
     def remove_faces(self, face_indices_to_remove):
         import numpy as np
-        self.f = np.delete(self.f, face_indices_to_remove, 0)
-        return self
+        face_indices_to_keep = np.setdiff1d(
+            np.arange(len(self.f)),
+            face_indices_to_remove)
+        return self.keep_faces(face_indices_to_keep)
 
     def flip_faces(self, face_indices_to_flip=()):
         import numpy as np
