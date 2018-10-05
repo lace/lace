@@ -1,6 +1,7 @@
 import unittest
 import numpy as np
 from bltest import attr
+import vx
 from lace.cache import sc, vc
 from lace.mesh import Mesh
 
@@ -217,7 +218,6 @@ class TestGeometryMixin(unittest.TestCase):
         import math
         from lace import shapes
         from blmath.geometry.surface_normals import surface_normal
-        from blmath.numerics import vx
 
         points = np.array([
             [1, 0, 0],

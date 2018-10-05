@@ -1,16 +1,6 @@
 # pylint: disable=attribute-defined-outside-init
 import numpy as np
-from blmath.numerics import vx
-
-def angle(v1, v2, normalize=True):
-    """
-    https://github.com/lace/vx/pull/4
-    Note: The implementation in vx is not vectorized.
-    """
-    if normalize:
-        v1, v2 = vx.normalize(v1), vx.normalize(v2)
-    dot_products = np.einsum('ij,ij->i', v1, v2)
-    return np.arccos(np.clip(dot_products, -1.0, 1.0))
+import vx
 
 def reorient_faces_using_normals(mesh):
     """
@@ -24,7 +14,7 @@ def reorient_faces_using_normals(mesh):
     if mesh.fn is None:
         raise ValueError("Face normals are required")
     normals_from_winding = surface_normal(mesh.v[mesh.f])
-    deviation_angle = angle(mesh.fn, normals_from_winding)
+    deviation_angle = vx.angle(mesh.fn, normals_from_winding, units="rad")
     need_flipping, = np.nonzero(deviation_angle > 0.5 * math.pi)
     mesh.flip_faces(need_flipping)
     return need_flipping
