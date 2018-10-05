@@ -1,6 +1,11 @@
 Changelog for the Metabolize fork
 =================================
 
+## 1.2.1 (Oct 5, 2018)
+
+- Use the new `vector_shortcuts` package.
+
+
 ## 1.2.0 (Oct 4, 2018)
 
 As of this release, break from the upstream revision history and adopt ordinary
