@@ -1,5 +1,7 @@
 # pylint: disable=attribute-defined-outside-init, access-member-before-definition, len-as-condition
 from cached_property import cached_property
+import numpy as np
+
 
 def quads_to_tris(quads, ret_mapping=False):
     '''
@@ -13,7 +15,6 @@ def quads_to_tris(quads, ret_mapping=False):
 
     When `ret_mapping` is `False`, return the 2nx3 array of triangles.
     '''
-    import numpy as np
     tris = np.empty((2 * len(quads), 3))
     tris[0::2, :] = quads[:, [0, 1, 2]]
     tris[1::2, :] = quads[:, [0, 2, 3]]
@@ -36,7 +37,6 @@ def vertices_in_common(face_1, face_2):
 
 class MeshMixin(object):
     def faces_by_vertex(self, as_sparse_matrix=False):
-        import numpy as np
         import scipy.sparse as sp
         if not as_sparse_matrix:
             faces_by_vertex = [[] for i in range(len(self.v))]
@@ -55,7 +55,6 @@ class MeshMixin(object):
         '''
         returns all of the faces that contain at least one of the vertices in v_indices
         '''
-        import numpy as np
         included_vertices = np.zeros(self.v.shape[0], dtype=bool)
         included_vertices[np.array(v_indices, dtype=np.uint32)] = True
         faces_with_verts = included_vertices[self.f].all(axis=1)
@@ -64,7 +63,6 @@ class MeshMixin(object):
         return np.nonzero(faces_with_verts)[0]
 
     def transfer_segm(self, mesh, exclude_empty_parts=True):
-        import numpy as np
         self.segm = {}
         if mesh.segm is not None:
             face_centers = np.array([self.v[face, :].mean(axis=0) for face in self.f])
@@ -89,7 +87,6 @@ class MeshMixin(object):
             segments: a list of segment names,
             ret_face_indices: if it is `True`, returns face indices
         '''
-        import numpy as np
         import warnings
 
         face_indices = np.array([])
@@ -169,7 +166,6 @@ class MeshMixin(object):
 
     @property
     def joint_xyz(self):
-        import numpy as np
         joint_locations = {}
         for name in self.joint_names:
             joint_locations[name] = self.joint_regressors[name]['offset'] + np.sum(self.v[self.joint_regressors[name]['v_indices']].T*self.joint_regressors[name]['coeff'], axis=1)
@@ -178,7 +174,6 @@ class MeshMixin(object):
     # creates joint_regressors from a list of joint names and a per joint list of vertex indices (e.g. a ring of vertices)
     # For the regression coefficients, all vertices for a given joint are given equal weight
     def set_joints(self, joint_names, vertex_indices):
-        import numpy as np
         self.joint_regressors = {}
         for name, indices in zip(joint_names, vertex_indices):
             self.joint_regressors[name] = {'v_indices': indices, 'coeff': [1.0/len(indices)]*len(indices), 'offset': np.array([0., 0., 0.])}
@@ -186,7 +181,6 @@ class MeshMixin(object):
     def uniquified_mesh(self):
         """This function returns a copy of the mesh in which vertices are copied such that
         each vertex appears in only one face, and hence has only one texture"""
-        import numpy as np
         from lace.mesh import Mesh
         new_mesh = Mesh(v=self.v[self.f.flatten()], f=np.array(range(len(self.f.flatten()))).reshape(-1, 3))
 
@@ -234,8 +228,6 @@ class MeshMixin(object):
         faces. Otherwise return `self` for chaining.
 
         '''
-        import numpy as np
-
         if self.v is None:
             return
 
@@ -276,7 +268,6 @@ class MeshMixin(object):
         return np.nonzero(f_indices_to_keep)[0] if ret_kept_faces else self
 
     def remove_vertices(self, v_list):
-        import numpy as np
         return self.keep_vertices(np.setdiff1d(np.arange(self.v.shape[0]), v_list))
 
     def point_cloud(self):
@@ -303,21 +294,18 @@ class MeshMixin(object):
         return f_old_to_new
 
     def remove_faces(self, face_indices_to_remove):
-        import numpy as np
         face_indices_to_keep = np.setdiff1d(
             np.arange(len(self.f)),
             face_indices_to_remove)
         return self.keep_faces(face_indices_to_keep)
 
     def flip_faces(self, face_indices_to_flip=()):
-        import numpy as np
         self.f[face_indices_to_flip] = np.fliplr(self.f[face_indices_to_flip])
         if self.ft is not None:
             self.ft[face_indices_to_flip] = np.fliplr(self.ft[face_indices_to_flip])
         return self
 
     def subdivide_triangles(self):
-        import numpy as np
         new_faces = []
         new_vertices = self.v.copy()
         for face in self.f:
@@ -349,7 +337,6 @@ class MeshMixin(object):
         return self
 
     def concatenate_mesh(self, mesh):
-        import numpy as np
         if len(self.v) == 0:
             self.f = mesh.f.copy()
             self.v = mesh.v.copy()
@@ -363,7 +350,6 @@ class MeshMixin(object):
     # new_ordering specifies the new index of each vertex. If new_ordering[i] = j,
     # vertex i should now be the j^th vertex. As such, each entry in new_ordering should be unique.
     def reorder_vertices(self, new_ordering, new_normal_ordering=None):
-        import numpy as np
         if new_normal_ordering is None:
             new_normal_ordering = new_ordering
         inverse_ordering = np.zeros(len(new_ordering), dtype=int)
@@ -400,7 +386,6 @@ class MeshMixin(object):
         lines: A list of Polyline or Lines objects.
 
         '''
-        import numpy as np
         if not lines:
             return
 
@@ -417,7 +402,6 @@ class MeshMixin(object):
         element indicates a neighborhood relation. For example, if there is a
         nonzero element in position (15, 12), that means vertex 15 is connected
         by an edge to vertex 12."""
-        import numpy as np
         import scipy.sparse as sp
         from blmath.numerics.matlab import row
         vpv = sp.csc_matrix((len(self.v), len(self.v)))
@@ -456,7 +440,6 @@ class MeshMixin(object):
         """Returns an Ex2 array of adjacencies between faces, where
         each element in the array is a face index. Each edge is included
         only once. Edges that are not shared by 2 faces are not included."""
-        import numpy as np
         import scipy.sparse as sp
         from blmath.numerics.matlab import col
         IS = np.repeat(np.arange(len(self.f)), 3)
@@ -474,7 +457,6 @@ class MeshMixin(object):
         """Returns an Ex2 array of adjacencies between vertices, where
         each element in the array is a vertex index. Each edge is included
         only once. Edges that are not shared by 2 faces are not included."""
-        import numpy as np
         return np.asarray([vertices_in_common(e[0], e[1]) for e in self.f[self.faces_per_edge]])
 
     def get_vertices_to_edges_matrix(self, want_xyz=True):
@@ -486,7 +468,6 @@ class MeshMixin(object):
             want_xyz: if true, takes and returns xyz coordinates, otherwise
                 takes and returns x *or* y *or* z coordinates
         """
-        import numpy as np
         import scipy.sparse as sp
 
         vpe = np.asarray(self.vertices_per_edge, dtype=np.int32)
@@ -514,7 +495,6 @@ class MeshMixin(object):
 
     def remove_redundant_verts(self, eps=1e-10):
         """Given verts and faces, this remove colocated vertices"""
-        import numpy as np
         from scipy.spatial import cKDTree # FIXME pylint: disable=no-name-in-module
         fshape = self.f.shape
         tree = cKDTree(self.v)
@@ -535,7 +515,6 @@ class MeshMixin(object):
             self.f = repl[self.f].reshape((-1, fshape[1]))
 
     def remove_unreferenced_vertices(self):
-        import numpy as np
         self.keep_vertices(np.unique(self.f.reshape(-1)))
 
     def has_same_topology(self, other_mesh):
