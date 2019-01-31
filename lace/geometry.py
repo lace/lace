@@ -1,6 +1,6 @@
 # pylint: disable=attribute-defined-outside-init
 import numpy as np
-import vx
+import vg
 
 def reorient_faces_using_normals(mesh):
     """
@@ -14,7 +14,7 @@ def reorient_faces_using_normals(mesh):
     if mesh.fn is None:
         raise ValueError("Face normals are required")
     normals_from_winding = surface_normal(mesh.v[mesh.f])
-    deviation_angle = vx.angle(mesh.fn, normals_from_winding, units="rad")
+    deviation_angle = vg.angle(mesh.fn, normals_from_winding, units="rad")
     need_flipping, = np.nonzero(deviation_angle > 0.5 * math.pi)
     mesh.flip_faces(need_flipping)
     return need_flipping
@@ -165,7 +165,7 @@ class MeshMixin(object):
     @property
     def floor_plane(self):
         from blmath.geometry import Plane
-        return Plane(self.floor_point, vx.basis.y)
+        return Plane(self.floor_point, vg.basis.y)
 
     def recenter_over_floor(self):
         self.translate(-self.floor_point)
@@ -215,12 +215,12 @@ class MeshMixin(object):
         '''
         from blmath.numerics import as_numeric_array
 
-        origin = vx.reject_axis(as_numeric_array(origin, (3,)), axis=squash_axis, squash=True)
-        initial_direction = vx.reject_axis(as_numeric_array(initial_direction, (3,)), axis=squash_axis, squash=True)
-        vertices = vx.reject_axis(self.v, axis=squash_axis, squash=True)
+        origin = vg.reject_axis(as_numeric_array(origin, (3,)), axis=squash_axis, squash=True)
+        initial_direction = vg.reject_axis(as_numeric_array(initial_direction, (3,)), axis=squash_axis, squash=True)
+        vertices = vg.reject_axis(self.v, axis=squash_axis, squash=True)
 
-        origin_to_mesh = vx.normalize(vertices - origin)
-        cosines = vx.normalize(initial_direction).dot(origin_to_mesh.T).T
+        origin_to_mesh = vg.normalize(vertices - origin)
+        cosines = vg.normalize(initial_direction).dot(origin_to_mesh.T).T
         index_of_first_blip = np.argmax(cosines)
 
         return self.v[index_of_first_blip]
