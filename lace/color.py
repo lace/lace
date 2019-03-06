@@ -34,7 +34,13 @@ def colors_like(color, arr, colormap=DEFAULT_COLORMAP):
     elif color.ndim == 2:
         if color.shape[1] == num_verts:
             color = color.T
-        return np.ones((num_verts, 3)) * color
+
+        if color.shape[0] != num_verts:
+            vc = np.repeat(-1., num_verts*3).reshape(-1, 3)
+            vc[:color.shape[0],:] = color
+            return vc
+        else:
+            return np.ones((num_verts, 3)) * color
     else:
         raise ValueError("Colors must be specified as one or two dimensions")
 
