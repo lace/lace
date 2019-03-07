@@ -36,7 +36,7 @@ def colors_like(color, arr, colormap=DEFAULT_COLORMAP):
             color = color.T
 
         if color.shape[0] != num_verts:
-            vc = np.repeat(-1., num_verts*3).reshape(-1, 3)
+            vc = np.repeat(1., num_verts*3).reshape(-1, 3)
             vc[:color.shape[0],:] = color
             return vc
         else:
