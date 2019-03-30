@@ -32,4 +32,7 @@ if baiji_version_2:
         bucket=BUCKET)
 else:
     sc = AssetCache(immutable_buckets=IMMUTABLE_BUCKETS)
-    vc = VersionedCache(sc, MANIFEST_PATH_V3)
+    if os.path.exists(MANIFEST_PATH_V3):
+        vc = VersionedCache(sc, MANIFEST_PATH_V3)
+    else:
+        vc = None
