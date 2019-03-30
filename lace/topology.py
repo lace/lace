@@ -445,7 +445,10 @@ class MeshMixin(object):
         IS = np.repeat(np.arange(len(self.f)), 3)
         JS = self.f.ravel()
         data = np.ones(IS.size)
-        f2v = sp.csc_matrix((data, (IS, JS)), shape=(len(self.f), np.max(self.f.ravel())+1))
+        f2v = sp.csc_matrix(
+            (data, (IS, JS)),
+            shape=(len(self.f), int(np.max(self.f.ravel())) + 1)
+        )
         f2f = f2v.dot(f2v.T)
         f2f = f2f.tocoo()
         f2f = np.hstack((col(f2f.row), col(f2f.col), col(f2f.data)))
