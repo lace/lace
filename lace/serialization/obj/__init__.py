@@ -3,12 +3,18 @@ from lace.serialization.obj.objutils import LoadObjError # lint isn't able to fi
 EXTENSION = '.obj'
 
 def load(f, existing_mesh=None):
-    from baiji.serialization.util.openlib import ensure_file_open_and_call
+    try:
+        from baiji.serialization.util.openlib import ensure_file_open_and_call
+    except ImportError:
+        from baiji.util.openlib import ensure_file_open_and_call
     return ensure_file_open_and_call(f, _load, mode='rb', mesh=existing_mesh)
 
 def dump(obj, f, flip_faces=False, ungroup=False, comments=None,
          copyright=False, split_normals=False, write_mtl=True): # pylint: disable=redefined-outer-name, redefined-builtin, unused-argument
-    from baiji.serialization.util.openlib import ensure_file_open_and_call
+    try:
+        from baiji.serialization.util.openlib import ensure_file_open_and_call
+    except ImportError:
+        from baiji.util.openlib import ensure_file_open_and_call
     if comments is None:
         comments = []
     return ensure_file_open_and_call(f, _dump, mode='wb', obj=obj, flip_faces=flip_faces,

@@ -1,4 +1,5 @@
 include requirements.txt
 include README.md
 include manifest.json
+include manifest_3.json
 recursive-include lace *.h *.c *.cpp *.hpp
