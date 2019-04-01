@@ -13,6 +13,7 @@ from lace import visibility
 from lace import texture
 from lace import search
 from lace import visualization
+from lace import intersection
 
 class Mesh(
         serialization.MeshMixin,
@@ -24,6 +25,7 @@ class Mesh(
         texture.MeshMixin,
         search.MeshMixin,
         visualization.MeshMixin,
+        intersection.MeshMixin,
         object
     ):
     """3d Triangulated Mesh class
