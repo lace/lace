@@ -217,7 +217,7 @@ class TestGeometryMixin(unittest.TestCase):
     def test_reorient_faces_using_normals(self):
         import math
         from lace import shapes
-        from blmath.geometry.surface_normals import surface_normal
+        from polliwog.tri.surface_normals import surface_normal
 
         points = np.array([
             [1, 0, 0],

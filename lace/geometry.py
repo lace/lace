@@ -10,7 +10,7 @@ def reorient_faces_using_normals(mesh):
     Return a list of indices of faces which were flipped.
     """
     import math
-    from blmath.geometry.surface_normals import surface_normal
+    from polliwog.tri.surface_normals import surface_normal
     if mesh.fn is None:
         raise ValueError("Face normals are required")
     normals_from_winding = surface_normal(mesh.v[mesh.f])
@@ -31,7 +31,7 @@ class MeshMixin(object):
         return self.vn # for backwards compatibility
 
     def barycentric_coordinates_for_points(self, points, face_indices):
-        from blmath.geometry.barycentric import barycentric_coordinates_of_projection
+        from polliwog.tri.barycentric import barycentric_coordinates_of_projection
         vertex_indices = self.f[face_indices]
         vertices = self.v[vertex_indices]
         coeffs = barycentric_coordinates_of_projection(
@@ -110,7 +110,7 @@ class MeshMixin(object):
         (i.e. facing towards a default OpenGL camera).
 
         '''
-        from blmath.geometry.transform import rotation_from_up_and_look
+        from polliwog.transform.rotation import rotation_from_up_and_look
         from blmath.numerics import as_numeric_array
 
         up = as_numeric_array(up, (3,))
@@ -164,7 +164,7 @@ class MeshMixin(object):
 
     @property
     def floor_plane(self):
-        from blmath.geometry import Plane
+        from polliwog import Plane
         return Plane(self.floor_point, vg.basis.y)
 
     def recenter_over_floor(self):
@@ -172,7 +172,7 @@ class MeshMixin(object):
 
     @property
     def bounding_box(self):
-        from blmath.geometry import Box
+        from polliwog import Box
 
         if self.v is None:
             raise ValueError('Mesh has no vertices; bounding box is not defined')
@@ -193,8 +193,7 @@ class MeshMixin(object):
         axis: A vector, which is an 3x1 np.array.
 
         '''
-        from blmath.geometry.apex import apex
-        return apex(self.v, axis)
+        return vg.apex(self.v, axis)
 
     def first_blip(self, squash_axis, origin, initial_direction):
         '''
