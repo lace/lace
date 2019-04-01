@@ -1,6 +1,17 @@
 Changelog for the Metabolize fork
 =================================
 
+## 1.3.0 (Apr 1, 2019)
+
+- Add `Mesh.intesect_plane()` method from blmath
+- Add utility functions for checking mesh integrity
+- Migrate geometry utilities from blmath to [polliwog][]
+- Migrate vector_shorcuts to [vg][]
+
+[polliwog]: https://github.com/lace/polliwog
+[vg]: https://github.com/lace/vg
+
+
 ## 1.2.1 (Oct 5, 2018)
 
 - Use the new `vector_shortcuts` package.
