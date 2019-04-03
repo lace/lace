@@ -1,6 +1,6 @@
 -r requirements.txt
 
-nose2==0.9.0
+nose2==0.9.1
 pylint>=1.7.1
 scratch-dir>=1.0.0
 bltest>=1.0.0
