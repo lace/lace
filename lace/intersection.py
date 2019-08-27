@@ -173,4 +173,4 @@ class MeshMixin(object):
 
         # number of components will not be large in practice, so this loop won't hurt
         means = [np.mean(kdtree.query(component)[0]) for component in components]
-        return [Polyline(components[np.argmin(means)], closed=True)]
+        return Polyline(components[np.argmin(means)], closed=True)

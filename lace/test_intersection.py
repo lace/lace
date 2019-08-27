@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 from bltest import attr
 from lace.mesh import Mesh
-from polliwog import Plane
+from polliwog import Plane, Polyline
 from collections import namedtuple
 
 class TestIntersection(unittest.TestCase):
@@ -79,11 +79,10 @@ class TestIntersection(unittest.TestCase):
 
         two_box_mesh = self.double_mesh(self.box_mesh)
 
-        xsections = two_box_mesh.intersect_plane(plane, neighborhood=np.array([[0., 0., 0.]]))
-        self.assertIsInstance(xsections, list)
-        self.assertEqual(len(xsections), 1)
-        self.assertEqual(len(xsections[0].v), 8)
-        self.assertTrue(xsections[0].closed)
+        xsection = two_box_mesh.intersect_plane(plane, neighborhood=np.array([[0., 0., 0.]]))
+        self.assertIsInstance(xsection, Polyline)
+        self.assertEqual(len(xsection.v), 8)
+        self.assertTrue(xsection.closed)
 
     def test_mesh_plane_intersection_with_non_watertight_mesh(self):
         # x-z plane
