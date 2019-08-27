@@ -19,7 +19,6 @@ def _load(fd, mesh=None):
     from collections import OrderedDict
     from baiji import s3
     from lace.mesh import Mesh
-    from lace.cache import sc
     import lace.serialization.obj.objutils as objutils # pylint: disable=no-name-in-module
 
     v, vt, vn, vc, f, ft, fn, mtl_path, landm, segm = objutils.read(fd.name)
@@ -42,14 +41,16 @@ def _load(fd, mesh=None):
     if segm:
         mesh.segm = OrderedDict([(k, v if isinstance(v, list) else v.tolist()) for k, v in segm.items()])
     def path_relative_to_mesh(filename):
-        # The OBJ file we're loading may have come from a local path, an s3 url,
-        # or a file cached by sc. Since OBJ defines materials and texture files
-        # with paths relative to the OBJ itself, we need to cope with the various
-        # possibilities and if it's a cached file make sure that the material and
-        # texture have been downloaded as well.
+
+        # The OBJ file we're loading may have come from a local path, or an s3
+        # url. Since OBJ defines materials and texture files with paths
+        # relative to the OBJ itself, we need tocope with the various
+        # possibilities and if it's a cached file make sure that the material
+        # and texture have been downloaded as well.
         #
-        # If an absolute path is given and the file is missing, try looking in the same directory;
-        # this lets you find the most common intention when an abs path is used.
+        # If an absolute path is given and the file is missing, try looking in
+        # the same directory; this lets you find the most common intention when
+        # an abs path is used.
         #
         # NB: We do not support loading material & texture info from objs read
         # from filelike objects without a location on the filesystem; what would
@@ -73,11 +74,6 @@ def _load(fd, mesh=None):
             return None
 
         path = s3.path.join(s3.path.dirname(mesh_path), filename)
-        if sc.is_cachefile(mesh_path):
-            try:
-                return sc(path)
-            except s3.KeyNotFound:
-                return None
         return path
 
     mesh.materials_filepath = None
