@@ -1,6 +1,13 @@
 Changelog for the Metabolize fork
 =================================
 
+## 2.0.0 (Aug 27, 2019)
+
+- Tweak interface of `Mesh.intesect_plane()` method: don't return a list
+  when a neighborhood is specified.
+- In collada export, make the lines red
+
+
 ## 1.3.0 (Apr 1, 2019)
 
 - Add `Mesh.intesect_plane()` method from blmath
