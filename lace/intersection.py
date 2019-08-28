@@ -164,7 +164,9 @@ class MeshMixin(object):
             components.append(component_verts)
 
         if neighborhood is None or len(components) == 1:
-            return [Polyline(v, closed=closed) for v, closed in zip(components, components_closed)]
+            polylines = [Polyline(v, closed=closed) for v, closed in zip(components, components_closed)]
+            # Return as list when neighborhood is provided; not otherwise.
+            return polylines[0] if neighborhood else polylines
 
         # 6 (optional - only if 'neighborhood' is provided): Use a KDTree to select the component with minimal distance to 'neighborhood'
         from scipy.spatial import cKDTree  # First thought this warning was caused by a pythonpath problem, but it seems more likely that the warning is caused by scipy import hackery. pylint: disable=no-name-in-module
