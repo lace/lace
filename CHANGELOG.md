@@ -1,6 +1,11 @@
 Changelog for the Metabolize fork
 =================================
 
+## 2.1.0 (Aug 29, 2019)
+
+- Update for Python 3.
+
+
 ## 2.0.1 (Aug 28, 2019)
 
 - Fix `Mesh.intesect_plane()` method not returning a list.
