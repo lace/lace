@@ -1,5 +1,6 @@
 # NB: setter_property incorrectly trigger's pylint's method-hidden error
 # pylint: disable=method-hidden, unused-argument, redefined-outer-name
+import six
 import numpy as np
 from blmath.numerics import as_numeric_array
 from blmath.util.decorators import setter_property
@@ -62,7 +63,7 @@ class Mesh(
 
         # Load from a file, if one is specified
         if filename is not None:
-            if isinstance(filename, basestring):
+            if isinstance(filename, six.string_types):
                 # Support `Mesh(filename)`
                 from lace.serialization import mesh
                 mesh.load(filename, existing_mesh=self)
@@ -75,7 +76,7 @@ class Mesh(
                 import copy
                 other_mesh = filename
                 # A deep copy with all of the numpy arrays copied:
-                for a in ['v', 'f'] + other_mesh.__dict__.keys(): # NB: v and f first as vc and fc need them
+                for a in ['v', 'f'] + list(other_mesh.__dict__.keys()): # NB: v and f first as vc and fc need them
                     if a == 'landm_raw_xyz':
                         # We've deprecated landm_raw_xyz and it raises an error to access it now, but some
                         # older pickled meshes (don't pickle meshes!) still have it as a property and they

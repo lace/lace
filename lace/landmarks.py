@@ -136,12 +136,13 @@ class MeshMixin(object):
          - Nx3 array or list of floats (treated as landm_xyz, given sequential integers as names)
          - pkl, json, yaml file containing either of the above dicts or arrays
         '''
+        import six
         import numpy as np
 
         if val is None:
             self._landm = None
             self._raw_landmarks = None
-        elif isinstance(val, basestring):
+        elif isinstance(val, six.string_types):
             self.landm = load_landmarks(val)
         else:
             if not hasattr(val, 'keys'):

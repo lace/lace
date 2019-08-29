@@ -104,6 +104,7 @@ def _dump(f, obj, flip_faces=False, ungroup=False, comments=None, split_normals=
       reference in the .obj and writes a .mtl alongside.
 
     '''
+    import six
     import os
     import numpy as np
     from baiji import s3
@@ -141,7 +142,7 @@ def _dump(f, obj, flip_faces=False, ungroup=False, comments=None, split_normals=
         obj_file.write(('f ' + ' '.join([pattern]*len(vertex_indices)) + '\n') % value)
 
     if comments != None:
-        if isinstance(comments, basestring):
+        if isinstance(comments, six.string_types):
             comments = [comments]
         for comment in comments:
             for line in comment.split("\n"):

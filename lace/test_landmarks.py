@@ -1,10 +1,10 @@
 import unittest
 import numpy as np
-from scratch_dir import ScratchDirMixin
 from bltest import skip_on_import_error
 from bltest.extra_asserts import ExtraAssertionsMixin
 from lace.cache import sc
 from lace.mesh import Mesh
+from .testing.scratch_dir import ScratchDirMixin
 
 class TestLandmarks(ExtraAssertionsMixin, ScratchDirMixin, unittest.TestCase):
     def setUp(self):

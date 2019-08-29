@@ -4,8 +4,6 @@ jobs:
     docker:
       - image: circleci/python:2
 
-    working_directory: ~/repo
-
     steps:
       - checkout
 
@@ -55,8 +53,6 @@ jobs:
   python3:
     docker:
       - image: circleci/python:3
-
-    working_directory: ~/repo
 
     steps:
       - checkout
@@ -110,7 +106,7 @@ workflows:
   on-commit:
     jobs:
       - python2
-      # - python3
+      - python3
 
   daily:
     triggers:
@@ -121,4 +117,4 @@ workflows:
               only: master
     jobs:
       - python2
-      # - python3
+      - python3

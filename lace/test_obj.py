@@ -4,7 +4,6 @@ from textwrap import dedent
 import numpy as np
 from bltest import attr
 from baiji import s3
-from scratch_dir import ScratchDirMixin
 from bltest import skip_if_unavailable, skip_on_import_error
 from bltest.extra_asserts import ExtraAssertionsMixin
 import mock
@@ -12,6 +11,7 @@ from lace.mesh import Mesh
 from lace.serialization import obj
 from lace.cache import sc
 from lace.cache import vc
+from .testing.scratch_dir import ScratchDirMixin
 
 @attr('missing_assets')
 class TestOBJBase(ExtraAssertionsMixin, unittest.TestCase):
