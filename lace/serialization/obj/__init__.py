@@ -4,14 +4,14 @@ EXTENSION = '.obj'
 
 def load(f, existing_mesh=None):
     from baiji.serialization.util.openlib import ensure_file_open_and_call
-    return ensure_file_open_and_call(f, _load, mode='rb', mesh=existing_mesh)
+    return ensure_file_open_and_call(f, _load, mode='r', mesh=existing_mesh)
 
 def dump(obj, f, flip_faces=False, ungroup=False, comments=None,
          copyright=False, split_normals=False, write_mtl=True): # pylint: disable=redefined-outer-name, redefined-builtin, unused-argument
     from baiji.serialization.util.openlib import ensure_file_open_and_call
     if comments is None:
         comments = []
-    return ensure_file_open_and_call(f, _dump, mode='wb', obj=obj, flip_faces=flip_faces,
+    return ensure_file_open_and_call(f, _dump, mode='w', obj=obj, flip_faces=flip_faces,
                                      ungroup=ungroup, comments=comments,
                                      split_normals=split_normals, write_mtl=write_mtl)
 
