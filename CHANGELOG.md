@@ -1,6 +1,11 @@
 Changelog for the Metabolize fork
 =================================
 
+## 2.1.1 (Aug 30, 2019)
+
+- Fix OBJ reading and writing in Python 3.
+
+
 ## 2.1.0 (Aug 29, 2019)
 
 - Update for Python 3.
