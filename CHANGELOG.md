@@ -1,6 +1,13 @@
 Changelog for the Metabolize fork
 =================================
 
+## 2.1.2 (Sep 27, 2019)
+
+- `intersect_plane()`: Preserve `closed=False` when a neighborhood is
+  provided.
+- Fix crash in `faces_per_edge()` in recent versions of NumPy.
+
+
 ## 2.1.1 (Aug 30, 2019)
 
 - Fix OBJ reading and writing in Python 3.
