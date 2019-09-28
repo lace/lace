@@ -16,7 +16,7 @@ The library is in active maintenance, and the goals are compatible with that:
 - Respond to community contributions.
 
 The eventual goal is to perform a rewrite of the loader and core mesh
-functionality with quad support as part of [a "lace-core" project][lacecore]
+functionality with quad support as part of a ["lace-core" project][lacecore]
 and consider how to handle the extensive mesh manipulation functions which
 remain.
 
