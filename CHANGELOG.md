@@ -1,5 +1,4 @@
-Changelog for the Metabolize fork
-=================================
+# Changelog
 
 ## 2.1.2 (Sep 27, 2019)
 
