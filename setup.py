@@ -22,7 +22,7 @@ install_requires = parse_requirements('requirements.txt', session=False)
 install_requires = [str(ir.req) for ir in install_requires]
 
 setup(
-    name='metabolace',
+    name='lace',
     version=importlib.import_module('lace').__version__,
     author='Body Labs',
     author_email='alex@bodylabs.com',
