@@ -6,9 +6,9 @@ lace
 [![version](https://img.shields.io/pypi/l/lace?style=flat-square)][pypi]
 [![build status](https://img.shields.io/circleci/project/github/lace/lace/master?style=flat-square)][circle]
 
-This is a polygonal mesh library developed at Body Labs.
+Polygonal mesh library developed at Body Labs.
 
-The library is in maintenance mode and the goals are compatible with that:
+The library is in active maintenance, and the goals are compatible with that:
 
 - Keep the library working in current versions of Python and other tools.
 - Make bug fixes.
@@ -16,15 +16,13 @@ The library is in maintenance mode and the goals are compatible with that:
 - Respond to community contributions.
 
 The eventual goal is to perform a rewrite of the loader and core mesh
-functionality with quad support as part of a "lace-core" project and
-consider how to handle the extensive mesh manipulation functions that remain.
-
-There is an unrelated permissively licensed mesh manipulation library called
-[Trimesh][] which provides some similar functionality.
+functionality with quad support as part of [a "lace-core" project][lacecore]
+and consider how to handle the extensive mesh manipulation functions which
+remain.
 
 [circle]: https://circleci.com/gh/lace/lace
 [pypi]: https://pypi.org/project/lace/
-[trimesh]: https://github.com/mikedh/trimesh
+[lacecore]: https://github.com/lace/lacecore-sketches
 
 
 Installation
@@ -101,6 +99,15 @@ transfer from Body Labs, the fork has been merged back into the original.
 [guillaume marceau]: https://github.com/gmarceau
 [fork]: https://github.com/metabolize/lace
 [fork pypi]: https://pypi.org/project/metabolace/
+
+
+Similar projects
+----------------
+
+There is an unrelated permissively licensed mesh manipulation library called
+[Trimesh][] which provides some similar functionality.
+
+[trimesh]: https://github.com/mikedh/trimesh
 
 
 License
