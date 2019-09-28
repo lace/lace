@@ -29,7 +29,7 @@ setup(
     description='Active fork of lace, the Body Labs-developed polygonal mesh library',
     long_description=long_description,
     url='https://github.com/metabolize/lace',
-    license='MIT',
+    license='BSD-2-Clause',
     packages=[
         'lace',
         'lace.serialization',
