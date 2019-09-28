@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1.3 (Sep 28, 2019)
+
+- Update documentation after unforking.
+
+
 ## 2.1.2 (Sep 27, 2019)
 
 - `intersect_plane()`: Preserve `closed=False` when a neighborhood is
