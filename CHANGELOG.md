@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1.4 (Sep 28, 2019)
+
+- Unfork blmath dependency
+
+
 ## 2.1.3 (Sep 28, 2019)
 
 - Update documentation after unforking.
