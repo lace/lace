@@ -1,30 +1,28 @@
-metabolace
-==========
+lace
+====
 
-[![pip install](https://img.shields.io/badge/pip%20install-metabolace-f441b8.svg?style=flat-square)][pypi]
-[![version](https://img.shields.io/pypi/v/metabolace.svg?style=flat-square)][pypi]
-[![python versions](https://img.shields.io/pypi/pyversions/metabolace.svg?style=flat-square)][pypi]
-[![build status](https://img.shields.io/circleci/project/github/metabolize/lace/master.svg?style=flat-square)][circle]
-[![last commit](https://img.shields.io/github/last-commit/metabolize/lace.svg?style=flat-square)][commits]
-[![open pull requests](https://img.shields.io/github/issues-pr/metabolize/lace.svg?style=flat-square)][pull requests]
+[![version](https://img.shields.io/pypi/v/lace?style=flat-square)][pypi]
+[![python versions](https://img.shields.io/pypi/pyversions/lace?style=flat-square)][pypi]
+[![version](https://img.shields.io/pypi/l/lace?style=flat-square)][pypi]
+[![build status](https://img.shields.io/circleci/project/github/lace/lace/master?style=flat-square)][circle]
 
-This is an active fork of [lace][upstream], the Body Labs-developed polygonal
-mesh library.
+Polygonal mesh library developed at Body Labs.
 
-The fork's goals are ambitious:
+The library is in active maintenance, and the goals are compatible with that:
 
 - Keep the library working in current versions of Python and other tools.
 - Make bug fixes.
 - Provide API stability and backward compatibility with the upstream version.
-- Expand functionality to fully support quad meshes, and additional
-  analysis and manipulation functionality where appropriate.
 - Respond to community contributions.
 
-[upstream]: https://github.com/bodylabs/lace
-[circle]: https://circleci.com/gh/metabolize/lace
-[pypi]: https://pypi.org/project/metabolace/
-[pull requests]: https://github.com/metabolize/lace/pulls
-[commits]: https://github.com/metabolize/lace/commits/master
+The eventual goal is to perform a rewrite of the loader and core mesh
+functionality with quad support as part of a ["lace-core" project][lacecore]
+and consider how to handle the extensive mesh manipulation functions which
+remain.
+
+[circle]: https://circleci.com/gh/lace/lace
+[pypi]: https://pypi.org/project/lace/
+[lacecore]: https://github.com/lace/lacecore-sketches
 
 
 Installation
@@ -54,14 +52,9 @@ docker build .
 ### Install the library
 
 ```sh
-pip install metabolace
+pip install lace
 ```
 
-And import it just like the upstream library:
-
-```py
-from lace.mesh import Mesh
-```
 
 Development
 -----------
@@ -77,8 +70,8 @@ rake lint
 Contribute
 ----------
 
-- Issue Tracker: https://github.com/metabolize/lace/issues
-- Source Code: https://github.com/metabolize/lace
+- Issue Tracker: https://github.com/lace/lace/issues
+- Source Code: https://github.com/lace/lace
 
 Pull requests welcome!
 
@@ -95,13 +88,26 @@ Acknowledgements
 This library was refactored from legacy code at Body Labs by [Alex Weiss][],
 with portions by [Eric Rachlin][], [Paul Melnikow][], [Victor Alvarez][],
 and others. It was extracted from the Body Labs codebase and open-sourced by
-[Guillaume Marceau][].
+[Guillaume Marceau][]. In 2018 it was [forked by Paul Melnikow][fork] and
+published as [metabolace][fork pypi]. Thanks to a repository and package
+transfer from Body Labs, the fork has been merged back into the original.
 
 [alex weiss]: https://github.com/algrs
 [eric rachlin]: https://github.com/eerac
 [paul melnikow]: https://github.com/paulmelnikow
 [victor alvarez]: https://github.com/yangmillstheory
 [guillaume marceau]: https://github.com/gmarceau
+[fork]: https://github.com/metabolize/lace
+[fork pypi]: https://pypi.org/project/metabolace/
+
+
+Similar projects
+----------------
+
+There is an unrelated permissively licensed mesh manipulation library called
+[Trimesh][] which provides some similar functionality.
+
+[trimesh]: https://github.com/mikedh/trimesh
 
 
 License
