@@ -1,6 +1,46 @@
 Changelog for the Metabolize fork
 =================================
 
+## 2.1.2 (Sep 27, 2019)
+
+- `intersect_plane()`: Preserve `closed=False` when a neighborhood is
+  provided.
+- Fix crash in `faces_per_edge()` in recent versions of NumPy.
+
+
+## 2.1.1 (Aug 30, 2019)
+
+- Fix OBJ reading and writing in Python 3.
+
+
+## 2.1.0 (Aug 29, 2019)
+
+- Update for Python 3.
+
+
+## 2.0.1 (Aug 28, 2019)
+
+- Fix `Mesh.intesect_plane()` method not returning a list.
+
+
+## 2.0.0 (Aug 27, 2019)
+
+- Tweak interface of `Mesh.intesect_plane()` method: don't return a list
+  when a neighborhood is specified.
+- In collada export, make the lines red
+
+
+## 1.3.0 (Apr 1, 2019)
+
+- Add `Mesh.intesect_plane()` method from blmath
+- Add utility functions for checking mesh integrity
+- Migrate geometry utilities from blmath to [polliwog][]
+- Migrate vector_shorcuts to [vg][]
+
+[polliwog]: https://github.com/lace/polliwog
+[vg]: https://github.com/lace/vg
+
+
 ## 1.2.1 (Oct 5, 2018)
 
 - Use the new `vector_shortcuts` package.

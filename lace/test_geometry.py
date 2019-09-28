@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 from bltest import attr
-import vx
+import vg
 from lace.cache import sc, vc
 from lace.mesh import Mesh
 
@@ -217,7 +217,7 @@ class TestGeometryMixin(unittest.TestCase):
     def test_reorient_faces_using_normals(self):
         import math
         from lace import shapes
-        from blmath.geometry.surface_normals import surface_normal
+        from polliwog.tri.surface_normals import surface_normal
 
         points = np.array([
             [1, 0, 0],
@@ -228,7 +228,7 @@ class TestGeometryMixin(unittest.TestCase):
         correct_faces = prism.f.copy()
 
         # Generate normals that are slightly off in random directions.
-        prism.fn = vx.normalize(
+        prism.fn = vg.normalize(
             surface_normal(prism.v[prism.f]) + \
             0.05 * np.random.random(len(prism.f)*3).reshape(len(prism.f), 3))
 

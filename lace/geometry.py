@@ -1,6 +1,6 @@
 # pylint: disable=attribute-defined-outside-init
 import numpy as np
-import vx
+import vg
 
 def reorient_faces_using_normals(mesh):
     """
@@ -10,11 +10,11 @@ def reorient_faces_using_normals(mesh):
     Return a list of indices of faces which were flipped.
     """
     import math
-    from blmath.geometry.surface_normals import surface_normal
+    from polliwog.tri.surface_normals import surface_normal
     if mesh.fn is None:
         raise ValueError("Face normals are required")
     normals_from_winding = surface_normal(mesh.v[mesh.f])
-    deviation_angle = vx.angle(mesh.fn, normals_from_winding, units="rad")
+    deviation_angle = vg.angle(mesh.fn, normals_from_winding, units="rad")
     need_flipping, = np.nonzero(deviation_angle > 0.5 * math.pi)
     mesh.flip_faces(need_flipping)
     return need_flipping
@@ -31,7 +31,7 @@ class MeshMixin(object):
         return self.vn # for backwards compatibility
 
     def barycentric_coordinates_for_points(self, points, face_indices):
-        from blmath.geometry.barycentric import barycentric_coordinates_of_projection
+        from polliwog.tri.barycentric import barycentric_coordinates_of_projection
         vertex_indices = self.f[face_indices]
         vertices = self.v[vertex_indices]
         coeffs = barycentric_coordinates_of_projection(
@@ -110,7 +110,7 @@ class MeshMixin(object):
         (i.e. facing towards a default OpenGL camera).
 
         '''
-        from blmath.geometry.transform import rotation_from_up_and_look
+        from polliwog.transform.rotation import rotation_from_up_and_look
         from blmath.numerics import as_numeric_array
 
         up = as_numeric_array(up, (3,))
@@ -164,15 +164,15 @@ class MeshMixin(object):
 
     @property
     def floor_plane(self):
-        from blmath.geometry import Plane
-        return Plane(self.floor_point, vx.basis.y)
+        from polliwog import Plane
+        return Plane(self.floor_point, vg.basis.y)
 
     def recenter_over_floor(self):
         self.translate(-self.floor_point)
 
     @property
     def bounding_box(self):
-        from blmath.geometry import Box
+        from polliwog import Box
 
         if self.v is None:
             raise ValueError('Mesh has no vertices; bounding box is not defined')
@@ -193,8 +193,7 @@ class MeshMixin(object):
         axis: A vector, which is an 3x1 np.array.
 
         '''
-        from blmath.geometry.apex import apex
-        return apex(self.v, axis)
+        return vg.apex(self.v, axis)
 
     def first_blip(self, squash_axis, origin, initial_direction):
         '''
@@ -215,12 +214,12 @@ class MeshMixin(object):
         '''
         from blmath.numerics import as_numeric_array
 
-        origin = vx.reject_axis(as_numeric_array(origin, (3,)), axis=squash_axis, squash=True)
-        initial_direction = vx.reject_axis(as_numeric_array(initial_direction, (3,)), axis=squash_axis, squash=True)
-        vertices = vx.reject_axis(self.v, axis=squash_axis, squash=True)
+        origin = vg.reject_axis(as_numeric_array(origin, (3,)), axis=squash_axis, squash=True)
+        initial_direction = vg.reject_axis(as_numeric_array(initial_direction, (3,)), axis=squash_axis, squash=True)
+        vertices = vg.reject_axis(self.v, axis=squash_axis, squash=True)
 
-        origin_to_mesh = vx.normalize(vertices - origin)
-        cosines = vx.normalize(initial_direction).dot(origin_to_mesh.T).T
+        origin_to_mesh = vg.normalize(vertices - origin)
+        cosines = vg.normalize(initial_direction).dot(origin_to_mesh.T).T
         index_of_first_blip = np.argmax(cosines)
 
         return self.v[index_of_first_blip]

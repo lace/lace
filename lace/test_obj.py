@@ -4,7 +4,6 @@ from textwrap import dedent
 import numpy as np
 from bltest import attr
 from baiji import s3
-from scratch_dir import ScratchDirMixin
 from bltest import skip_if_unavailable, skip_on_import_error
 from bltest.extra_asserts import ExtraAssertionsMixin
 import mock
@@ -12,6 +11,7 @@ from lace.mesh import Mesh
 from lace.serialization import obj
 from lace.cache import sc
 from lace.cache import vc
+from .testing.scratch_dir import ScratchDirMixin
 
 @attr('missing_assets')
 class TestOBJBase(ExtraAssertionsMixin, unittest.TestCase):
@@ -156,7 +156,7 @@ class TestOBJWithMaterials(ScratchDirMixin, TestOBJBase):
         self.assertEqual(m.texture_filepath, local_obj_with_texure_tex)
 
     @mock.patch('baiji.s3.open', side_effect=s3.open)
-    @mock.patch('baiji.pod.asset_cache.AssetCache.__call__', side_effect=sc.__call__)
+    # @mock.patch('baiji.pod.asset_cache.AssetCache.__call__', side_effect=sc.__call__)
     def test_reading_obj_with_mtl_from_sc_file(self, mock_sc, mock_s3_open):
         from baiji.pod.asset_cache import CacheFile
 

@@ -165,6 +165,7 @@ class BSFParser(object):
 
 
     def _parse_header(self, data):
+        import six
         import struct
         fields = {
             'identifier': ("3s", 0),
@@ -207,7 +208,7 @@ class BSFParser(object):
             val = struct.unpack(spec[0], data[spec[1]:(spec[1] + struct.calcsize(spec[0]))])
             if len(val) == 1:
                 val = val[0]
-            if isinstance(val, basestring):
+            if isinstance(val, six.string_types):
                 val = val.rstrip('\x00')
             if len(spec) > 2:
                 try:

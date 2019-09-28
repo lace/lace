@@ -34,10 +34,10 @@ class TestMeshlabPickedPoints(unittest.TestCase):
         self.assertEquals(value_normalized, expected_normalized)
 
     def test_load(self):
-        import StringIO
+        from six import StringIO
         from lace.serialization import meshlab_pickedpoints
 
-        sample_f = StringIO.StringIO(sample_xml_string)
+        sample_f = StringIO(sample_xml_string)
 
         try:
             result = meshlab_pickedpoints.load(sample_f)
@@ -47,10 +47,10 @@ class TestMeshlabPickedPoints(unittest.TestCase):
         self.assertEqual(result, sample_points)
 
     def test_dump(self):
-        import StringIO
+        from six import StringIO
         from lace.serialization import meshlab_pickedpoints
 
-        result_f = StringIO.StringIO()
+        result_f = StringIO()
 
         try:
             meshlab_pickedpoints.dump(sample_points, result_f, mesh_filename='a_pose.ply')

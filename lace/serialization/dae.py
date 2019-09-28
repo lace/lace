@@ -35,13 +35,13 @@ def mesh_to_collada(mesh):
         raise ImportError("lace.serialization.dae.mesh_to_collade requires package pycollada.")
 
 
-    def create_material(dae):
+    def create_material(dae, name, color=(1, 1, 1)):
         from collada import material, scene
-        effect = material.Effect("effect0", [], "phong", diffuse=(1, 1, 1), specular=(0, 0, 0), double_sided=True)
-        mat = material.Material("material0", "mymaterial", effect)
+        effect = material.Effect("{}_effect".format(name), [], "lambert", diffuse=color, specular=(0, 0, 0), double_sided=True)
+        mat = material.Material("{}_material".format(name), name, effect)
         dae.effects.append(effect)
         dae.materials.append(mat)
-        return scene.MaterialNode("materialref", mat, inputs=[])
+        return scene.MaterialNode(name, mat, inputs=[])
 
     def geometry_from_mesh(dae, mesh):
         from collada import source, geometry
@@ -57,19 +57,19 @@ def mesh_to_collada(mesh):
         # f
         geom = geometry.Geometry(str(mesh), "geometry0", "mymesh", srcs)
         indices = np.dstack([mesh.f for _ in srcs]).ravel()
-        triset = geom.createTriangleSet(indices, input_list, "materialref")
+        triset = geom.createTriangleSet(indices, input_list, "tri_material")
         geom.primitives.append(triset)
         # e
         if mesh.e is not None:
             indices = np.dstack([mesh.e for _ in srcs]).ravel()
-            lineset = geom.createLineSet(indices, input_list, "materialref")
+            lineset = geom.createLineSet(indices, input_list, "line_material")
             geom.primitives.append(lineset)
         dae.geometries.append(geom)
         return geom
 
     dae = Collada()
     geom = geometry_from_mesh(dae, mesh)
-    node = scene.Node("node0", children=[scene.GeometryNode(geom, [create_material(dae)])])
+    node = scene.Node("node0", children=[scene.GeometryNode(geom, [create_material(dae, name="tri_material"), create_material(dae, name="line_material", color=(1, 0, 0))])])
     myscene = scene.Scene("myscene", [node])
     dae.scenes.append(myscene)
     dae.scene = myscene

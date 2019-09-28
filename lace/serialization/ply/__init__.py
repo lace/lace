@@ -38,9 +38,10 @@ def _load(f, mesh=None):
 
 def _dump(f, mesh, flip_faces=False, ascii=False, little_endian=True, comments=[]):
     # pylint: disable=superfluous-parens
+    import six
     from lace.serialization.ply import plyutils
     ff = -1 if flip_faces else 1
-    if isinstance(comments, basestring):
+    if isinstance(comments, six.string_types):
         comments = [comments]
     comments = filter(lambda c: len(c) > 0, sum(map(lambda c: c.split("\n"), comments), []))
     plyutils.write(list([list(x) for x in mesh.v]),

@@ -1,4 +1,4 @@
-from blmath.geometry import shapes
+from polliwog.tri import shapes
 
 
 def _shape_as_mesh(shape_factory_fn, *args, **kwargs):

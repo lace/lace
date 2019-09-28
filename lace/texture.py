@@ -53,21 +53,6 @@ class MeshMixin(object):
                     sz = texture_sizes[closest_texture_size_idx]
                     self._texture_image = cv2.resize(self._texture_image, (sz, sz))
 
-    def load_texture(self, texture_version):
-        '''
-        Expect a texture version number as an integer, load the texture version from /is/ps/shared/data/body/template/texture_coordinates/.
-        Currently there are versions [0, 1, 2, 3] availiable.
-        '''
-        import numpy as np
-        lowres_tex_template = 's3://bodylabs-korper-assets/is/ps/shared/data/body/template/texture_coordinates/textured_template_low_v%d.obj' % texture_version
-        highres_tex_template = 's3://bodylabs-korper-assets/is/ps/shared/data/body/template/texture_coordinates/textured_template_high_v%d.obj' % texture_version
-        from lace.mesh import Mesh
-        from lace.cache import sc
-        mesh_with_texture = Mesh(filename=sc(lowres_tex_template))
-        if not np.all(mesh_with_texture.f.shape == self.f.shape):
-            mesh_with_texture = Mesh(filename=sc(highres_tex_template))
-        self.transfer_texture(mesh_with_texture)
-
     def transfer_texture(self, mesh_with_texture):
         import numpy as np
         if not np.all(mesh_with_texture.f.shape == self.f.shape):

@@ -4,14 +4,14 @@ EXTENSION = '.obj'
 
 def load(f, existing_mesh=None):
     from baiji.serialization.util.openlib import ensure_file_open_and_call
-    return ensure_file_open_and_call(f, _load, mode='rb', mesh=existing_mesh)
+    return ensure_file_open_and_call(f, _load, mode='r', mesh=existing_mesh)
 
 def dump(obj, f, flip_faces=False, ungroup=False, comments=None,
          copyright=False, split_normals=False, write_mtl=True): # pylint: disable=redefined-outer-name, redefined-builtin, unused-argument
     from baiji.serialization.util.openlib import ensure_file_open_and_call
     if comments is None:
         comments = []
-    return ensure_file_open_and_call(f, _dump, mode='wb', obj=obj, flip_faces=flip_faces,
+    return ensure_file_open_and_call(f, _dump, mode='w', obj=obj, flip_faces=flip_faces,
                                      ungroup=ungroup, comments=comments,
                                      split_normals=split_normals, write_mtl=write_mtl)
 
@@ -19,7 +19,6 @@ def _load(fd, mesh=None):
     from collections import OrderedDict
     from baiji import s3
     from lace.mesh import Mesh
-    from lace.cache import sc
     import lace.serialization.obj.objutils as objutils # pylint: disable=no-name-in-module
 
     v, vt, vn, vc, f, ft, fn, mtl_path, landm, segm = objutils.read(fd.name)
@@ -42,14 +41,16 @@ def _load(fd, mesh=None):
     if segm:
         mesh.segm = OrderedDict([(k, v if isinstance(v, list) else v.tolist()) for k, v in segm.items()])
     def path_relative_to_mesh(filename):
-        # The OBJ file we're loading may have come from a local path, an s3 url,
-        # or a file cached by sc. Since OBJ defines materials and texture files
-        # with paths relative to the OBJ itself, we need to cope with the various
-        # possibilities and if it's a cached file make sure that the material and
-        # texture have been downloaded as well.
+
+        # The OBJ file we're loading may have come from a local path, or an s3
+        # url. Since OBJ defines materials and texture files with paths
+        # relative to the OBJ itself, we need tocope with the various
+        # possibilities and if it's a cached file make sure that the material
+        # and texture have been downloaded as well.
         #
-        # If an absolute path is given and the file is missing, try looking in the same directory;
-        # this lets you find the most common intention when an abs path is used.
+        # If an absolute path is given and the file is missing, try looking in
+        # the same directory; this lets you find the most common intention when
+        # an abs path is used.
         #
         # NB: We do not support loading material & texture info from objs read
         # from filelike objects without a location on the filesystem; what would
@@ -73,11 +74,6 @@ def _load(fd, mesh=None):
             return None
 
         path = s3.path.join(s3.path.dirname(mesh_path), filename)
-        if sc.is_cachefile(mesh_path):
-            try:
-                return sc(path)
-            except s3.KeyNotFound:
-                return None
         return path
 
     mesh.materials_filepath = None
@@ -108,6 +104,7 @@ def _dump(f, obj, flip_faces=False, ungroup=False, comments=None, split_normals=
       reference in the .obj and writes a .mtl alongside.
 
     '''
+    import six
     import os
     import numpy as np
     from baiji import s3
@@ -145,7 +142,7 @@ def _dump(f, obj, flip_faces=False, ungroup=False, comments=None, split_normals=
         obj_file.write(('f ' + ' '.join([pattern]*len(vertex_indices)) + '\n') % value)
 
     if comments != None:
-        if isinstance(comments, basestring):
+        if isinstance(comments, six.string_types):
             comments = [comments]
         for comment in comments:
             for line in comment.split("\n"):

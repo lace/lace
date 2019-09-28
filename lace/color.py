@@ -14,11 +14,12 @@ def colors_like(color, arr, colormap=DEFAULT_COLORMAP):
     not a colormap index. This is a sort of degenerate case, as a mesh with three verticies is just a single
     triangle and not something we ever actually use in practice.
     '''
+    import six
     import numpy as np
     from blmath.numerics import is_empty_arraylike
     if is_empty_arraylike(color):
         return None
-    if isinstance(color, basestring):
+    if isinstance(color, six.string_types):
         from lace.color_names import name_to_rgb
         color = name_to_rgb[color]
     elif isinstance(color, list):

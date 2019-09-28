@@ -51,10 +51,10 @@ def dumps(obj, mesh_filename=None, *args, **kwargs): # pylint: disable=unused-ar
     """
     from blmath.numerics import isnumericarray
 
-    if not isinstance(obj, dict) or not all([isnumericarray(point) for point in obj.itervalues()]):
+    if not isinstance(obj, dict) or not all([isnumericarray(point) for point in obj.values()]):
         raise ValueError('obj should be a dict of points')
 
-    points = '\n'.join([point_template % (tuple(xyz) + (name,)) for name, xyz in obj.iteritems()])
+    points = '\n'.join([point_template % (tuple(xyz) + (name,)) for name, xyz in obj.items()])
 
     return file_template % (mesh_filename, points)
 
