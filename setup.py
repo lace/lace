@@ -1,14 +1,8 @@
-# Conversion from Markdown to pypi's restructured text: https://coderwall.com/p/qawuyq -- Thanks James.
 import os
-
-try:
-    import pypandoc
-    long_description = pypandoc.convert('README.md', 'rst')
-except (IOError, ImportError):
-    long_description = ''
-    print('warning: pandoc or pypandoc does not seem to be installed; using empty long_description')
-
 import importlib
+
+with open("README.md") as f:
+    readme = f.read()
 
 try:  # pip >= 10
     from pip._internal.req import parse_requirements
@@ -26,9 +20,10 @@ setup(
     version=importlib.import_module('lace').__version__,
     author='Body Labs',
     author_email='alex@bodylabs.com',
-    description='Active fork of lace, the Body Labs-developed polygonal mesh library',
-    long_description=long_description,
-    url='https://github.com/metabolize/lace',
+    description='Polygonal mesh library developed at Body Labs',
+    long_description=readme,
+    long_description_content_type="text/markdown",
+    url='https://github.com/lace/lace',
     license='BSD-2-Clause',
     packages=[
         'lace',
@@ -50,7 +45,7 @@ setup(
     ],
     install_requires=install_requires,
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
