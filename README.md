@@ -8,7 +8,7 @@ lace
 
 Polygonal mesh library developed at Body Labs.
 
-The library is in active maintenance, and the goals are compatible with that:
+The library is under active maintenance, and the goals are compatible with that:
 
 - Keep the library working in current versions of Python and other tools.
 - Make bug fixes.
