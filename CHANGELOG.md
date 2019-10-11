@@ -1,8 +1,13 @@
 # Changelog
 
+## 2.1.5 (Oct 11, 2019)
+
+- Relax NumPy dependency version.
+
+
 ## 2.1.4 (Sep 28, 2019)
 
-- Unfork blmath dependency
+- Unfork blmath dependency.
 
 
 ## 2.1.3 (Sep 28, 2019)
