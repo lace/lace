@@ -2,7 +2,7 @@
 
 ## 2.1.5 (Oct 11, 2019)
 
-- Relax numpy dependency version
+- Relax NumPy dependency version.
 
 
 ## 2.1.4 (Sep 28, 2019)
