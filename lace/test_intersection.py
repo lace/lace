@@ -39,6 +39,18 @@ class TestIntersection(unittest.TestCase):
             self.assertEqual(np.sum(a == b), 1)
             self.assertEqual(np.linalg.norm(a - b), 0.5)
 
+    def test_mesh_plane_intersection_with_ret_pointcloud(self):
+        # x-z plane
+        normal = np.array([0., 1., 0.])
+        sample = np.array([0., 0., 0.])
+        plane = Plane(sample, normal)
+
+        xsections = self.box_mesh.intersect_plane(plane)
+
+        pointcloud = self.box_mesh.intersect_plane(plane, ret_pointcloud=True)
+        self.assertIsInstance(pointcloud, np.ndarray)
+        np.testing.assert_array_equal(pointcloud, xsections[0].v)
+
     def test_mesh_plane_intersection_with_no_intersection(self):
         # x-z plane
         normal = np.array([0., 1., 0.])
@@ -52,6 +64,20 @@ class TestIntersection(unittest.TestCase):
         xsections = self.box_mesh.intersect_plane(plane)
         self.assertIsInstance(xsections, list)
         self.assertEqual(len(xsections), 0)
+
+    def test_mesh_plane_intersection_with_no_intersection_and_ret_pointcloud(self):
+        # x-z plane
+        normal = np.array([0., 1., 0.])
+        sample = np.array([0., 5., 0.])
+
+        plane = Plane(sample, normal)
+
+        xsections = self.box_mesh.intersect_plane(plane)
+
+        pointcloud = self.box_mesh.intersect_plane(plane, ret_pointcloud=True)
+
+        self.assertIsInstance(pointcloud, np.ndarray)
+        assert pointcloud.shape == (0,3)
 
     def test_mesh_plane_intersection_wth_two_components(self):
         # x-z plane
@@ -83,6 +109,22 @@ class TestIntersection(unittest.TestCase):
         self.assertIsInstance(xsection, Polyline)
         self.assertEqual(len(xsection.v), 8)
         self.assertTrue(xsection.closed)
+
+    def test_mesh_plane_intersection_with_neighborhood_and_ret_pointcloud(self):
+        # x-z plane
+        normal = np.array([0., 1., 0.])
+        sample = np.array([0., 0., 0.])
+        plane = Plane(sample, normal)
+
+        two_box_mesh = self.double_mesh(self.box_mesh)
+
+        neighborhood=np.array([[0.0, 0.0, 0.0]])
+        xsection = two_box_mesh.intersect_plane(plane, neighborhood=neighborhood)
+
+        pointcloud = two_box_mesh.intersect_plane(plane, neighborhood=neighborhood, ret_pointcloud=True)
+
+        self.assertIsInstance(pointcloud, np.ndarray)
+        np.testing.assert_array_equal(pointcloud, xsection.v)
 
     def test_mesh_plane_intersection_with_non_watertight_mesh(self):
         # x-z plane
