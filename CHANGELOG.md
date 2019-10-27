@@ -2,7 +2,7 @@
 
 ## 3.0.0 (Oct 27, 2019)
 
-- Require polliwog 0.11+, which is itself a breaking change.
+- Require polliwog 0.11+, which includes breaking changes.
 - Require vg 1.5+.
 
 
