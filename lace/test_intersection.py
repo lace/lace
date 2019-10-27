@@ -30,7 +30,7 @@ class TestIntersection(unittest.TestCase):
         self.assertIsInstance(xsections, list)
         self.assertEqual(len(xsections), 1)
         self.assertEqual(len(xsections[0].v), 8)
-        self.assertTrue(xsections[0].closed)
+        self.assertTrue(xsections[0].is_closed)
 
         self.assertEqual(xsections[0].total_length, 4.0)
         np.testing.assert_array_equal(xsections[0].v[:, 1], np.zeros((8, )))
@@ -92,9 +92,9 @@ class TestIntersection(unittest.TestCase):
         self.assertIsInstance(xsections, list)
         self.assertEqual(len(xsections), 2)
         self.assertEqual(len(xsections[0].v), 8)
-        self.assertTrue(xsections[0].closed)
+        self.assertTrue(xsections[0].is_closed)
         self.assertEqual(len(xsections[1].v), 8)
-        self.assertTrue(xsections[1].closed)
+        self.assertTrue(xsections[1].is_closed)
 
     def test_mesh_plane_intersection_wth_neighborhood(self):
         # x-z plane
@@ -108,7 +108,7 @@ class TestIntersection(unittest.TestCase):
         xsection = two_box_mesh.intersect_plane(plane, neighborhood=np.array([[0., 0., 0.]]))
         self.assertIsInstance(xsection, Polyline)
         self.assertEqual(len(xsection.v), 8)
-        self.assertTrue(xsection.closed)
+        self.assertTrue(xsection.is_closed)
 
     def test_mesh_plane_intersection_with_neighborhood_and_ret_pointcloud(self):
         # x-z plane
@@ -145,7 +145,7 @@ class TestIntersection(unittest.TestCase):
         self.assertIsInstance(xsections, list)
         self.assertEqual(len(xsections), 1)
         self.assertEqual(len(xsections[0].v), 7)
-        self.assertFalse(xsections[0].closed)
+        self.assertFalse(xsections[0].is_closed)
 
         self.assertEqual(xsections[0].total_length, 3.0)
         np.testing.assert_array_equal(xsections[0].v[:, 1], np.zeros((7, )))
@@ -174,9 +174,9 @@ class TestIntersection(unittest.TestCase):
         self.assertIsInstance(xsections, list)
         self.assertEqual(len(xsections), 2)
         self.assertEqual(len(xsections[0].v), 7)
-        self.assertFalse(xsections[0].closed)
+        self.assertFalse(xsections[0].is_closed)
         self.assertEqual(len(xsections[1].v), 7)
-        self.assertFalse(xsections[1].closed)
+        self.assertFalse(xsections[1].is_closed)
 
         self.assertEqual(xsections[0].total_length, 3.0)
         np.testing.assert_array_equal(xsections[0].v[:, 1], np.zeros((7, )))

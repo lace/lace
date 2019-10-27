@@ -177,7 +177,7 @@ class MeshMixin(object):
         if self.v is None:
             raise ValueError('Mesh has no vertices; bounding box is not defined')
 
-        return Box(np.min(self.v, axis=0), np.ptp(self.v, axis=0))
+        return Box.from_points(self.v)
 
     def almost_on_floor(self, atol=1e-08):
         if self.v is None:
