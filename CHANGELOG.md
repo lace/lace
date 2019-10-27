@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.0 (Oct 27, 2019)
+
+- Require polliwog 0.11+, which includes breaking changes.
+- Require vg 1.5+.
+
+
 ## 2.1.5 (Oct 11, 2019)
 
 - Relax NumPy dependency version.
