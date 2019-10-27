@@ -199,16 +199,16 @@ class MeshMixin(object):
             if ret_pointcloud:
                 return components[index]
             else:
-                return Polyline(components[index], closed=components_closed[index])
+                return Polyline(components[index], is_closed=components_closed[index])
         elif neighborhood is not None and len(components) == 1:
             if ret_pointcloud:
                 return components[0]
             else:
-                return Polyline(components[0], closed=components_closed[0])
+                return Polyline(components[0], is_closed=components_closed[0])
         else:
             # No neighborhood provided, so return all the components, either in
             # a pointcloud or as separate polylines.
             if ret_pointcloud:
                 return np.vstack(components)
             else:
-                return [Polyline(v, closed=closed) for v, closed in zip(components, components_closed)]
+                return [Polyline(v, is_closed=closed) for v, closed in zip(components, components_closed)]
