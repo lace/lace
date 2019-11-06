@@ -59,17 +59,54 @@ def mesh_to_collada(mesh):
         indices = np.dstack([mesh.f for _ in srcs]).ravel()
         triset = geom.createTriangleSet(indices, input_list, "tri_material")
         geom.primitives.append(triset)
+
+        extra_materials = []
         # e
         if mesh.e is not None:
-            indices = np.dstack([mesh.e for _ in srcs]).ravel()
-            lineset = geom.createLineSet(indices, input_list, "line_material")
-            geom.primitives.append(lineset)
+            if e_color is None:
+                indices = np.dstack([mesh.e for _ in srcs]).ravel()
+                lineset = geom.createLineSet(indices, input_list, "line_material")
+                geom.primitives.append(lineset)
+            else:
+                used_edges = np.zeros(len(mesh.e), dtype=np.bool)
+                for i, this_e_color in enumerate(e_color):
+                    these_edge_indices = this_e_color["e_indices"]
+                    this_color = this_e_color["color"]
+                    material_name = "line_material_{}".format(i)
+
+                    indices = np.dstack(
+                        [mesh.e[these_edge_indices] for _ in srcs]
+                    ).ravel()
+                    extra_materials.append(
+                        create_material(dae, name=material_name, color=this_color)
+                    )
+                    lineset = geom.createLineSet(indices, input_list, material_name)
+                    geom.primitives.append(lineset)
+                    used_edges[these_edge_indices] = True
+                edges_remaining = (~used_edges).nonzero()
+                if len(edges_remaining):
+                    indices = np.dstack([mesh.e[edges_remaining] for _ in srcs]).ravel()
+                    lineset = geom.createLineSet(indices, input_list, "line_material")
+                    geom.primitives.append(lineset)
+
         dae.geometries.append(geom)
-        return geom
+        return geom, extra_materials
 
     dae = Collada()
-    geom = geometry_from_mesh(dae, mesh)
-    node = scene.Node("node0", children=[scene.GeometryNode(geom, [create_material(dae, name="tri_material"), create_material(dae, name="line_material", color=(1, 0, 0))])])
+    geom, extra_materials = geometry_from_mesh(dae, mesh)
+    node = scene.Node(
+        "node0",
+        children=[
+            scene.GeometryNode(
+                geom,
+                [
+                    create_material(dae, name="tri_material"),
+                    create_material(dae, name="line_material", color=(1, 0, 0)),
+                ]
+                + extra_materials,
+            )
+        ],
+    )
     myscene = scene.Scene("myscene", [node])
     dae.scenes.append(myscene)
     dae.scene = myscene
