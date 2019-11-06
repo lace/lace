@@ -68,12 +68,11 @@ def mesh_to_collada(mesh):
                 lineset = geom.createLineSet(indices, input_list, "line_material")
                 geom.primitives.append(lineset)
             else:
-                used_edges = np.zeros(len(mesh.e), dtype=np.bool)
+                edges_rendered = np.zeros(len(mesh.e), dtype=np.bool)
                 for i, this_e_color in enumerate(e_color):
                     these_edge_indices = this_e_color["e_indices"]
                     this_color = this_e_color["color"]
                     material_name = "line_material_{}".format(i)
-
                     indices = np.dstack(
                         [mesh.e[these_edge_indices] for _ in srcs]
                     ).ravel()
@@ -82,8 +81,8 @@ def mesh_to_collada(mesh):
                     )
                     lineset = geom.createLineSet(indices, input_list, material_name)
                     geom.primitives.append(lineset)
-                    used_edges[these_edge_indices] = True
-                edges_remaining = (~used_edges).nonzero()
+                    edges_rendered[these_edge_indices] = True
+                edges_remaining = (~edges_rendered).nonzero()
                 if len(edges_remaining):
                     indices = np.dstack([mesh.e[edges_remaining] for _ in srcs]).ravel()
                     lineset = geom.createLineSet(indices, input_list, "line_material")
