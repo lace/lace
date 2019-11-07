@@ -1,30 +1,30 @@
 __all__ = ['dump']
 
-def dump(mesh, f):
+def dump(mesh, f, e_color=None):
     from baiji.serialization.util.openlib import ensure_file_open_and_call
-    return ensure_file_open_and_call(f, _dump, 'w', mesh)
+    return ensure_file_open_and_call(f, _dump, 'w', mesh, e_color=e_color)
 
-def _dump(f, mesh):
+def _dump(f, mesh, e_color=None):
     '''
     Writes a mesh to collada file format.
     '''
-    dae = mesh_to_collada(mesh)
+    dae = mesh_to_collada(mesh, e_color=e_color)
     dae.write(f.name)
 
-def dumps(mesh):
+def dumps(mesh, e_color=None):
     '''
     Generates a UTF-8 XML string containing the mesh, in collada format.
     '''
     from lxml import etree
 
-    dae = mesh_to_collada(mesh)
+    dae = mesh_to_collada(mesh, e_color=e_color)
 
     # Update the xmlnode.
     dae.save()
 
     return etree.tostring(dae.xmlnode, encoding='UTF-8')
 
-def mesh_to_collada(mesh):
+def mesh_to_collada(mesh, e_color=None):
     '''
     Supports per-vertex color, but nothing else.
     '''
