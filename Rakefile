@@ -66,7 +66,10 @@ task :upload do
     puts
     raise
   end
+  raise unless system "find . -name '*.pyc' -delete"
   raise unless system "rm -rf dist"
-  raise unless system "python setup.py sdist"
+  raise unless system "python3 setup.py sdist"
+  raise unless system "python3 setup.py bdist_wheel"
+  raise unless system "python setup.py bdist_wheel"
   raise unless system "twine upload dist/*"
 end
