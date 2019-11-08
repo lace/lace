@@ -32,6 +32,6 @@ class MeshMixin(object):
         from lace.serialization import ply
         ply.dump(self, filename, flip_faces=flip_faces, ascii=ascii, little_endian=little_endian, comments=comments)
 
-    def write_dae(self, filename):
+    def write_dae(self, filename, e_color=None):
         from lace.serialization import dae
-        dae.dump(self, filename)
+        dae.dump(self, filename, e_color=e_color)
