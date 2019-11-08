@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.1.0 (Nov 8, 2019)
+
+- Collada: Support writing edges with more than one color
+
+
 ## 3.0.0 (Oct 27, 2019)
 
 - Require polliwog 0.11+, which includes breaking changes.
