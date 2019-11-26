@@ -6,7 +6,7 @@ from bltest import attr
 from baiji import s3
 from bltest import skip_if_unavailable, skip_on_import_error
 from bltest.extra_asserts import ExtraAssertionsMixin
-import mock
+from unittest import mock
 from lace.mesh import Mesh
 from lace.serialization import obj
 from lace.cache import sc
