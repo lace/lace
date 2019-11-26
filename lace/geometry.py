@@ -31,10 +31,10 @@ class MeshMixin(object):
         return self.vn # for backwards compatibility
 
     def barycentric_coordinates_for_points(self, points, face_indices):
-        from polliwog.tri.barycentric import barycentric_coordinates_of_projection
+        from polliwog.tri.functions import barycentric_coordinates_of_points
         vertex_indices = self.f[face_indices]
         vertices = self.v[vertex_indices]
-        coeffs = barycentric_coordinates_of_projection(
+        coeffs = barycentric_coordinates_of_points(
             points,
             vertices[:, 0],
             vertices[:, 1] - vertices[:, 0],
