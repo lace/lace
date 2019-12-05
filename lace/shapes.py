@@ -1,4 +1,4 @@
-from polliwog.tri import shapes
+from polliwog import shapes
 
 
 def _shape_as_mesh(shape_factory_fn, *args, **kwargs):
@@ -39,11 +39,11 @@ def create_triangular_prism(*args, **kwargs):
     return _shape_as_mesh(shapes.create_triangular_prism, *args, **kwargs)
 
 
-def create_horizontal_plane(*args, **kwargs):
+def create_rectangle(*args, **kwargs):
     '''
     Creates a horizontal plane.
     '''
-    return _shape_as_mesh(shapes.create_horizontal_plane, *args, **kwargs)
+    return _shape_as_mesh(shapes.create_rectangle, *args, **kwargs)
 
 
 def _main():

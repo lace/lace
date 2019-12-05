@@ -10,7 +10,7 @@ def reorient_faces_using_normals(mesh):
     Return a list of indices of faces which were flipped.
     """
     import math
-    from polliwog.tri.functions import surface_normals
+    from polliwog.tri import surface_normals
     if mesh.fn is None:
         raise ValueError("Face normals are required")
     normals_from_winding = surface_normals(mesh.v[mesh.f])
@@ -31,7 +31,7 @@ class MeshMixin(object):
         return self.vn # for backwards compatibility
 
     def barycentric_coordinates_for_points(self, points, face_indices):
-        from polliwog.tri.functions import barycentric_coordinates_of_points
+        from polliwog.tri import barycentric_coordinates_of_points
         vertex_indices = self.f[face_indices]
         vertices = self.v[vertex_indices]
         coeffs = barycentric_coordinates_of_points(
@@ -110,7 +110,7 @@ class MeshMixin(object):
         (i.e. facing towards a default OpenGL camera).
 
         '''
-        from polliwog.transform.rotation import rotation_from_up_and_look
+        from polliwog.transform import rotation_from_up_and_look
         from blmath.numerics import as_numeric_array
 
         up = as_numeric_array(up, (3,))
