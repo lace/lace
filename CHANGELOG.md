@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.0.0-beta.1 (Dec 5, 2019)
+
+- Require polliwog 1.0.0-beta.1, which includes breaking changes.
+
+
 ## 4.0.0 (Nov 25, 2019)
 
 - Require polliwog 0.12+, which includes breaking changes.
