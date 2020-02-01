@@ -8,7 +8,7 @@ lxml>=3.5.0
 matplotlib>=1.5.0
 numpy>=1.15.1
 pyopengl>=3.1.0
-pyopengl_accelerate==3.1.3b1
+pyopengl_accelerate==3.1.5
 pyzmq>=15.1.0
 scipy>=0.14.1
 polliwog==1.0.0-beta.1
