@@ -3,6 +3,7 @@
 # pylint: disable=invalid-unary-operand-type, too-many-lines
 # encoding: utf-8
 
+from __future__ import print_function
 import sys
 import os
 import os.path
@@ -63,7 +64,7 @@ def test_for_opengl():
     if test_for_opengl.result is None:
         p = _run_self(["TEST_FOR_OPENGL"], stderr=open(os.devnull, 'wb'))
         line = p.stdout.readline()
-        test_for_opengl.result = 'success' in line
+        test_for_opengl.result = 'success' in line.decode('utf-8')
     return test_for_opengl.result
 
 
@@ -255,7 +256,7 @@ class MeshViewerLocal(object):
                 str(window_height)
             ]
         )
-        line = result.p.stdout.readline()
+        line = result.p.stdout.readline().decode('utf-8')
         current_port = re.match('<PORT>(.*?)</PORT>', line)
         if not current_port:
             raise Exception("MeshViewer remote appears to have failed to launch")
@@ -747,7 +748,7 @@ class MeshViewerRemote(object):
         )
         # Print out our port so that our client can connect to us with it.
         # Flush stdout immediately; otherwise our client could wait forever.
-        print '<PORT>%d</PORT>\n' % (port, )
+        print('<PORT>{}</PORT>\n'.format(port))
         sys.stdout.flush()
         self.arcball = arcball.ArcBallT(width, height)
         self.transform = arcball.Matrix4fT()
@@ -833,7 +834,7 @@ class MeshViewerRemote(object):
             del self.event_port
         if hasattr(self, 'keypress_port'):
             client = zmq.Context.instance().socket(zmq.PUSH)
-            client.connect('tcp://127.0.0.1:%d' % (self.keypress_port))
+            client.connect('tcp://127.0.0.1:{}'.format(self.keypress_port))
             client.send_pyobj({'event_type': 'keyboard', 'key': key})
             del self.keypress_port
 
@@ -1033,10 +1034,10 @@ def main(argv):
             from OpenGL.GLUT import glutInit
             glutInit()
         except Exception as e:  # pylint: disable=broad-except
-            print >>sys.stderr, e
-            print 'failure'
+            print(e, file=sys.stderr)
+            print('failure')
         else:
-            print 'success'
+            print('success')
 
 
 if __name__ == '__main__':
