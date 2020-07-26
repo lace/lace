@@ -56,13 +56,3 @@ workflows:
   on-commit:
     jobs:
       - main
-
-  daily:
-    triggers:
-      - schedule:
-          cron: "0 17 * * *"
-          filters:
-            branches:
-              only: master
-    jobs:
-      - main
