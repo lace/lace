@@ -13,7 +13,8 @@ The primary successor library is **[lacecore][]**:
 * Supports triangles and quads.
 * Provides OBJ loading via the `obj` extra.
 
-Several other libraries were broken out from this package (and from [blmath][]):
+Several other mesh-related libraries were broken out from this package and
+[blmath][]:
 
 * **[polliwog][]** provides low-level, production-ready functions for working with
   triangles.
