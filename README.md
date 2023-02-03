@@ -19,7 +19,7 @@ Polygonal mesh library developed at Body Labs. **This library is deprecated.**
   correspondence.
 * **[proximity][]** provides proximity queries.
 * **[hobart][]** obtains planar cross sections.
-* **[tri-again][]** provides simple 3D scenegraphs for debugging 3D meshes,
+* **[tri-again][]** provides simple 3D scenegraphs for debugging meshes,
   polylines, and points.
 * **[meshlab-pickedpoints][]** loads and saves MeshLab picked point (.pp) files.
 
