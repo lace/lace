@@ -4,25 +4,42 @@ lace
 [![version](https://img.shields.io/pypi/v/lace?style=flat-square)][pypi]
 [![python versions](https://img.shields.io/pypi/pyversions/lace?style=flat-square)][pypi]
 [![version](https://img.shields.io/pypi/l/lace?style=flat-square)][pypi]
-[![build status](https://img.shields.io/circleci/project/github/lace/lace/master?style=flat-square)][circle]
 
 Polygonal mesh library developed at Body Labs.
 
-The library is under active maintenance, and the goals are compatible with that:
+**This library is deprecated. The primary successor is [lacecore][]**:
 
-- Keep the library working in current versions of Python and other tools.
-- Make bug fixes.
-- Provide API stability and backward compatibility with the upstream version.
-- Respond to community contributions.
+* Provides polygonal meshes optimized for cloud computation.
+* Supports triangles and quads.
+* Provides OBJ loading via the `obj` extra.
 
-The eventual goal is to perform a rewrite of the loader and core mesh
-functionality with quad support as part of a ["lace-core" project][lacecore]
-and consider how to handle the extensive mesh manipulation functions which
-remain.
+Several other mesh-related libraries were broken out from this package and
+[blmath][]:
 
-[circle]: https://circleci.com/gh/lace/lace
+* **[polliwog][]** provides low-level functions for working with triangles,
+  optimized for cloud computation.
+* **[entente][]** provides functions for working with meshes having vertexwise
+  correspondence.
+* **[proximity][]** provides proximity queries.
+* **[hobart][]** obtains planar cross sections.
+* **[tri-again][]** provides simple 3D scenegraphs for debugging meshes,
+  polylines, and points.
+* **[meshlab-pickedpoints][]** loads and saves MeshLab picked point (.pp) files.
+
+For batteries-included prototyping, **[Trimesh][]** is recommended as an alternative.
+
+
 [pypi]: https://pypi.org/project/lace/
-[lacecore]: https://github.com/lace/lacecore-sketches
+[lacecore]: https://github.com/lace/lacecore
+[tinyobjloader]: https://github.com/tinyobjloader/tinyobjloader
+[entente]: https://github.com/lace/entente/
+[hobart]: https://github.com/lace/hobart
+[meshlab-pickedpoints]: https://github.com/lace/meshlab-pickedpoints
+[proximity]: https://github.com/lace/proximity
+[trimesh]: https://trimsh.org/
+[tri-again]: https://github.com/lace/tri-again/
+[polliwog]: https://github.com/lace/polliwog/
+[blmath]: https://github.com/lace/blmath/
 
 
 Installation
@@ -67,21 +84,6 @@ rake lint
 ```
 
 
-Contribute
-----------
-
-- Issue Tracker: https://github.com/lace/lace/issues
-- Source Code: https://github.com/lace/lace
-
-Pull requests welcome!
-
-
-Support
--------
-
-If you are having issues, please let us know.
-
-
 Acknowledgements
 ----------------
 
@@ -99,15 +101,6 @@ transfer from Body Labs, the fork has been merged back into the original.
 [guillaume marceau]: https://github.com/gmarceau
 [fork]: https://github.com/metabolize/lace
 [fork pypi]: https://pypi.org/project/metabolace/
-
-
-Similar projects
-----------------
-
-There is an unrelated permissively licensed mesh manipulation library called
-[Trimesh][] which provides some similar functionality.
-
-[trimesh]: https://github.com/mikedh/trimesh
 
 
 License
