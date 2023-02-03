@@ -9,20 +9,21 @@ Polygonal mesh library developed at Body Labs. **This library is deprecated.**
 
 **There are five successor libraries:**
 
-* [**lacecore**][] provides production-ready polygonal meshes optimized for cloud
+* **[lacecore][]** provides production-ready polygonal meshes optimized for cloud
   computation.
     * It supports triangles and quads.
     * The `obj` extra provides OBJ loading via [tinyobjloader][].
-* [**polliwog**][] provides production-ready low-level functions for working with
+* **[polliwog][]** provides production-ready low-level functions for working with
   triangles.
-* [**entente**][] provides functions for working with vertexwise correspondence.
-* [**proximity**][] provides proximity queries.
-* [**hobart**][] obtains planar cross sections.
-* [**tri-again**][] provides simple 3D scenegraphs for debugging 3D meshes,
+* **[entente][]** provides functions for working with vertexwise correspondence.
+* **[proximity][]** provides proximity queries.
+* **[hobart][]** obtains planar cross sections.
+* **[tri-again][]** provides simple 3D scenegraphs for debugging 3D meshes,
   polylines, and points.
-* [**meshlab-pickedpoints**][] loads and saves MeshLab picked point (.pp) files.
+* **[meshlab-pickedpoints][]** loads and saves MeshLab picked point (.pp) files.
 
-As an altenative for batteries-included prototyping, [Trimesh][] is recommended.
+As an altenative for batteries-included prototyping, **[Trimesh][]** is
+recommended.
 
 
 [pypi]: https://pypi.org/project/lace/
