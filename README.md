@@ -26,8 +26,7 @@ Several other mesh-related libraries were broken out from this package and
   polylines, and points.
 * **[meshlab-pickedpoints][]** loads and saves MeshLab picked point (.pp) files.
 
-As an altenative for batteries-included prototyping, **[Trimesh][]** is
-recommended.
+For batteries-included prototyping, **[Trimesh][]** is recommended as an alternative.
 
 
 [pypi]: https://pypi.org/project/lace/
