@@ -5,9 +5,9 @@ lace
 [![python versions](https://img.shields.io/pypi/pyversions/lace?style=flat-square)][pypi]
 [![version](https://img.shields.io/pypi/l/lace?style=flat-square)][pypi]
 
-Polygonal mesh library developed at Body Labs. **This library is deprecated.**
+Polygonal mesh library developed at Body Labs.
 
-**The primary successor library is [lacecore][]**:
+**This library is deprecated. The primary successor is [lacecore][]**:
 
 * Provides production-ready polygonal meshes optimized for cloud computation.
 * Supports triangles and quads.
