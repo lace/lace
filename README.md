@@ -22,8 +22,7 @@ Polygonal mesh library developed at Body Labs. **This library is deprecated.**
   polylines, and points.
 * [**meshlab-pickedpoints**][] loads and saves MeshLab picked point (.pp) files.
 
-For batteries-included prototyping, a better alternative may be the unrelated
-library [Trimesh][].
+As an altenative for batteries-included prototyping, [Trimesh][] is recommended.
 
 
 [pypi]: https://pypi.org/project/lace/
