@@ -7,12 +7,14 @@ lace
 
 Polygonal mesh library developed at Body Labs. **This library is deprecated.**
 
-**There are five successor libraries:**
+The primary successor library is **[lacecore][]**:
 
-* **[lacecore][]** provides production-ready polygonal meshes optimized for cloud
-  computation.
-    * Supports triangles and quads.
-    * Provides OBJ loading via the `obj` extra.
+* Provides production-ready polygonal meshes optimized for cloud computation.
+* Supports triangles and quads.
+* Provides OBJ loading via the `obj` extra.
+
+Several other libraries were broken out from this package (and from [blmath][]):
+
 * **[polliwog][]** provides low-level, production-ready functions for working with
   triangles.
 * **[entente][]** provides functions for working with meshes having vertexwise
@@ -37,6 +39,7 @@ recommended.
 [trimesh]: https://trimsh.org/
 [tri-again]: https://github.com/lace/tri-again/
 [polliwog]: https://github.com/lace/polliwog/
+[blmath]: https://github.com/lace/blmath/
 
 
 Installation
