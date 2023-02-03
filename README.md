@@ -15,7 +15,8 @@ Polygonal mesh library developed at Body Labs. **This library is deprecated.**
     * Provides OBJ loading via the `obj` extra.
 * **[polliwog][]** provides low-level, production-ready functions for working with
   triangles.
-* **[entente][]** provides functions for working with vertexwise correspondence.
+* **[entente][]** provides functions for working with meshes having vertexwise
+  correspondence.
 * **[proximity][]** provides proximity queries.
 * **[hobart][]** obtains planar cross sections.
 * **[tri-again][]** provides simple 3D scenegraphs for debugging 3D meshes,
