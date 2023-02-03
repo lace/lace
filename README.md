@@ -9,15 +9,15 @@ Polygonal mesh library developed at Body Labs.
 
 **This library is deprecated. The primary successor is [lacecore][]**:
 
-* Provides production-ready polygonal meshes optimized for cloud computation.
+* Provides polygonal meshes optimized for cloud computation.
 * Supports triangles and quads.
 * Provides OBJ loading via the `obj` extra.
 
 Several other mesh-related libraries were broken out from this package and
 [blmath][]:
 
-* **[polliwog][]** provides low-level, production-ready functions for working with
-  triangles.
+* **[polliwog][]** provides low-level functions for working with triangles,
+  optimized for cloud computation.
 * **[entente][]** provides functions for working with meshes having vertexwise
   correspondence.
 * **[proximity][]** provides proximity queries.
