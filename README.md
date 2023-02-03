@@ -13,7 +13,7 @@ Polygonal mesh library developed at Body Labs. **This library is deprecated.**
   computation.
     * Supports triangles and quads.
     * Provides OBJ loading via the `obj` extra.
-* **[polliwog][]** provides production-ready low-level functions for working with
+* **[polliwog][]** provides low-level, production-ready functions for working with
   triangles.
 * **[entente][]** provides functions for working with vertexwise correspondence.
 * **[proximity][]** provides proximity queries.
