@@ -11,8 +11,8 @@ Polygonal mesh library developed at Body Labs. **This library is deprecated.**
 
 * **[lacecore][]** provides production-ready polygonal meshes optimized for cloud
   computation.
-    * It supports triangles and quads.
-    * The `obj` extra provides OBJ loading via [tinyobjloader][].
+    * Supports triangles and quads.
+    * Provides OBJ loading via the `obj` extra.
 * **[polliwog][]** provides production-ready low-level functions for working with
   triangles.
 * **[entente][]** provides functions for working with vertexwise correspondence.
