@@ -7,7 +7,7 @@ lace
 
 Polygonal mesh library developed at Body Labs. **This library is deprecated.**
 
-The primary successor library is **[lacecore][]**:
+**The primary successor library is [lacecore][]**:
 
 * Provides production-ready polygonal meshes optimized for cloud computation.
 * Supports triangles and quads.
